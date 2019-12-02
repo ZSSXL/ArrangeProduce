@@ -1,0 +1,42 @@
+<div class="page-header">
+    <div class="container-fluid">
+        <h2 class="h5 no-margin-bottom">防错</h2>
+    </div>
+</div>
+<section class="no-padding-top no-padding-bottom">
+    <div class="container-fluid" id="load-area">
+        <div class="row">
+            <div class="col-md-12 col-sm-12">
+                <div class="statistic-block block">
+                    <div class="progress-details d-flex align-items-end justify-content-between">
+                        <div class="title">
+                            <div class="icon"><i class="icon-user-1"></i></div>
+                            <strong>New Clients</strong>
+                        </div>
+                        <div class="number dashtext-1">27</div>
+                    </div>
+                    <div class="progress progress-template">
+                        <div role="progressbar" style="width: 30%" aria-valuenow="30" aria-valuemin="0"
+                             aria-valuemax="100" class="progress-bar progress-bar-template dashbg-1"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 col-sm-12">
+                <button class="btn btn-info" id="show">消息</button>
+            </div>
+            <div class="col-md-6 col-sm-12">
+                <button class="btn btn-outline-danger">危险</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- javascript -->
+
+<script type="text/javascript">
+    $("#show").click(function (){
+        alert("show");
+    });
+</script>
