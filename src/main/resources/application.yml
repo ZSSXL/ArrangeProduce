@@ -1,0 +1,26 @@
+spring:
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    open-in-view: false
+
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/oil_pool?useSSL=false&serverTimezone=GMT%2b8&characterEncoding=UTF-8
+    username: root
+    password: 20171109
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  thymeleaf:
+    prefix: classpath:/templates/
+    cache: false
+    suffix: .html
+    encoding: utf-8
+    servlet:
+      content-type: text/html
+    mode: HTML
+
+server:
+  port: 8080
