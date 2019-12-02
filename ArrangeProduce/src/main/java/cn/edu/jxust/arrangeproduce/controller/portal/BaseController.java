@@ -1,4 +1,4 @@
-package cn.edu.jxust.arrangeproduce.controller;
+package cn.edu.jxust.arrangeproduce.controller.portal;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 

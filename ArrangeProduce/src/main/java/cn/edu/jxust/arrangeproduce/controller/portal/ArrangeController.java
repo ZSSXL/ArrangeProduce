@@ -1,7 +1,5 @@
-package cn.edu.jxust.arrangeproduce.controller;
+package cn.edu.jxust.arrangeproduce.controller.portal;
 
-import cn.edu.jxust.arrangeproduce.common.ServerResponse;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
