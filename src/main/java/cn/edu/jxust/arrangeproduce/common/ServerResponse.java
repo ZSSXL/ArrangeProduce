@@ -7,7 +7,8 @@ import java.io.Serializable;
 
 /**
  * @author ZSS
- * @description 通用类 保证序列化json的时候，如果是null的对象，key会消失
+ * @description 通用类
+ * 保证序列化json的时候，如果是null的对象，key会消失
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ServerResponse<T> implements Serializable {
