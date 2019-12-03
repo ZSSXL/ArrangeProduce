@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Boolean isExistInDb(String username) {
+    public Boolean existInDb(String username) {
         return userRepository.findByUserName(username).isPresent();
     }
 

@@ -24,7 +24,7 @@ public interface UserService {
      * @param username 用户名
      * @return Boolean
      */
-    Boolean isExistInDb(String username);
+    Boolean existInDb(String username);
 
     /**
      * 通过用户Id 查询用户信息

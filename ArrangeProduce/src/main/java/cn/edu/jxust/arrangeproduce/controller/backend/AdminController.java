@@ -54,7 +54,7 @@ public class AdminController {
         if(result.hasErrors()) {
             return ServerResponse.createByErrorMessage("参数错误");
         } else {
-            Boolean existInDb = userService.isExistInDb(registerVo.getUsername());
+            Boolean existInDb = userService.existInDb(registerVo.getUsername());
             if(!existInDb) {
                 String userId = UUIDUtil.getId();
                 try {

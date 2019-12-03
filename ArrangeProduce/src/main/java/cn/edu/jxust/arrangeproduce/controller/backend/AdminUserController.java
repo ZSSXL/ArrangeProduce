@@ -7,6 +7,7 @@ import cn.edu.jxust.arrangeproduce.entity.po.Account;
 import cn.edu.jxust.arrangeproduce.entity.po.User;
 import cn.edu.jxust.arrangeproduce.entity.vo.RegisterVo;
 import cn.edu.jxust.arrangeproduce.service.AccountService;
+import cn.edu.jxust.arrangeproduce.service.EnterpriseService;
 import cn.edu.jxust.arrangeproduce.service.UserService;
 import cn.edu.jxust.arrangeproduce.util.EncryptionUtil;
 import cn.edu.jxust.arrangeproduce.util.UUIDUtil;
@@ -34,52 +35,61 @@ public class AdminUserController {
 
     private final AccountService accountService;
     private final UserService userService;
+    private final EnterpriseService enterpriseService;
 
     @Autowired
-    public AdminUserController(AccountService accountService, UserService userService) {
+    public AdminUserController(AccountService accountService, UserService userService, EnterpriseService enterpriseService) {
         this.accountService = accountService;
         this.userService = userService;
+        this.enterpriseService = enterpriseService;
     }
 
     /**
      * 管理员创建用户
      *
      * @param registerVo 注册实体
-     * @param result 错误结果
+     * @param result     错误结果
      * @return ServerResponse
      */
     @PostMapping
     @RequiredPermission("admin")
     @Transactional(rollbackFor = Exception.class)
-    public ServerResponse registerUser(@Valid @RequestBody RegisterVo registerVo, BindingResult result){
-        if(result.hasErrors()) {
+    public ServerResponse registerUser(@Valid @RequestBody RegisterVo registerVo, BindingResult result) {
+        if (result.hasErrors()) {
             return ServerResponse.createByErrorMessage("参数错误");
-        } else if(StringUtils.isEmpty(registerVo.getEnterpriseId())) {
+        } else if (StringUtils.isEmpty(registerVo.getEnterpriseId())) {
             return ServerResponse.createByErrorMessage("请选择企业");
         } else {
-            Boolean existInDb = userService.isExistInDb(registerVo.getUsername());
-            if(!existInDb) {
-                String userId = UUIDUtil.getId();
-                try {
-                    userService.createUser(User.builder()
-                            .userId(userId)
-                            .userName(registerVo.getUsername())
-                            .phone(registerVo.getPhone())
-                            .enterpriseId(registerVo.getEnterpriseId())
-                            .role(Const.Role.ROLE_USER)
-                            .build());
-                    accountService.createAccount(Account.builder()
-                            .accountId(userId)
-                            .accountName(registerVo.getUsername())
-                            .password(EncryptionUtil.encrypt(registerVo.getPassword()))
-                            .build());
-                    return ServerResponse.createBySuccessMessage("添加用户成功");
-                } catch (Exception e) {
-                    log.error("create user error []", e);
-                    return ServerResponse.createByErrorMessage("添加用户失败");
-                }
+            // 判断是否存在该企业，存在则添加
+            Boolean enterpriseId = enterpriseService.existInDbById(registerVo.getEnterpriseId());
+            if (!enterpriseId) {
+                return ServerResponse.createByErrorMessage("该企业不存在");
             } else {
-                return ServerResponse.createByErrorMessage("该用户名已存在,请修改后再注册");
+                // 判断是否存在该用户，不存在则添加
+                Boolean user = userService.existInDb(registerVo.getUsername());
+                if (!user) {
+                    String userId = UUIDUtil.getId();
+                    try {
+                        userService.createUser(User.builder()
+                                .userId(userId)
+                                .userName(registerVo.getUsername())
+                                .phone(registerVo.getPhone())
+                                .enterpriseId(registerVo.getEnterpriseId())
+                                .role(Const.Role.ROLE_USER)
+                                .build());
+                        accountService.createAccount(Account.builder()
+                                .accountId(userId)
+                                .accountName(registerVo.getUsername())
+                                .password(EncryptionUtil.encrypt(registerVo.getPassword()))
+                                .build());
+                        return ServerResponse.createBySuccessMessage("添加用户成功");
+                    } catch (Exception e) {
+                        log.error("create user error []", e);
+                        return ServerResponse.createByErrorMessage("添加用户失败");
+                    }
+                } else {
+                    return ServerResponse.createByErrorMessage("该用户名已存在,请修改后再注册");
+                }
             }
         }
     }
