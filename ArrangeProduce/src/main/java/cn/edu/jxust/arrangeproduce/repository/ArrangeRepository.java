@@ -1,6 +1,6 @@
 package cn.edu.jxust.arrangeproduce.repository;
 
-import cn.edu.jxust.arrangeproduce.entity.Arrange;
+import cn.edu.jxust.arrangeproduce.entity.po.Arrange;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
