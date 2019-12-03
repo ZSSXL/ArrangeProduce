@@ -1,5 +1,8 @@
 package cn.edu.jxust.arrangeproduce.controller.portal;
 
+import cn.edu.jxust.arrangeproduce.annotation.RequiredPermission;
+import cn.edu.jxust.arrangeproduce.common.ServerResponse;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -11,4 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/arrange")
 public class ArrangeController extends BaseController{
+
+    @RequiredPermission("admin")
+    @GetMapping
+    public ServerResponse aspectTest(){
+        System.out.println("aspectTest");
+        return ServerResponse.createBySuccess();
+    }
+
 }

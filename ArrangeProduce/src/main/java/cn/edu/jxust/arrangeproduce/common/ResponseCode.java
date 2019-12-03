@@ -15,13 +15,13 @@ public enum ResponseCode {
      */
     ERROR(1, "ERROR"),
     /**
-     * 未登录
-     */
-    NEED_LOGIN(10, "NEED_LOGIN"),
-    /**
      * 权限失败
      */
-    ILLEGAL_ARGUMENT(2, "ILLEGAL_ARGUMENT");
+    ILLEGAL_ARGUMENT(2, "ILLEGAL_ARGUMENT"),
+    /**
+     * 未登录
+     */
+    NEED_LOGIN(10, "NEED_LOGIN");
 
     private final int code;
     private final String desc;
