@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 /**
  * @author ZSS
@@ -21,7 +22,7 @@ public class MachineVo {
     @NotEmpty
     private String machineName;
 
-    @NotEmpty
+    @NotNull
     private Integer machineNumber;
 
 }

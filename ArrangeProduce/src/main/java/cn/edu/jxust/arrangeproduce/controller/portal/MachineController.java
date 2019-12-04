@@ -12,6 +12,7 @@ import cn.edu.jxust.arrangeproduce.util.UUIDUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
@@ -40,13 +41,13 @@ public class MachineController extends BaseController {
      *
      * @param machineVo 小拉机Vo实体
      * @param session   session
-     * @param result    错误结果
+     * @param errors    错误结果
      * @return ServerResponse
      */
     @PostMapping
     @RequiredPermission
-    public ServerResponse createMachine(@RequestBody @Valid MachineVo machineVo, HttpSession session, BindingResult result) {
-        if (result.hasErrors()) {
+    public ServerResponse createMachine(@RequestBody @Valid MachineVo machineVo, HttpSession session, Errors errors) {
+        if (errors.hasErrors()) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.PARAMETER_ERROR.getCode(), ResponseCode.PARAMETER_ERROR.getDesc());
         } else {
             User user = (User) session.getAttribute(Const.CURRENT_USER);

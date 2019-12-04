@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 /**
@@ -19,7 +20,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class GaugeVo {
 
-    @NotEmpty
+    @NotNull
     private BigDecimal gauge;
 
 }

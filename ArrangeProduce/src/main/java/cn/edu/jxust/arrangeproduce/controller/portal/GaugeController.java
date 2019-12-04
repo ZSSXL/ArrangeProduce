@@ -6,7 +6,6 @@ import cn.edu.jxust.arrangeproduce.common.ResponseCode;
 import cn.edu.jxust.arrangeproduce.common.ServerResponse;
 import cn.edu.jxust.arrangeproduce.entity.po.Gauge;
 import cn.edu.jxust.arrangeproduce.entity.po.User;
-import cn.edu.jxust.arrangeproduce.entity.vo.GaugeVo;
 import cn.edu.jxust.arrangeproduce.service.GaugeService;
 import cn.edu.jxust.arrangeproduce.util.UUIDUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +14,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -38,19 +38,21 @@ public class GaugeController extends BaseController {
     /**
      * 添加线规
      *
-     * @param gaugeVo 线规Vo实体
+     * @param gauge 线规
      * @param session session
      * @param result  错误结果
      * @return ServerResponse
      */
     @PostMapping
     @RequiredPermission
-    public ServerResponse createGauge(@RequestBody @Valid GaugeVo gaugeVo, HttpSession session, BindingResult result) {
+    public ServerResponse createGauge(@RequestBody @NotEmpty String gauge, HttpSession session, BindingResult result) {
         if (result.hasErrors()) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.PARAMETER_ERROR.getCode(), ResponseCode.PARAMETER_ERROR.getDesc());
         } else {
             User user = (User) session.getAttribute(Const.CURRENT_USER);
-            Boolean exist = gaugeService.existInDb(user.getEnterpriseId(), gaugeVo.getGauge());
+            BigDecimal gaugeDecimal = new BigDecimal(gauge);
+            System.out.println("BigDecimal : " + gaugeDecimal);
+            Boolean exist = gaugeService.existInDb(user.getEnterpriseId(), gaugeDecimal);
             if (exist) {
                 return ServerResponse.createByErrorMessage("改线规已存在，请仔细查找");
             } else {
@@ -58,7 +60,7 @@ public class GaugeController extends BaseController {
                 try {
                     return gaugeService.createGauge(Gauge.builder()
                             .gaugeId(gaugeId)
-                            .gauge(gaugeVo.getGauge())
+                            .gauge(gaugeDecimal)
                             .enterpriseId(user.getEnterpriseId())
                             .build());
                 } catch (Exception e) {
