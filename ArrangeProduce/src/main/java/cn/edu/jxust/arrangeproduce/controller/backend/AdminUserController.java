@@ -2,6 +2,7 @@ package cn.edu.jxust.arrangeproduce.controller.backend;
 
 import cn.edu.jxust.arrangeproduce.annotation.RequiredPermission;
 import cn.edu.jxust.arrangeproduce.common.Const;
+import cn.edu.jxust.arrangeproduce.common.ResponseCode;
 import cn.edu.jxust.arrangeproduce.common.ServerResponse;
 import cn.edu.jxust.arrangeproduce.entity.po.Account;
 import cn.edu.jxust.arrangeproduce.entity.po.User;
@@ -56,13 +57,13 @@ public class AdminUserController {
     @Transactional(rollbackFor = Exception.class)
     public ServerResponse registerUser(@Valid @RequestBody RegisterVo registerVo, BindingResult result) {
         if (result.hasErrors()) {
-            return ServerResponse.createByErrorMessage("参数错误");
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.PARAMETER_ERROR.getCode(), ResponseCode.PARAMETER_ERROR.getDesc());
         } else if (StringUtils.isEmpty(registerVo.getEnterpriseId())) {
             return ServerResponse.createByErrorMessage("请选择企业");
         } else {
             // 判断是否存在该企业，存在则添加
             Boolean enterpriseId = enterpriseService.existInDbById(registerVo.getEnterpriseId());
-            if (!enterpriseId) {
+            if (enterpriseId) {
                 return ServerResponse.createByErrorMessage("该企业不存在");
             } else {
                 // 判断是否存在该用户，不存在则添加

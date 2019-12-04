@@ -2,6 +2,7 @@ package cn.edu.jxust.arrangeproduce.controller.backend;
 
 import cn.edu.jxust.arrangeproduce.annotation.RequiredPermission;
 import cn.edu.jxust.arrangeproduce.common.Const;
+import cn.edu.jxust.arrangeproduce.common.ResponseCode;
 import cn.edu.jxust.arrangeproduce.common.ServerResponse;
 import cn.edu.jxust.arrangeproduce.entity.po.Account;
 import cn.edu.jxust.arrangeproduce.entity.po.User;
@@ -52,7 +53,7 @@ public class AdminController {
     @Transactional(rollbackFor = Exception.class)
     public ServerResponse registerAdmin(@Valid @RequestBody RegisterVo registerVo, BindingResult result){
         if(result.hasErrors()) {
-            return ServerResponse.createByErrorMessage("参数错误");
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.PARAMETER_ERROR.getCode(), ResponseCode.PARAMETER_ERROR.getDesc());
         } else {
             Boolean existInDb = userService.existInDb(registerVo.getUsername());
             if(!existInDb) {

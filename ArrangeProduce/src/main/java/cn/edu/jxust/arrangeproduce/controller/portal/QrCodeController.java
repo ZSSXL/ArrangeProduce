@@ -14,33 +14,30 @@ import cn.edu.jxust.arrangeproduce.util.UUIDUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 /**
  * @author ZSS
- * @date 2019/11/30 10:01
- * @description Arrange 控制器
+ * @date 2019/12/4 15:13
+ * @description 二维码控制器
  */
 @Slf4j
 @RestController
-@RequestMapping("/arrange")
-public class ArrangeController extends BaseController {
+@RequestMapping("/qr")
+public class QrCodeController {
 
     private final ArrangeService arrangeService;
 
     @Autowired
-    public ArrangeController(ArrangeService arrangeService) {
+    public QrCodeController(ArrangeService arrangeService) {
         this.arrangeService = arrangeService;
     }
 
     /**
-     * 新建排产任务
+     * 新建排产任务并打印二维码
      *
      * @param arrangeVo 排产Vo实体
      * @param session   session
@@ -49,15 +46,24 @@ public class ArrangeController extends BaseController {
      */
     @PostMapping
     @RequiredPermission
-    public ServerResponse createArrange(@RequestBody @Valid ArrangeVo arrangeVo, HttpSession session, BindingResult result) {
+    public ServerResponse<String> printQrCode(@RequestBody @Valid ArrangeVo arrangeVo, HttpSession session, BindingResult result) {
         if (result.hasErrors()) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.PARAMETER_ERROR.getCode(), ResponseCode.PARAMETER_ERROR.getDesc());
         } else {
             User user = (User) session.getAttribute(Const.CURRENT_USER);
             Boolean conflict = arrangeService.isConflict(arrangeVo.getArrangeDate(), arrangeVo.getShift(), arrangeVo.getMachine(), user.getEnterpriseId());
+            String qrCode;
             if (conflict) {
-                return ServerResponse.createByErrorMessage("任务时间冲突，请修改生产时间或者机器");
+                // 如果存在，直接打印
+                qrCode = generateQrCode(arrangeVo);
+                if (qrCode == null) {
+                    return ServerResponse.createByErrorMessage("生成二维码失败");
+                } else {
+                    qrCode = qrCode.replaceAll("\\n", "").replaceAll("\\r", "").replaceAll("\\r\\n", "");
+                    return ServerResponse.createBySuccess(qrCode);
+                }
             } else {
+                // 如果不存在，先保存，后打印
                 String arrangeId = UUIDUtil.getId();
                 try {
                     arrangeService.createArrange(Arrange.builder()
@@ -70,14 +76,48 @@ public class ArrangeController extends BaseController {
                             .weight(arrangeVo.getWeight())
                             .tolerance(arrangeVo.getTolerance())
                             .build());
-                    return ServerResponse.createBySuccess();
                 } catch (Exception e) {
                     log.error("create arrange error {}", e.getClass());
                     return ServerResponse.createByErrorMessage("新建排产任务异常");
+                }
+                qrCode = generateQrCode(arrangeVo);
+                if (qrCode == null) {
+                    return ServerResponse.createByErrorMessage("生成二维码失败");
+                } else {
+                    return ServerResponse.createBySuccess(qrCode);
                 }
             }
         }
     }
 
+    /**
+     * 生成二维码
+     *
+     * @return String
+     */
+    private String generateQrCode(ArrangeVo arrangeVo) {
+        StringBuilder qrMessage = new StringBuilder();
+        // 打码时间
+        qrMessage.append(DateUtil.getDateSimple()).append("*");
+        // 小拉机编号
+        qrMessage.append(arrangeVo.getMachine()).append("*");
+        // 线规
+        qrMessage.append(arrangeVo.getGauge()).append("*");
+        // 公差
+        qrMessage.append(arrangeVo.getTolerance()).append("*");
+        // 任务生产时间
+        qrMessage.append(DateUtil.timestampToDate(arrangeVo.getArrangeDate())).append("*");
+        // 早晚班： 1是早班， 0是晚班
+        qrMessage.append(arrangeVo.getShift()).append("*");
+        // 流水号 随机四位数
+        qrMessage.append((int) (Math.random() * 9000 + 1000));
+        log.info("generate QrCode message : {}", qrMessage);
+        String qrCode = QrCodeUtil.createQrCode(qrMessage.toString());
+        if (qrCode != null) {
+            return qrCode.replaceAll("\\n", "").replaceAll("\\r", "").replaceAll("\\r\\n", "");
+        } else {
+            return null;
+        }
+    }
 
 }
