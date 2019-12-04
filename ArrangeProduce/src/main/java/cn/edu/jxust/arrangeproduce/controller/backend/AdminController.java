@@ -12,7 +12,6 @@ import cn.edu.jxust.arrangeproduce.service.UserService;
 import cn.edu.jxust.arrangeproduce.util.EncryptionUtil;
 import cn.edu.jxust.arrangeproduce.util.UUIDUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
@@ -44,19 +43,20 @@ public class AdminController {
 
     /**
      * 添加管理员
+     *
      * @param registerVo 注册实体
-     * @param result 错误结果
+     * @param result     错误结果
      * @return ServerResponse
      */
     @PostMapping
     @RequiredPermission("admin")
     @Transactional(rollbackFor = Exception.class)
-    public ServerResponse registerAdmin(@Valid @RequestBody RegisterVo registerVo, BindingResult result){
-        if(result.hasErrors()) {
+    public ServerResponse registerAdmin(@Valid @RequestBody RegisterVo registerVo, BindingResult result) {
+        if (result.hasErrors()) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.PARAMETER_ERROR.getCode(), ResponseCode.PARAMETER_ERROR.getDesc());
         } else {
             Boolean existInDb = userService.existInDb(registerVo.getUsername());
-            if(!existInDb) {
+            if (!existInDb) {
                 String userId = UUIDUtil.getId();
                 try {
                     userService.createUser(User.builder()

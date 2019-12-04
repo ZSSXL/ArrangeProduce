@@ -46,7 +46,7 @@ public class PermissionAspect {
             if (user == null) {
                 return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "请先登录");
             } else {
-                if (StringUtils.equals(permission, user.getRole())){
+                if (StringUtils.equals(permission, user.getRole())) {
                     return joinPoint.proceed();
                 } else {
                     return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(), "权限错误");

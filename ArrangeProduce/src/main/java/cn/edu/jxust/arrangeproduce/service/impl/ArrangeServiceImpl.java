@@ -28,7 +28,7 @@ public class ArrangeServiceImpl implements ArrangeService {
         if (save != null) {
             return ServerResponse.createBySuccess();
         } else {
-            return null;
+            return ServerResponse.createByError();
         }
     }
 

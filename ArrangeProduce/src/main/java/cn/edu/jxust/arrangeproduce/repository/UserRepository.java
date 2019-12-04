@@ -16,6 +16,7 @@ public interface UserRepository extends JpaRepository<User, String> {
 
     /**
      * 查看是否已存在该用户名
+     *
      * @param username 用户名
      * @return Optional<User>
      */

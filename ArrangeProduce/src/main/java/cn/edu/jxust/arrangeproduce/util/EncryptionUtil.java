@@ -17,15 +17,16 @@ public class EncryptionUtil {
 
     /**
      * 密码加密
+     *
      * @param origin 原密码
      * @return String
      */
-    public static String encrypt(String origin){
+    public static String encrypt(String origin) {
         origin = origin + SALT;
         return md5Encode(origin);
     }
 
-    private static String byteArrayToHexString(byte[] b){
+    private static String byteArrayToHexString(byte[] b) {
         StringBuilder resultSb = new StringBuilder();
         for (byte value : b) {
             resultSb.append(byteToHexString(value));
@@ -33,9 +34,9 @@ public class EncryptionUtil {
         return resultSb.toString();
     }
 
-    private static String byteToHexString(byte b){
+    private static String byteToHexString(byte b) {
         int n = b;
-        if(n < 0){
+        if (n < 0) {
             n += 256;
         }
         int d1 = n / 16;
@@ -45,10 +46,11 @@ public class EncryptionUtil {
 
     /**
      * 返回大写的MD5
+     *
      * @param origin 加盐后的密码
      * @return String
      */
-    private static String md5Encode(String origin){
+    private static String md5Encode(String origin) {
         String resultString = null;
         try {
             resultString = origin;
@@ -61,7 +63,7 @@ public class EncryptionUtil {
     }
 
     private static final String[] HEX_DIGITS = {
-            "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b",  "c", "d", "e", "f"
+            "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"
     };
 
 }

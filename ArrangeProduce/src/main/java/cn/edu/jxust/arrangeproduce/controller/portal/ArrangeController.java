@@ -8,8 +8,6 @@ import cn.edu.jxust.arrangeproduce.entity.po.Arrange;
 import cn.edu.jxust.arrangeproduce.entity.po.User;
 import cn.edu.jxust.arrangeproduce.entity.vo.ArrangeVo;
 import cn.edu.jxust.arrangeproduce.service.ArrangeService;
-import cn.edu.jxust.arrangeproduce.util.DateUtil;
-import cn.edu.jxust.arrangeproduce.util.QrCodeUtil;
 import cn.edu.jxust.arrangeproduce.util.UUIDUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +58,7 @@ public class ArrangeController extends BaseController {
             } else {
                 String arrangeId = UUIDUtil.getId();
                 try {
-                    arrangeService.createArrange(Arrange.builder()
+                    return arrangeService.createArrange(Arrange.builder()
                             .arrangeId(arrangeId)
                             .arrangeDate(arrangeVo.getArrangeDate())
                             .gauge(arrangeVo.getGauge())
@@ -70,7 +68,6 @@ public class ArrangeController extends BaseController {
                             .weight(arrangeVo.getWeight())
                             .tolerance(arrangeVo.getTolerance())
                             .build());
-                    return ServerResponse.createBySuccess();
                 } catch (Exception e) {
                     log.error("create arrange error {}", e.getClass());
                     return ServerResponse.createByErrorMessage("新建排产任务异常");

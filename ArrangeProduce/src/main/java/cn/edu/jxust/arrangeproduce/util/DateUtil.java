@@ -3,7 +3,6 @@ package cn.edu.jxust.arrangeproduce.util;
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Component;
 
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 /**
@@ -21,7 +20,7 @@ public class DateUtil {
         return dateTime.toString(DATE_FORMAT);
     }
 
-    public static String timestampToDate(Long timestamp){
+    public static String timestampToDate(Long timestamp) {
         Date date = new Date(timestamp);
         DateTime dateTime = new DateTime(date);
         return dateTime.toString(DATE_FORMAT);

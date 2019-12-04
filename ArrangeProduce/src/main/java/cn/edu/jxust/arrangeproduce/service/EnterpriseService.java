@@ -9,6 +9,7 @@ public interface EnterpriseService {
 
     /**
      * 该企业是否存在
+     *
      * @param enterpriseId 企业id
      * @return Boolean
      */

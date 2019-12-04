@@ -28,6 +28,7 @@ public interface UserService {
 
     /**
      * 通过用户Id 查询用户信息
+     *
      * @param userId 用户Id
      * @return User
      */

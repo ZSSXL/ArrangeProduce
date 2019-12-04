@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 @Slf4j
 @Component
 @ControllerAdvice
-public class ExceptionResolver{
+public class ExceptionResolver {
 
     @ExceptionHandler(Exception.class)
     @ResponseBody

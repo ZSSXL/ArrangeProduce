@@ -12,6 +12,7 @@ public interface AccountService {
 
     /**
      * 创建账户
+     *
      * @param account 账户实体
      * @return 创建账户
      */

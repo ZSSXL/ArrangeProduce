@@ -25,10 +25,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public ServerResponse createUser(User user) {
         User save = userRepository.save(user);
-        if(save == null){
-            return ServerResponse.createByError();
+        if (save != null) {
+            return ServerResponse.createBySuccessMessage("添加用户成功");
         } else {
-            return ServerResponse.createBySuccess();
+            return ServerResponse.createByErrorMessage("添加用户失败");
         }
     }
 
