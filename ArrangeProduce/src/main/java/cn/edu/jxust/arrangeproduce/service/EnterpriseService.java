@@ -34,4 +34,12 @@ public interface EnterpriseService {
      */
     Boolean existInDbByName(String enterpriseName);
 
+    /**
+     * 删除该企业
+     *
+     * @param enterpriseId 企业Id
+     * @return Boolean
+     */
+    Boolean deleteEnterpriseId(String enterpriseId);
+
 }

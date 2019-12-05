@@ -10,12 +10,11 @@ import cn.edu.jxust.arrangeproduce.entity.vo.ArrangeVo;
 import cn.edu.jxust.arrangeproduce.service.ArrangeService;
 import cn.edu.jxust.arrangeproduce.util.UUIDUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -76,5 +75,31 @@ public class ArrangeController extends BaseController {
         }
     }
 
+    /**
+     * 删除一条排产
+     *
+     * @param arrangeId 排产Id
+     * @return ServerResponse
+     */
+    @RequiredPermission
+    @DeleteMapping("/{arrangeId}")
+    @Transactional(rollbackFor = Exception.class)
+    public ServerResponse deleteArrangeById(@PathVariable("arrangeId") String arrangeId){
+        if(StringUtils.isEmpty(arrangeId)){
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.PARAMETER_ERROR.getCode(), ResponseCode.PARAMETER_ERROR.getDesc());
+        } else {
+            try {
+                Boolean delete = arrangeService.deleteArrangeByArrangeId(arrangeId);
+                if(delete){
+                    return ServerResponse.createBySuccessMessage("删除成功");
+                } else {
+                    return ServerResponse.createByErrorMessage("删除失败, 请重试");
+                }
+            } catch (Exception e){
+                log.error("delete arrange error : {}", e.getMessage());
+                return ServerResponse.createByErrorMessage("删除一条排产发生未知异常");
+            }
+        }
+    }
 
 }

@@ -9,7 +9,9 @@ import cn.edu.jxust.arrangeproduce.entity.po.User;
 import cn.edu.jxust.arrangeproduce.service.GaugeService;
 import cn.edu.jxust.arrangeproduce.util.UUIDUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -82,4 +84,32 @@ public class GaugeController extends BaseController {
         User user = (User) session.getAttribute(Const.CURRENT_USER);
         return gaugeService.getAllGaugeByEnterpriseId(user.getEnterpriseId());
     }
+
+    /**
+     * 删除一条线规
+     *
+     * @param gaugeId 线规Id
+     * @return ServerResponse
+     */
+    @RequiredPermission
+    @DeleteMapping("/{gaugeId}")
+    @Transactional(rollbackFor = Exception.class)
+    public ServerResponse deleteGaugeById(@PathVariable("gaugeId") String gaugeId){
+        if(StringUtils.isEmpty(gaugeId)){
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.PARAMETER_ERROR.getCode(), ResponseCode.PARAMETER_ERROR.getDesc());
+        } else {
+            try {
+                Boolean delete = gaugeService.deleteGaugeByGaugeId(gaugeId);
+                if(delete){
+                    return ServerResponse.createBySuccessMessage("删除成功");
+                } else {
+                    return ServerResponse.createByErrorMessage("删除失败, 请重试");
+                }
+            } catch (Exception e){
+                log.error("delete gauge error : {}", e.getMessage());
+                return ServerResponse.createByErrorMessage("删除一条线规发生未知异常");
+            }
+        }
+    }
+
 }

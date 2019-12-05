@@ -29,4 +29,20 @@ public interface ArrangeService {
      */
     Boolean isConflict(Long arrangeDate, String shift, String machine, String enterpriseId);
 
+    /**
+     * 删除该企业的所有的排产信息
+     *
+     * @param enterpriseId 企业Id
+     * @return Boolean
+     */
+    Boolean deleteAllArrangeByEnterpriseId(String enterpriseId);
+
+    /**
+     * 删除排产信息
+     *
+     * @param arrangeId 排产Id
+     * @return Boolean
+     */
+    Boolean deleteArrangeByArrangeId(String arrangeId);
+
 }

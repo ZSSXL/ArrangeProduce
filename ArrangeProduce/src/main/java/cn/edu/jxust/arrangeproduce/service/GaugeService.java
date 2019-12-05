@@ -38,4 +38,20 @@ public interface GaugeService {
      */
     Boolean existInDb(String enterpriseId, BigDecimal gauge);
 
+    /**
+     * 删除该企业的所有线规
+     *
+     * @param enterpriseId 企业Id
+     * @return Boolean
+     */
+    Boolean deleteAllGaugeByEnterpriseId(String enterpriseId);
+
+    /**
+     * 删除该线规
+     *
+     * @param gaugeId 线规Id
+     * @return Boolean
+     */
+    Boolean deleteGaugeByGaugeId(String gaugeId);
+
 }

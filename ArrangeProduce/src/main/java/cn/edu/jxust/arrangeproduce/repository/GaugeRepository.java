@@ -2,7 +2,9 @@ package cn.edu.jxust.arrangeproduce.repository;
 
 import cn.edu.jxust.arrangeproduce.entity.po.Gauge;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -32,5 +34,25 @@ public interface GaugeRepository extends JpaRepository<Gauge, String> {
      * @return List<Gauge>
      */
     List<Gauge> findAllByEnterpriseIdOrderByGaugeDesc(String enterpriseId);
+
+    /**
+     * 删除该企业的所有线规
+     *
+     * @param enterpriseId 企业Id
+     * @return Integer
+     */
+    @Modifying
+    @Transactional(rollbackFor = Exception.class)
+    Integer deleteAllByEnterpriseId(String enterpriseId);
+
+    /**
+     * 删除该线规
+     *
+     * @param gaugeId 线规Id
+     * @return Integer
+     */
+    @Modifying
+    @Transactional(rollbackFor = Exception.class)
+    Integer deleteByGaugeId(String gaugeId);
 
 }

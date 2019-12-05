@@ -5,15 +5,14 @@ import cn.edu.jxust.arrangeproduce.common.ResponseCode;
 import cn.edu.jxust.arrangeproduce.common.ServerResponse;
 import cn.edu.jxust.arrangeproduce.entity.po.Enterprise;
 import cn.edu.jxust.arrangeproduce.entity.vo.EnterpriseVo;
-import cn.edu.jxust.arrangeproduce.service.EnterpriseService;
+import cn.edu.jxust.arrangeproduce.service.*;
 import cn.edu.jxust.arrangeproduce.util.UUIDUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -28,10 +27,18 @@ import javax.validation.Valid;
 public class AdminEnterpriseController {
 
     private final EnterpriseService enterpriseService;
+    private final UserService userService;
+    private final ArrangeService arrangeService;
+    private final MachineService machineService;
+    private final GaugeService gaugeService;
 
     @Autowired
-    public AdminEnterpriseController(EnterpriseService enterpriseService) {
+    public AdminEnterpriseController(EnterpriseService enterpriseService, UserService userService, ArrangeService arrangeService, MachineService machineService, GaugeService gaugeService) {
         this.enterpriseService = enterpriseService;
+        this.userService = userService;
+        this.arrangeService = arrangeService;
+        this.machineService = machineService;
+        this.gaugeService = gaugeService;
     }
 
     /**
@@ -63,6 +70,33 @@ public class AdminEnterpriseController {
                     log.error("create enterprise error : {}", e.getMessage());
                     return ServerResponse.createByErrorMessage("添加企业发生未知异常");
                 }
+            }
+        }
+    }
+
+    /**
+     * 删除企业
+     *
+     * @param enterpriseId 企业Id
+     * @return ServerResponse
+     */
+    @DeleteMapping("/{enterpriseId}")
+    @RequiredPermission("admin")
+    @Transactional(rollbackFor = Exception.class)
+    public ServerResponse deleteEnterprise(@PathVariable("enterpriseId") String enterpriseId) {
+        if (StringUtils.isEmpty(enterpriseId)) {
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.PARAMETER_ERROR.getCode(), ResponseCode.PARAMETER_ERROR.getDesc());
+        } else {
+            try {
+                gaugeService.deleteAllGaugeByEnterpriseId(enterpriseId);
+                machineService.deleteAllMachineByEnterpriseId(enterpriseId);
+                arrangeService.deleteAllArrangeByEnterpriseId(enterpriseId);
+                userService.deleteAllUserByEnterpriseId(enterpriseId);
+                enterpriseService.deleteEnterpriseId(enterpriseId);
+                return ServerResponse.createByErrorMessage("删除企业失败");
+            } catch (Exception e) {
+                log.error("delete enterprise error : {}", e.getMessage());
+                return ServerResponse.createByErrorMessage("删除企业发生未知异常");
             }
         }
     }

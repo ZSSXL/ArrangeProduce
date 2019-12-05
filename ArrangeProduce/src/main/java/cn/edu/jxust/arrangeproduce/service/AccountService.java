@@ -25,6 +25,6 @@ public interface AccountService {
      * @param password 密码
      * @return Boolean
      */
-    String login(String username, String password);
+    ServerResponse<String> login(String username, String password);
 
 }

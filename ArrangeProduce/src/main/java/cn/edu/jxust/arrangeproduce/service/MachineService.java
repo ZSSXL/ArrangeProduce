@@ -37,4 +37,20 @@ public interface MachineService {
      */
     Boolean existInDb(String enterpriseId, Integer machineNumber);
 
+    /**
+     * 删除该企业所有的小拉机
+     *
+     * @param enterpriseId 企业Id
+     * @return Boolean
+     */
+    Boolean deleteAllMachineByEnterpriseId(String enterpriseId);
+
+    /**
+     * 删除该小拉机
+     *
+     * @param machineId 小拉机Id
+     * @return Boolean
+     */
+    Boolean deleteMachineByMachineId(String machineId);
+
 }

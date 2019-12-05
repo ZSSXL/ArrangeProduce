@@ -4,6 +4,8 @@ import cn.edu.jxust.arrangeproduce.common.ServerResponse;
 import cn.edu.jxust.arrangeproduce.entity.po.Account;
 import cn.edu.jxust.arrangeproduce.repository.AccountRepository;
 import cn.edu.jxust.arrangeproduce.service.AccountService;
+import cn.edu.jxust.arrangeproduce.util.DateUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
  * @date 2019/12/3 11:30
  * @description Account 服务层实现方法
  */
+@Slf4j
 @Service
 public class AccountServiceImpl implements AccountService {
 
@@ -33,12 +36,14 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public String login(String username, String password) {
+    public ServerResponse<String> login(String username, String password) {
         Account account = accountRepository.findByAccountNameAndPassword(username, password).orElse(null);
         if (account != null) {
-            return account.getAccountId();
+            log.info("{} tried to login success when : {}", username, DateUtil.getDateComplete());
+            return ServerResponse.createBySuccess("登录成功", account.getAccountId());
         } else {
-            return null;
+            log.info("{} tried to login but failed at : {}", username, DateUtil.getDateComplete());
+            return ServerResponse.createByErrorMessage("登录失败, 用户名或密码错误");
         }
     }
 }

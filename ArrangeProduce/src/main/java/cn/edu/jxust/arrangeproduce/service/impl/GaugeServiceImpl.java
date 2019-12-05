@@ -4,6 +4,7 @@ import cn.edu.jxust.arrangeproduce.common.ServerResponse;
 import cn.edu.jxust.arrangeproduce.entity.po.Gauge;
 import cn.edu.jxust.arrangeproduce.repository.GaugeRepository;
 import cn.edu.jxust.arrangeproduce.service.GaugeService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ import java.util.List;
  * @date 2019/12/4 16:13
  * @description Gauge 服务层接口实现
  */
+@Slf4j
 @Service
 public class GaugeServiceImpl implements GaugeService {
 
@@ -48,5 +50,19 @@ public class GaugeServiceImpl implements GaugeService {
     @Override
     public Boolean existInDb(String enterpriseId, BigDecimal gauge) {
         return gaugeRepository.findByEnterpriseIdAndGauge(enterpriseId, gauge).isPresent();
+    }
+
+    @Override
+    public Boolean deleteAllGaugeByEnterpriseId(String enterpriseId) {
+        Integer integer = gaugeRepository.deleteAllByEnterpriseId(enterpriseId);
+        log.info("delete all gauge result : {}", integer);
+        return integer > 0;
+    }
+
+    @Override
+    public Boolean deleteGaugeByGaugeId(String gaugeId) {
+        Integer integer = gaugeRepository.deleteByGaugeId(gaugeId);
+        log.info("delete gauge result : {}", integer);
+        return integer > 0;
     }
 }

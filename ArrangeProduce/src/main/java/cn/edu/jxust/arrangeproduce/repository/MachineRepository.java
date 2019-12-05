@@ -2,7 +2,9 @@ package cn.edu.jxust.arrangeproduce.repository;
 
 import cn.edu.jxust.arrangeproduce.entity.po.Machine;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,5 +33,25 @@ public interface MachineRepository extends JpaRepository<Machine, String> {
      * @return List<Machine>
      */
     List<Machine> findAllByEnterpriseIdOrderByMachineNumber(String enterpriseId);
+
+    /**
+     * 删除该企业的所有小拉机
+     *
+     * @param enterpriseId 企业Id
+     * @return Integer
+     */
+    @Modifying
+    @Transactional(rollbackFor = Exception.class)
+    Integer deleteAllByEnterpriseId(String enterpriseId);
+
+    /**
+     * 删除该小拉机
+     *
+     * @param machineId 小拉机Id
+     * @return Integer
+     */
+    @Modifying
+    @Transactional(rollbackFor = Exception.class)
+    Integer deleteByMachineId(String machineId);
 
 }

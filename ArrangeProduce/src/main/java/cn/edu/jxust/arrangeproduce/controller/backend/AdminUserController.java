@@ -17,10 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -91,6 +88,33 @@ public class AdminUserController {
                 } else {
                     return ServerResponse.createByErrorMessage("该用户名已存在,请修改后再注册");
                 }
+            }
+        }
+    }
+
+    /**
+     * 删除一个用户
+     *
+     * @param userId 用户Id
+     * @return ServerResponse
+     */
+    @DeleteMapping("/{userId}")
+    @RequiredPermission("admin")
+    @Transactional(rollbackFor = Exception.class)
+    public ServerResponse deleteGaugeById(@PathVariable("userId") String userId) {
+        if (StringUtils.isEmpty(userId)) {
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.PARAMETER_ERROR.getCode(), ResponseCode.PARAMETER_ERROR.getDesc());
+        } else {
+            try {
+                Boolean delete = userService.deleteUserById(userId);
+                if (delete) {
+                    return ServerResponse.createBySuccessMessage("删除成功");
+                } else {
+                    return ServerResponse.createByErrorMessage("删除失败, 请重试");
+                }
+            } catch (Exception e) {
+                log.error("delete user error : {}", e.getMessage());
+                return ServerResponse.createByErrorMessage("删除一个用户发生未知异常");
             }
         }
     }
