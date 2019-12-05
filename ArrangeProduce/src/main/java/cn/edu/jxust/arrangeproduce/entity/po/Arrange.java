@@ -78,6 +78,12 @@ public class Arrange implements Serializable {
     private String enterpriseId;
 
     /**
+     * 二维码打印状态
+     */
+    @Column(nullable = false, columnDefinition = "int(2) comment '打印状态，是否打印过，0为未打印，1为已打印'")
+    private Integer status;
+
+    /**
      * 创建日期
      */
     @Column(updatable = false, columnDefinition = "bigint(20) comment'创建时间'")

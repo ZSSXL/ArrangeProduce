@@ -1,4 +1,4 @@
-package cn.edu.jxust.arrangeproduce.controller.common;
+package cn.edu.jxust.arrangeproduce.controller.portal;
 
 import cn.edu.jxust.arrangeproduce.common.Const;
 import cn.edu.jxust.arrangeproduce.common.ResponseCode;
@@ -40,7 +40,7 @@ public class AccountController extends BaseController {
     }
 
     /**
-     * 登录
+     * 主管和员工登录
      *
      * @param loginVo 登录Vo
      * @param session session

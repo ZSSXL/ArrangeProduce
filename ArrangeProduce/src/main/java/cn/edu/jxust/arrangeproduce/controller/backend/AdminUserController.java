@@ -73,20 +73,20 @@ public class AdminUserController {
                                 .userName(registerVo.getUsername())
                                 .phone(registerVo.getPhone())
                                 .enterpriseId(registerVo.getEnterpriseId())
-                                .role(Const.Role.ROLE_USER)
+                                .role(Const.Role.ROLE_MANAGER)
                                 .build());
                         accountService.createAccount(Account.builder()
                                 .accountId(userId)
                                 .accountName(registerVo.getUsername())
                                 .password(EncryptionUtil.encrypt(registerVo.getPassword()))
                                 .build());
-                        return ServerResponse.createBySuccessMessage("添加用户成功");
+                        return ServerResponse.createBySuccessMessage("添加主管成功");
                     } catch (Exception e) {
-                        log.error("create user error []", e);
-                        return ServerResponse.createByErrorMessage("添加用户失败");
+                        log.error("create manager error []", e);
+                        return ServerResponse.createByErrorMessage("添加主管失败");
                     }
                 } else {
-                    return ServerResponse.createByErrorMessage("该用户名已存在,请修改后再注册");
+                    return ServerResponse.createByErrorMessage("该主管名已存在,请修改后再注册");
                 }
             }
         }

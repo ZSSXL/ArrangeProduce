@@ -2,6 +2,10 @@ package cn.edu.jxust.arrangeproduce.service;
 
 import cn.edu.jxust.arrangeproduce.common.ServerResponse;
 import cn.edu.jxust.arrangeproduce.entity.po.Arrange;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
+import java.util.List;
 
 /**
  * @author ZSS
@@ -45,4 +49,19 @@ public interface ArrangeService {
      */
     Boolean deleteArrangeByArrangeId(String arrangeId);
 
+    /**
+     * 通过Id获取排产信息
+     *
+     * @param arrangeId 排产Id
+     * @return Arrange
+     */
+    Arrange getArrangeById(String arrangeId);
+
+    /**
+     * 分页获取所有的排产信息
+     *
+     * @param enterpriseId 企业Id
+     * @return ServerResponse<List < Arrange>>
+     */
+    ServerResponse<Page<Arrange>> getAllArrangeByEnterpriseId(String enterpriseId, Pageable pageable);
 }

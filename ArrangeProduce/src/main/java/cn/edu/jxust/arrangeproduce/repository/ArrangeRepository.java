@@ -1,11 +1,14 @@
 package cn.edu.jxust.arrangeproduce.repository;
 
 import cn.edu.jxust.arrangeproduce.entity.po.Arrange;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -47,5 +50,14 @@ public interface ArrangeRepository extends JpaRepository<Arrange, String> {
     @Modifying
     @Transactional(rollbackFor = Exception.class)
     Integer deleteByArrangeId(String arrangeId);
+
+    /**
+     * 分页获取该企业所有的排产信息
+     *
+     * @param enterpriseId 企业Id
+     * @param pageable     分页信息
+     * @return Page<Arrange>
+     */
+    Page<Arrange> findAllByEnterpriseId(String enterpriseId, Pageable pageable);
 
 }

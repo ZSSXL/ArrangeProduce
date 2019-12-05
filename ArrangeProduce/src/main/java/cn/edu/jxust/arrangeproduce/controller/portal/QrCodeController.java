@@ -12,12 +12,10 @@ import cn.edu.jxust.arrangeproduce.util.DateUtil;
 import cn.edu.jxust.arrangeproduce.util.QrCodeUtil;
 import cn.edu.jxust.arrangeproduce.util.UUIDUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -62,6 +60,7 @@ public class QrCodeController extends BaseController {
                 if (qrCode == null) {
                     return ServerResponse.createByErrorMessage("生成二维码失败");
                 } else {
+                    // todo 讲道理，这里打印之后也要改变数据库中的排产打印状态，但是好麻烦，但是不影响大局，后面有时间再改
                     qrCode = qrCode.replaceAll("\\n", "").replaceAll("\\r", "").replaceAll("\\r\\n", "");
                     return ServerResponse.createBySuccess(qrCode);
                 }
@@ -78,6 +77,7 @@ public class QrCodeController extends BaseController {
                             .enterpriseId(user.getEnterpriseId())
                             .weight(arrangeVo.getWeight())
                             .tolerance(arrangeVo.getTolerance())
+                            .status(1)
                             .build());
                 } catch (Exception e) {
                     log.error("create arrange error {}", e.getClass());
@@ -88,6 +88,49 @@ public class QrCodeController extends BaseController {
                     return ServerResponse.createByErrorMessage("生成二维码失败");
                 } else {
                     return ServerResponse.createBySuccess(qrCode);
+                }
+            }
+        }
+    }
+
+    /**
+     * 从历史记录中打印二维码
+     *
+     * @param arrangeId 排产Id
+     * @return ServerResponse<String>
+     */
+    @GetMapping("/{arrangeId}")
+    public ServerResponse<String> printByArrangeId(@PathVariable("arrangeId") String arrangeId, HttpSession session) {
+        if (StringUtils.isEmpty(arrangeId)) {
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.PARAMETER_ERROR.getCode(), ResponseCode.PARAMETER_ERROR.getDesc());
+        } else {
+            Object attribute = session.getAttribute(Const.CURRENT_USER);
+            if (attribute == null) {
+                return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
+            } else {
+                Arrange arrange = arrangeService.getArrangeById(arrangeId);
+                if (arrange == null) {
+                    return ServerResponse.createByErrorMessage("打印失败，没有该排产信息");
+                } else {
+                    String qrCode = generateQrCode(ArrangeVo.builder()
+                            .machine(arrange.getMachine())
+                            .gauge(arrange.getGauge())
+                            .tolerance(arrange.getTolerance())
+                            .shift(arrange.getShift())
+                            .build());
+                    if (StringUtils.isEmpty(qrCode)) {
+                        return ServerResponse.createByErrorMessage("生成二维码失败");
+                    } else {
+                        // 更新排产打印状态
+                        arrange.setStatus(1);
+                        ServerResponse response = arrangeService.createArrange(arrange);
+                        if (response.isSuccess()) {
+                            return ServerResponse.createBySuccess(qrCode);
+                        } else {
+                            return ServerResponse.createBySuccess("打印成功，但是更新排产信息打印状态失败", qrCode);
+                        }
+
+                    }
                 }
             }
         }

@@ -5,20 +5,18 @@ import cn.edu.jxust.arrangeproduce.common.Const;
 import cn.edu.jxust.arrangeproduce.common.ResponseCode;
 import cn.edu.jxust.arrangeproduce.common.ServerResponse;
 import cn.edu.jxust.arrangeproduce.entity.po.Account;
-import cn.edu.jxust.arrangeproduce.entity.po.User;
+import cn.edu.jxust.arrangeproduce.entity.po.Admin;
 import cn.edu.jxust.arrangeproduce.entity.vo.RegisterVo;
 import cn.edu.jxust.arrangeproduce.service.AccountService;
-import cn.edu.jxust.arrangeproduce.service.UserService;
+import cn.edu.jxust.arrangeproduce.service.AdminService;
 import cn.edu.jxust.arrangeproduce.util.EncryptionUtil;
 import cn.edu.jxust.arrangeproduce.util.UUIDUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -33,12 +31,12 @@ import javax.validation.Valid;
 public class AdminController {
 
     private final AccountService accountService;
-    private final UserService userService;
+    private final AdminService adminService;
 
     @Autowired
-    public AdminController(AccountService accountService, UserService userService) {
+    public AdminController(AccountService accountService, AdminService adminService) {
         this.accountService = accountService;
-        this.userService = userService;
+        this.adminService = adminService;
     }
 
     /**
@@ -55,18 +53,18 @@ public class AdminController {
         if (result.hasErrors()) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.PARAMETER_ERROR.getCode(), ResponseCode.PARAMETER_ERROR.getDesc());
         } else {
-            Boolean existInDb = userService.existInDb(registerVo.getUsername());
+            Boolean existInDb = adminService.existInDb(registerVo.getUsername());
             if (!existInDb) {
-                String userId = UUIDUtil.getId();
+                String adminId = UUIDUtil.getId();
                 try {
-                    userService.createUser(User.builder()
-                            .userId(userId)
-                            .userName(registerVo.getUsername())
+                    adminService.createAdmin(Admin.builder()
+                            .adminId(adminId)
+                            .adminName(registerVo.getUsername())
                             .phone(registerVo.getPhone())
                             .role(Const.Role.ROLE_ADMIN)
                             .build());
                     accountService.createAccount(Account.builder()
-                            .accountId(userId)
+                            .accountId(adminId)
                             .accountName(registerVo.getUsername())
                             .password(EncryptionUtil.encrypt(registerVo.getPassword()))
                             .build());
@@ -78,6 +76,34 @@ public class AdminController {
                 }
             } else {
                 return ServerResponse.createByErrorMessage("该用户名已存在,请修改后再注册");
+            }
+        }
+    }
+
+    /**
+     * 删除管理员, 只有初始管理员有这个权限
+     *
+     * @param adminId 管理员Id
+     * @return ServerResponse
+     */
+    @RequiredPermission
+    @DeleteMapping("/{adminId}")
+    @Transactional(rollbackFor = Exception.class)
+    public ServerResponse deleteAdminById(@PathVariable("adminId") String adminId) {
+        if (StringUtils.isEmpty(adminId)) {
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.PARAMETER_ERROR.getCode(), ResponseCode.PARAMETER_ERROR.getDesc());
+        } else {
+            Admin admin = adminService.getAdminById(adminId);
+            // 初始管理员名称为admin, 不允许删除
+            if (StringUtils.equals(admin.getAdminName(), Const.Role.ROLE_ADMIN)) {
+                return ServerResponse.createByErrorMessage("初始管理员无法删除");
+            } else {
+                Boolean result = adminService.deleteAdminById(adminId);
+                if (result) {
+                    return ServerResponse.createBySuccessMessage("删除管理员成功");
+                } else {
+                    return ServerResponse.createByErrorMessage("删除管理员失败");
+                }
             }
         }
     }

@@ -1,8 +1,10 @@
 package cn.edu.jxust.arrangeproduce.runner;
 
 import cn.edu.jxust.arrangeproduce.entity.po.Account;
+import cn.edu.jxust.arrangeproduce.entity.po.Admin;
 import cn.edu.jxust.arrangeproduce.entity.po.User;
 import cn.edu.jxust.arrangeproduce.service.AccountService;
+import cn.edu.jxust.arrangeproduce.service.AdminService;
 import cn.edu.jxust.arrangeproduce.service.UserService;
 import cn.edu.jxust.arrangeproduce.util.EncryptionUtil;
 import cn.edu.jxust.arrangeproduce.util.UUIDUtil;
@@ -20,30 +22,30 @@ import org.springframework.stereotype.Component;
 @Component
 public class InitAdmin implements CommandLineRunner {
 
-    private final String ADMIN = "admin";
-    private final String PASS = "123456";
-    private final String ROLE = "admin";
+    private final static String ADMIN = "admin";
+    private final static String PASS = "123456";
+    private final static String ROLE = "admin";
 
     private final AccountService accountService;
-    private final UserService userService;
+    private final AdminService adminService;
 
     @Autowired
-    public InitAdmin(AccountService accountService, UserService userService) {
+    public InitAdmin(AccountService accountService, AdminService adminService) {
         this.accountService = accountService;
-        this.userService = userService;
+        this.adminService = adminService;
     }
 
     @Override
     public void run(String... args) throws Exception {
-        Boolean exist = userService.existInDb(ADMIN);
+        Boolean exist = adminService.existInDb(ADMIN);
         if (exist) {
             log.info("初始管理员已经存在");
         } else {
             String adminId = UUIDUtil.getId();
             try {
-                userService.createUser(User.builder()
-                        .userId(adminId)
-                        .userName(ADMIN)
+                adminService.createAdmin(Admin.builder()
+                        .adminId(adminId)
+                        .adminName(ADMIN)
                         .role(ROLE)
                         .build());
                 accountService.createAccount(Account.builder()
@@ -52,7 +54,7 @@ public class InitAdmin implements CommandLineRunner {
                         .password(EncryptionUtil.encrypt(PASS))
                         .build());
             } catch (Exception e) {
-                log.error(" init admin error {}", e.getMessage());
+                log.error("init admin error {}", e.getMessage());
             }
         }
     }

@@ -80,8 +80,8 @@ public class AdminEnterpriseController {
      * @param enterpriseId 企业Id
      * @return ServerResponse
      */
-    @DeleteMapping("/{enterpriseId}")
     @RequiredPermission("admin")
+    @DeleteMapping("/{enterpriseId}")
     @Transactional(rollbackFor = Exception.class)
     public ServerResponse deleteEnterprise(@PathVariable("enterpriseId") String enterpriseId) {
         if (StringUtils.isEmpty(enterpriseId)) {
