@@ -66,27 +66,28 @@ public class QrCodeController extends BaseController {
                 }
             } else {
                 // 如果不存在，先保存，后打印
-                String arrangeId = UUIDUtil.getId();
-                try {
-                    arrangeService.createArrange(Arrange.builder()
-                            .arrangeId(arrangeId)
-                            .arrangeDate(arrangeVo.getArrangeDate())
-                            .gauge(arrangeVo.getGauge())
-                            .machine(arrangeVo.getMachine())
-                            .shift(arrangeVo.getShift())
-                            .enterpriseId(user.getEnterpriseId())
-                            .weight(arrangeVo.getWeight())
-                            .tolerance(arrangeVo.getTolerance())
-                            .status(1)
-                            .build());
-                } catch (Exception e) {
-                    log.error("create arrange error {}", e.getClass());
-                    return ServerResponse.createByErrorMessage("新建排产任务异常");
-                }
                 qrCode = generateQrCode(arrangeVo);
                 if (qrCode == null) {
                     return ServerResponse.createByErrorMessage("生成二维码失败");
                 } else {
+                    String arrangeId = UUIDUtil.getId();
+                    try {
+                        arrangeService.createArrange(Arrange.builder()
+                                .arrangeId(arrangeId)
+                                .arrangeDate(arrangeVo.getArrangeDate())
+                                .gauge(arrangeVo.getGauge())
+                                .machine(arrangeVo.getMachine())
+                                .shift(arrangeVo.getShift())
+                                .enterpriseId(user.getEnterpriseId())
+                                .weight(arrangeVo.getWeight())
+                                .tolerance(arrangeVo.getTolerance())
+                                // 更新打印状态为已打印(1)
+                                .status(1)
+                                .build());
+                    } catch (Exception e) {
+                        log.error("create arrange error {}", e.getClass());
+                        return ServerResponse.createByErrorMessage("新建排产任务异常");
+                    }
                     return ServerResponse.createBySuccess(qrCode);
                 }
             }
@@ -116,6 +117,7 @@ public class QrCodeController extends BaseController {
                             .machine(arrange.getMachine())
                             .gauge(arrange.getGauge())
                             .tolerance(arrange.getTolerance())
+                            .arrangeDate(arrange.getArrangeDate())
                             .shift(arrange.getShift())
                             .build());
                     if (StringUtils.isEmpty(qrCode)) {
