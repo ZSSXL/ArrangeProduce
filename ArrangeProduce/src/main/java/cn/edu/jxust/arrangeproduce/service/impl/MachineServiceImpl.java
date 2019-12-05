@@ -28,7 +28,7 @@ public class MachineServiceImpl implements MachineService {
     public ServerResponse createMachine(Machine machine) {
         Machine save = machineRepository.save(machine);
         if (save != null) {
-            return ServerResponse.createBySuccessMessage("添加小拉机失败");
+            return ServerResponse.createBySuccessMessage("添加小拉机成功");
         } else {
             return ServerResponse.createByErrorMessage("添加小拉机失败");
         }

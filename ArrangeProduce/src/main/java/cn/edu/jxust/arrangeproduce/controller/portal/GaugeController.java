@@ -51,7 +51,6 @@ public class GaugeController extends BaseController {
         } else {
             User user = (User) session.getAttribute(Const.CURRENT_USER);
             BigDecimal gaugeDecimal = new BigDecimal(gauge);
-            System.out.println("BigDecimal : " + gaugeDecimal);
             Boolean exist = gaugeService.existInDb(user.getEnterpriseId(), gaugeDecimal);
             if (exist) {
                 return ServerResponse.createByErrorMessage("改线规已存在，请仔细查找");

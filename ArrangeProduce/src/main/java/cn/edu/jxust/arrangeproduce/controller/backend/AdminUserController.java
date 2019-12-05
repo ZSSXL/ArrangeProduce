@@ -63,7 +63,7 @@ public class AdminUserController {
         } else {
             // 判断是否存在该企业，存在则添加
             Boolean enterpriseId = enterpriseService.existInDbById(registerVo.getEnterpriseId());
-            if (enterpriseId) {
+            if (!enterpriseId) {
                 return ServerResponse.createByErrorMessage("该企业不存在");
             } else {
                 // 判断是否存在该用户，不存在则添加

@@ -1,5 +1,7 @@
 package cn.edu.jxust.arrangeproduce.service.impl;
 
+import cn.edu.jxust.arrangeproduce.common.ServerResponse;
+import cn.edu.jxust.arrangeproduce.entity.po.Enterprise;
 import cn.edu.jxust.arrangeproduce.repository.EnterpriseRepository;
 import cn.edu.jxust.arrangeproduce.service.EnterpriseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +23,22 @@ public class EnterpriseServiceImpl implements EnterpriseService {
     }
 
     @Override
+    public ServerResponse createEnterprise(Enterprise enterprise) {
+        Enterprise save = enterpriseRepository.save(enterprise);
+        if (save != null) {
+            return ServerResponse.createBySuccessMessage("添加企业成功");
+        } else {
+            return ServerResponse.createByErrorMessage("添加企业失败");
+        }
+    }
+
+    @Override
     public Boolean existInDbById(String enterpriseId) {
         return enterpriseRepository.findById(enterpriseId).isPresent();
+    }
+
+    @Override
+    public Boolean existInDbByName(String enterpriseName) {
+        return enterpriseRepository.findByEnterpriseName(enterpriseName).isPresent();
     }
 }
