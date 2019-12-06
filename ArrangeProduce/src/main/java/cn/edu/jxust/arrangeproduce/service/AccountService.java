@@ -12,6 +12,7 @@ public interface AccountService {
 
     /**
      * 创建账户
+     *
      * @param account 账户实体
      * @return 创建账户
      */
@@ -24,6 +25,6 @@ public interface AccountService {
      * @param password 密码
      * @return Boolean
      */
-    String login(String username, String password);
+    ServerResponse<String> login(String username, String password);
 
 }

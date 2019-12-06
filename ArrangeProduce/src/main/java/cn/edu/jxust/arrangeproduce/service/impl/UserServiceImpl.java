@@ -4,6 +4,7 @@ import cn.edu.jxust.arrangeproduce.common.ServerResponse;
 import cn.edu.jxust.arrangeproduce.entity.po.User;
 import cn.edu.jxust.arrangeproduce.repository.UserRepository;
 import cn.edu.jxust.arrangeproduce.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
  * @date 2019/12/3 13:46
  * @description User 服务层方法实现
  */
+@Slf4j
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -25,10 +27,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public ServerResponse createUser(User user) {
         User save = userRepository.save(user);
-        if(save == null){
-            return ServerResponse.createByError();
-        } else {
+        if (save != null) {
             return ServerResponse.createBySuccess();
+        } else {
+            return ServerResponse.createByError();
         }
     }
 
@@ -40,5 +42,19 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserById(String userId) {
         return userRepository.findById(userId).orElse(null);
+    }
+
+    @Override
+    public Boolean deleteAllUserByEnterpriseId(String enterpriseId) {
+        Integer integer = userRepository.deleteAllByEnterpriseId(enterpriseId);
+        log.info("delete all user result : {}", integer);
+        return integer > 0;
+    }
+
+    @Override
+    public Boolean deleteUserById(String userId) {
+        Integer integer = userRepository.deleteByUserId(userId);
+        log.info("delete user result : {}", integer);
+        return integer > 0;
     }
 }

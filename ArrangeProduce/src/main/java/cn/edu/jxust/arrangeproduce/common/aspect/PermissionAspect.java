@@ -4,6 +4,7 @@ import cn.edu.jxust.arrangeproduce.annotation.RequiredPermission;
 import cn.edu.jxust.arrangeproduce.common.Const;
 import cn.edu.jxust.arrangeproduce.common.ResponseCode;
 import cn.edu.jxust.arrangeproduce.common.ServerResponse;
+import cn.edu.jxust.arrangeproduce.entity.po.Admin;
 import cn.edu.jxust.arrangeproduce.entity.po.User;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -17,7 +18,6 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.lang.reflect.Method;
 
 /**
  * @author ZSS
@@ -33,23 +33,33 @@ public class PermissionAspect {
     public Object aroundPermission(ProceedingJoinPoint joinPoint) throws Throwable {
         // 获取注解中的参数
         MethodSignature ms = (MethodSignature) joinPoint.getSignature();
-        Method method = ms.getMethod();
-        RequiredPermission requiredPermission = method.getAnnotation(RequiredPermission.class);
+        RequiredPermission requiredPermission = ms.getMethod().getAnnotation(RequiredPermission.class);
         String permission = requiredPermission.value();
 
-        // 获取session
         ServletRequestAttributes sra = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         if (sra != null) {
             HttpServletRequest request = sra.getRequest();
             HttpSession session = request.getSession();
-            User user = (User) session.getAttribute(Const.CURRENT_USER);
-            if (user == null) {
+            Object object = session.getAttribute(Const.CURRENT_USER);
+            if (object == null) {
                 return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "请先登录");
             } else {
-                if (StringUtils.equals(permission, user.getRole())){
-                    return joinPoint.proceed();
+                // 查看注解参数是否为admin
+                // todo 普通用户访问admin接口会发生强制转换异常
+                if (StringUtils.equals(permission, Const.Role.ROLE_ADMIN)) {
+                    Admin admin = (Admin) object;
+                    if (StringUtils.equals(permission, admin.getRole())) {
+                        return joinPoint.proceed();
+                    } else {
+                        return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(), "权限错误, 你不是管理员");
+                    }
                 } else {
-                    return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(), "权限错误");
+                    User user = (User) object;
+                    if (StringUtils.equals(permission, user.getRole())) {
+                        return joinPoint.proceed();
+                    } else {
+                        return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(), "权限错误, ");
+                    }
                 }
             }
         } else {

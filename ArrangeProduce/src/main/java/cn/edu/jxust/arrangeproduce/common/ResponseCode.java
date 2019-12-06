@@ -21,7 +21,12 @@ public enum ResponseCode {
     /**
      * 未登录
      */
-    NEED_LOGIN(10, "NEED_LOGIN");
+    NEED_LOGIN(10, "NEED_LOGIN"),
+
+    /**
+     * 参数错误
+     */
+    PARAMETER_ERROR(11, "PARAMETER_ERROR");
 
     private final int code;
     private final String desc;

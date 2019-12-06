@@ -62,8 +62,26 @@ public class Arrange implements Serializable {
     /**
      * 安排班次 A为早班，B为晚班
      */
-    @Column(nullable = false, columnDefinition = "varchar(10) comment '安排班次 A为早班，B为晚班'")
+    @Column(nullable = false, columnDefinition = "varchar(10) comment '安排班次 1为早班，为晚班'")
     private String shift;
+
+    /**
+     * 公差
+     */
+    @Column(columnDefinition = "varchar(10) default '0' comment '公差'")
+    private String tolerance;
+
+    /**
+     * 所属企业
+     */
+    @Column(nullable = false, columnDefinition = "varchar(255) comment '所属企业'")
+    private String enterpriseId;
+
+    /**
+     * 二维码打印状态
+     */
+    @Column(nullable = false, columnDefinition = "int(2) comment '打印状态，是否打印过，0为未打印，1为已打印'")
+    private Integer status;
 
     /**
      * 创建日期

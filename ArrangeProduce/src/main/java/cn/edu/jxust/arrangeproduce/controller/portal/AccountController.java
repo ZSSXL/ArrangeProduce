@@ -1,6 +1,7 @@
-package cn.edu.jxust.arrangeproduce.controller.common;
+package cn.edu.jxust.arrangeproduce.controller.portal;
 
 import cn.edu.jxust.arrangeproduce.common.Const;
+import cn.edu.jxust.arrangeproduce.common.ResponseCode;
 import cn.edu.jxust.arrangeproduce.common.ServerResponse;
 import cn.edu.jxust.arrangeproduce.controller.portal.BaseController;
 import cn.edu.jxust.arrangeproduce.entity.po.User;
@@ -9,7 +10,6 @@ import cn.edu.jxust.arrangeproduce.service.AccountService;
 import cn.edu.jxust.arrangeproduce.service.UserService;
 import cn.edu.jxust.arrangeproduce.util.EncryptionUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,31 +40,30 @@ public class AccountController extends BaseController {
     }
 
     /**
-     * 登录
+     * 主管和员工登录
      *
      * @param loginVo 登录Vo
      * @param session session
      * @param result  错误结果
-     * @return ServerResponse
+     * @return ServerResponse<String>
      */
     @PostMapping
-    public ServerResponse login(@RequestBody @Valid LoginVo loginVo, HttpSession session, BindingResult result) {
+    public ServerResponse<String> login(@RequestBody @Valid LoginVo loginVo, HttpSession session, BindingResult result) {
         if (result.hasErrors()) {
-            return ServerResponse.createByErrorMessage("参数错误");
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.PARAMETER_ERROR.getCode(), ResponseCode.PARAMETER_ERROR.getDesc());
         } else {
-            String userId = accountService.login(loginVo.getUsername(), EncryptionUtil.encrypt(loginVo.getPassword()));
-            if (StringUtils.isNoneEmpty(userId)) {
-                User user = userService.getUserById(userId);
+            ServerResponse<String> login = accountService.login(loginVo.getUsername(), EncryptionUtil.encrypt(loginVo.getPassword()));
+            if (login.isSuccess()) {
+                User user = userService.getUserById(login.getData());
                 if (user != null) {
                     session.setAttribute(Const.CURRENT_USER, user);
-                    log.info("登录成功");
-                    return ServerResponse.createBySuccessMessage("登录成功");
+                    return login;
                 } else {
                     log.error("登录失败，保存session错误");
                     return ServerResponse.createByErrorMessage("登录失败, 保存session错误");
                 }
             } else {
-                return ServerResponse.createByErrorMessage("登录失败, 用户名和密码不匹配");
+                return login;
             }
         }
     }

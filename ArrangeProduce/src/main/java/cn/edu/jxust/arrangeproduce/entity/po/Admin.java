@@ -16,37 +16,42 @@ import java.io.Serializable;
 
 /**
  * @author ZSS
- * @date 2019/12/3 11:10
- * @description 防错实体
+ * @date 2019/12/5 18:13
+ * @description 管理员实体
  */
-@Entity(name = "ap_proof")
-@org.hibernate.annotations.Table(appliesTo = "ap_proof", comment = "防错表")
+@Entity(name = "ap_admin")
+@org.hibernate.annotations.Table(appliesTo = "ap_admin", comment = "账户表")
 @Data
-@Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @EntityListeners(AuditingEntityListener.class)
-public class Proof implements Serializable {
+public class Admin implements Serializable {
 
     /**
      * Id
      */
     @Id
-    @Column(nullable = false, columnDefinition = "varchar(255) comment 'Id'")
-    private String proofId;
+    @Column(unique = true, nullable = false, columnDefinition = "varchar(255) comment 'Id'")
+    private String adminId;
 
     /**
-     * 设定线规
+     * 用户名
      */
-    @Column(nullable = false, columnDefinition = "varchar(10) comment '设定线规'")
-    private String gauge;
+    @Column(nullable = false, columnDefinition = "varchar(100) comment '名称'")
+    private String adminName;
 
     /**
-     * 安排重量
+     * 身份
      */
-    @Column(nullable = false, columnDefinition = "varchar(20) comment '安排重量'")
-    private String weight;
+    @Column(nullable = false, columnDefinition = "varchar(10) comment '身份'")
+    private String role;
 
+    /**
+     * 电话
+     */
+    @Column(columnDefinition = "varchar(50) comment '电话'")
+    private String phone;
 
     /**
      * 创建日期

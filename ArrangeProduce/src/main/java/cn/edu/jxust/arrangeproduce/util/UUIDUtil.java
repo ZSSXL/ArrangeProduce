@@ -11,9 +11,10 @@ public class UUIDUtil {
 
     /**
      * 获取 UUID
+     *
      * @return String
      */
-    public static String getId(){
+    public static String getId() {
         return UUID.randomUUID().toString().replace("-", "");
     }
 

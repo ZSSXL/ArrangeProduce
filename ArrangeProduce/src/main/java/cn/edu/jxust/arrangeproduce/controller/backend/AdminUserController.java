@@ -2,6 +2,7 @@ package cn.edu.jxust.arrangeproduce.controller.backend;
 
 import cn.edu.jxust.arrangeproduce.annotation.RequiredPermission;
 import cn.edu.jxust.arrangeproduce.common.Const;
+import cn.edu.jxust.arrangeproduce.common.ResponseCode;
 import cn.edu.jxust.arrangeproduce.common.ServerResponse;
 import cn.edu.jxust.arrangeproduce.entity.po.Account;
 import cn.edu.jxust.arrangeproduce.entity.po.User;
@@ -16,10 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -56,7 +54,7 @@ public class AdminUserController {
     @Transactional(rollbackFor = Exception.class)
     public ServerResponse registerUser(@Valid @RequestBody RegisterVo registerVo, BindingResult result) {
         if (result.hasErrors()) {
-            return ServerResponse.createByErrorMessage("参数错误");
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.PARAMETER_ERROR.getCode(), ResponseCode.PARAMETER_ERROR.getDesc());
         } else if (StringUtils.isEmpty(registerVo.getEnterpriseId())) {
             return ServerResponse.createByErrorMessage("请选择企业");
         } else {
@@ -75,21 +73,48 @@ public class AdminUserController {
                                 .userName(registerVo.getUsername())
                                 .phone(registerVo.getPhone())
                                 .enterpriseId(registerVo.getEnterpriseId())
-                                .role(Const.Role.ROLE_USER)
+                                .role(Const.Role.ROLE_MANAGER)
                                 .build());
                         accountService.createAccount(Account.builder()
                                 .accountId(userId)
                                 .accountName(registerVo.getUsername())
                                 .password(EncryptionUtil.encrypt(registerVo.getPassword()))
                                 .build());
-                        return ServerResponse.createBySuccessMessage("添加用户成功");
+                        return ServerResponse.createBySuccessMessage("添加主管成功");
                     } catch (Exception e) {
-                        log.error("create user error []", e);
-                        return ServerResponse.createByErrorMessage("添加用户失败");
+                        log.error("create manager error []", e);
+                        return ServerResponse.createByErrorMessage("添加主管失败");
                     }
                 } else {
-                    return ServerResponse.createByErrorMessage("该用户名已存在,请修改后再注册");
+                    return ServerResponse.createByErrorMessage("该主管名已存在,请修改后再注册");
                 }
+            }
+        }
+    }
+
+    /**
+     * 删除一个用户
+     *
+     * @param userId 用户Id
+     * @return ServerResponse
+     */
+    @DeleteMapping("/{userId}")
+    @RequiredPermission("admin")
+    @Transactional(rollbackFor = Exception.class)
+    public ServerResponse deleteGaugeById(@PathVariable("userId") String userId) {
+        if (StringUtils.isEmpty(userId)) {
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.PARAMETER_ERROR.getCode(), ResponseCode.PARAMETER_ERROR.getDesc());
+        } else {
+            try {
+                Boolean delete = userService.deleteUserById(userId);
+                if (delete) {
+                    return ServerResponse.createBySuccessMessage("删除成功");
+                } else {
+                    return ServerResponse.createByErrorMessage("删除失败, 请重试");
+                }
+            } catch (Exception e) {
+                log.error("delete user error : {}", e.getMessage());
+                return ServerResponse.createByErrorMessage("删除一个用户发生未知异常");
             }
         }
     }

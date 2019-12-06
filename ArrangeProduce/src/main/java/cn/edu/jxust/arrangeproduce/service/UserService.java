@@ -28,8 +28,25 @@ public interface UserService {
 
     /**
      * 通过用户Id 查询用户信息
+     *
      * @param userId 用户Id
      * @return User
      */
     User getUserById(String userId);
+
+    /**
+     * 删除该企业的所有用户
+     *
+     * @param enterpriseId 企业Id
+     * @return Boolean
+     */
+    Boolean deleteAllUserByEnterpriseId(String enterpriseId);
+
+    /**
+     * 删除用户
+     *
+     * @param userId userId
+     * @return Boolean
+     */
+    Boolean deleteUserById(String userId);
 }

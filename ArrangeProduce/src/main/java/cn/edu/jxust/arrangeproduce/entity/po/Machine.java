@@ -16,37 +16,42 @@ import java.io.Serializable;
 
 /**
  * @author ZSS
- * @date 2019/12/3 11:10
- * @description 防错实体
+ * @date 2019/12/4 16:18
+ * @description 设备实体
  */
-@Entity(name = "ap_proof")
-@org.hibernate.annotations.Table(appliesTo = "ap_proof", comment = "防错表")
+@Entity(name = "ap_machine")
+@org.hibernate.annotations.Table(appliesTo = "ap_machine", comment = "账户表")
 @Data
-@Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @EntityListeners(AuditingEntityListener.class)
-public class Proof implements Serializable {
+public class Machine implements Serializable {
 
     /**
-     * Id
+     * 小拉机Id
      */
     @Id
-    @Column(nullable = false, columnDefinition = "varchar(255) comment 'Id'")
-    private String proofId;
+    @Column(columnDefinition = "varchar(255) comment '小拉机Id'")
+    private String machineId;
 
     /**
-     * 设定线规
+     * 小拉机名称
      */
-    @Column(nullable = false, columnDefinition = "varchar(10) comment '设定线规'")
-    private String gauge;
+    @Column(columnDefinition = "varchar(50) comment '小拉机名称'")
+    private String machineName;
 
     /**
-     * 安排重量
+     * 小拉机比那好
      */
-    @Column(nullable = false, columnDefinition = "varchar(20) comment '安排重量'")
-    private String weight;
+    @Column(columnDefinition = "int(8) comment '小拉机编号，如：2001'")
+    private Integer machineNumber;
 
+    /**
+     * 所属企业
+     */
+    @Column(columnDefinition = "varchar(255) comment '所属企业'")
+    private String enterpriseId;
 
     /**
      * 创建日期

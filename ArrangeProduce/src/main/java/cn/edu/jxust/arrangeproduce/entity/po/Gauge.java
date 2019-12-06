@@ -13,40 +13,40 @@ import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.Id;
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
  * @author ZSS
- * @date 2019/12/3 11:10
- * @description 防错实体
+ * @date 2019/12/4 16:05
+ * @description 线规
  */
-@Entity(name = "ap_proof")
-@org.hibernate.annotations.Table(appliesTo = "ap_proof", comment = "防错表")
+@Entity(name = "ap_gauge")
+@org.hibernate.annotations.Table(appliesTo = "ap_gauge", comment = "线规表")
 @Data
-@Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @EntityListeners(AuditingEntityListener.class)
-public class Proof implements Serializable {
+public class Gauge implements Serializable {
 
     /**
-     * Id
+     * 线规Id
      */
     @Id
-    @Column(nullable = false, columnDefinition = "varchar(255) comment 'Id'")
-    private String proofId;
+    @Column(nullable = false, columnDefinition = "varchar(255) comment '线规Id'")
+    private String gaugeId;
 
     /**
-     * 设定线规
+     * 线规
      */
-    @Column(nullable = false, columnDefinition = "varchar(10) comment '设定线规'")
-    private String gauge;
+    @Column(nullable = false, columnDefinition = "decimal(5,4) comment '线规'")
+    private BigDecimal gauge;
 
     /**
-     * 安排重量
+     * 所属企业
      */
-    @Column(nullable = false, columnDefinition = "varchar(20) comment '安排重量'")
-    private String weight;
-
+    @Column(nullable = false, columnDefinition = "varchar(255) comment '企业Id'")
+    private String enterpriseId;
 
     /**
      * 创建日期
