@@ -2,15 +2,12 @@ package cn.edu.jxust.arrangeproduce.websocket;
 
 import cn.edu.jxust.arrangeproduce.entity.po.User;
 import cn.edu.jxust.arrangeproduce.service.UserService;
-import cn.edu.jxust.arrangeproduce.util.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.socket.handler.TextWebSocketHandler;
 
-import javax.websocket.OnClose;
-import javax.websocket.OnMessage;
-import javax.websocket.Session;
+import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
@@ -24,14 +21,9 @@ import java.util.concurrent.CopyOnWriteArraySet;
 @Slf4j
 @Component
 @ServerEndpoint("/notice/{userId}")
-public class Notice {
+public class Notice extends TextWebSocketHandler {
 
-    private final UserService userService;
-
-    @Autowired
-    public Notice(UserService userService) {
-        this.userService = userService;
-    }
+    public static UserService userService;
 
     /**
      * 静态变量，用来记录当前在线连接数，应该把它设计成线程安全的
@@ -53,6 +45,12 @@ public class Notice {
      */
     private String enterpriseId = "";
 
+    /**
+     * 建立连接
+     * @param userId 用户Id
+     * @param session session
+     */
+    @OnOpen
     public void onOpen(@PathParam("userId") String userId, Session session) {
         if (StringUtils.isEmpty(userId)) {
             log.error("参数错误");
@@ -63,48 +61,66 @@ public class Notice {
             }
         } else {
             User user = userService.getUserById(userId);
-            // 将当前用户的企业Id保存
-            this.enterpriseId = user.getEnterpriseId();
-            noticeSet.add(this);
-            addOnlineCount();
-            log.info("New connection, current number of people online : {}", onlineCount);
+            if (user != null) {
+                // 将当前用户的企业Id保存
+                this.enterpriseId = user.getEnterpriseId();
+                this.session = session;
+                noticeSet.add(this);
+                addOnlineCount();
+                log.info("New connection, currently online : {}", onlineCount);
+            } else {
+                log.warn("query user failed, the userId is : " + userId);
+            }
+
         }
     }
 
+    /**
+     * 断开连接
+     */
     @OnClose
     public void onClose() {
-        noticeSet.remove(this);
-        subOnlineCount();
-        log.info("someone offline");
+        if (!StringUtils.isEmpty(this.enterpriseId)) {
+            noticeSet.remove(this);
+            subOnlineCount();
+            log.info("someone offline, currently online : {}", onlineCount);
+        }
     }
 
+    /**
+     * 发送消息
+     *
+     * @param message 消息
+     * @param session session
+     */
     @OnMessage
-    public void onMessage(Session session) {
-
+    public void onMessage(String message, Session session) {
+        log.info("get message : {} by session : {}", message, session.getId());
+        sendAll();
     }
 
-    private void sendMessageToAll() {
+    /**
+     * 将提示消息发送给所有人，本企业的人只能发送给自己企业的人
+     */
+    public void sendAll() {
         // 发送数据给所有用户
         // 遍历noticeSet
         for (Notice notice : noticeSet) {
-            System.out.println(notice.enterpriseId);
             if (StringUtils.equals(this.enterpriseId, notice.enterpriseId)) {
-                try {
-                    notice.session.getBasicRemote().sendText("test");
-                } catch (IOException e) {
-                    log.error("{} : 发送消息给 ：{} 所有人发生异常", DateUtil.getDateComplete(), notice.enterpriseId);
+                if (!StringUtils.equals(this.session.getId(), notice.session.getId())) {
+                    try {
+                        notice.session.getBasicRemote().sendText("How are you ?");
+                    } catch (IOException e) {
+                        log.error("send message error : {}", e.getMessage());
+                    }
                 }
             }
         }
     }
 
-    /**
-     * 获取当前的在线人数
-     *
-     * @return int
-     */
-    private static synchronized int getOnlineCount() {
-        return onlineCount;
+    @OnError
+    public void onError(Session session, Throwable error) {
+        log.error("session : {} websocket has error : {}", session.getId(), error.getMessage());
     }
 
     /**
@@ -120,6 +136,8 @@ public class Notice {
     private static synchronized void subOnlineCount() {
         Notice.onlineCount--;
     }
+
+    // 重写hashCode和equals方法
 
     @Override
     public int hashCode() {
