@@ -71,6 +71,7 @@
             <li class="active" id="load-arrange"><a href="#"> <i class="icon-contract"></i>排产</a></li>
             <li id="load-error-prof"><a href="#"> <i class="icon-windows"></i>防错</a></li>
             <li id="load-history"><a href="#"> <i class="icon-bill"></i>历史记录</a></li>
+            <li id="load-employee"><a href="#"> <i class="icon-user"></i>员工信息</a></li>
         </ul>
         <span class="heading">Extra</span>
         <ul class="list-unstyled">
@@ -98,45 +99,12 @@
 <script src="vendor/jquery.cookie/jquery.cookie.js"></script>
 <script src="vendor/chart.js/Chart.min.js"></script>
 <script src="vendor/jquery-validation/jquery.validate.min.js"></script>
+<script src="js/load-page.js"></script>
 <script src="js/front.js"></script>
 <script type="text/javascript">
     window.onload = function () {
         $("#load-area").load("/arrange.html");
     };
-
-    $("#load-arrange").click(function () {
-        $("#load-area").load("/arrange.html");
-        $(this).attr("class", "active");
-        $("#load-error-prof").removeAttr("class");
-        $("#load-history").removeAttr("class");
-        $("#load-setting").removeAttr("class");
-    });
-
-    $("#load-error-prof").click(function () {
-        $("#load-area").load("/errorProf.html");
-        $(this).attr("class", "active");
-        $("#load-arrange").removeAttr("class");
-        $("#load-history").removeAttr("class");
-        $("#load-setting").removeAttr("class");
-    });
-
-    $("#load-history").click(function () {
-        $("#load-area").load("/history.html");
-        $(this).attr("class", "active");
-        $("#load-error-prof").removeAttr("class");
-        $("#load-arrange").removeAttr("class");
-        $("#load-setting").removeAttr("class");
-    });
-
-    $("#load-setting").click(function () {
-        $("#load-area").load("/settings.html");
-        $(this).attr("class", "active");
-        $("#load-error-prof").removeAttr("class");
-        $("#load-arrange").removeAttr("class");
-        $("#load-history").removeAttr("class");
-    });
-
-
 </script>
 </body>
 </html>

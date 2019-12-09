@@ -147,7 +147,7 @@ public class QrCodeController extends BaseController {
     private String generateQrCode(ArrangeVo arrangeVo) {
         StringBuilder qrMessage = new StringBuilder();
         // 打码时间
-        qrMessage.append(DateUtil.getDateSimple()).append("*");
+        qrMessage.append("8").append(DateUtil.getDateSimple()).append("*");
         // 小拉机编号
         qrMessage.append(arrangeVo.getMachine()).append("*");
         // 线规
