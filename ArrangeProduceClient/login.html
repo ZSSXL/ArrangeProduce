@@ -47,8 +47,7 @@
                         <div class="content">
                             <div class="form-group">
                                 <input id="login-username" type="text" name="loginUsername" required
-                                       data-msg="Please enter your username" class="input-material"
-                                       autofocus="autofocus">
+                                       data-msg="Please enter your username" class="input-material">
                                 <label for="login-username" class="label-material">用户名</label>
                             </div>
                             <div class="form-group">
@@ -119,7 +118,7 @@
 
     function analysisResult(result) {
         if (result.status === 0) {
-            localStorage.setItem("currentPage", "arrange");
+            localStorage.setItem("arrangeCurrentPage", "arrange");
             Notiflix.Notify.Success("登录成功");
             window.location.href = "/index.html";
         } else {
