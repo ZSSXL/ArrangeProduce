@@ -3,55 +3,102 @@
         <h2 class="h5 no-margin-bottom">排产</h2>
     </div>
 </div>
-<section class="no-padding-top no-padding-bottom">
-    <div class="container-fluid statistic-block block" id="load-area">
+<section class="no-padding-top">
+    <div class="container-fluid">
         <div class="row">
-            <div class="panel panel-dange">
-                <div class="panel-body">
-                    日期
-                </div>
-                <div class="panel-footer">
-                    <input type="date" value="2019-12-09 20:22"/>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    设备好
-                </div>
-                <div class="panel-footer">
-                    <input type="text" placeholder="2001"/>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    线规
-                </div>
-                <div class="panel-footer">
-                    <input type="text" placeholder="0.080"/>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    重量
-                </div>
-                <div class="panel-footer">
-                    <input type="text" value="39272"/>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    班次
-                </div>
-                <div class="panel-footer">
-                    <input type="text" value="早班"/>
+            <!-- Form Elements -->
+            <div class="col-lg-12">
+                <div class="block">
+                    <div class="block-body">
+                        <form class="form-horizontal">
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">
+                                    <h3>公差</h3>
+                                </label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" value="+0.005">
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">
+                                    <h3>重量</h3>
+                                </label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" value="3473">
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-lg-3 col-sm-3 form-control-label">
+                                    <h3>班次</h3>
+                                </label>
+                                <div class="col-lg-2 col-sm-3">
+                                    <div class="i-checks">
+                                        <input id="radioCustom2" type="radio" checked="" value="1" name="shift"
+                                               class="radio-template">
+                                        <label for="radioCustom2">早班</label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-7 col-sm-5">
+                                    <div class="i-checks">
+                                        <input id="radioCustom1" type="radio" value="0" name="shift"
+                                               class="radio-template">
+                                        <label for="radioCustom1">晚班</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">
+                                    <h3>小拉机</h3>
+                                </label>
+                                <div class="col-sm-9">
+                                    <select name="machine" class="form-control mb-3 mb-3">
+                                        <option>小拉机1号</option>
+                                        <option>小拉机2号</option>
+                                        <option>小拉机3号</option>
+                                        <option>小拉机4号</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">
+                                    <h3>线规</h3>
+                                </label>
+                                <div class="col-sm-9">
+                                    <select name="machine" class="form-control mb-3 mb-3">
+                                        <option>0.095</option>
+                                        <option>0.090</option>
+                                        <option>0.085</option>
+                                        <option>0.080</option>
+                                        <option>0.075</option>
+                                        <option>0.070</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">
+                                    <h3>
+                                        生产时间
+                                    </h3>
+                                </label>
+                                <div class="col-sm-9">
+                                    <input type="date" class="form-control">
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="form-group row">
+                                <div class="col-sm-9 ml-auto">
+                                    <button type="submit" class="btn btn-outline-info">保存</button>
+                                    <button type="submit" class="btn btn-outline-success">打印</button>
+                                    <button type="submit" class="btn btn-outline-secondary">取消</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -61,7 +108,7 @@
 <!-- javascript -->
 
 <script type="text/javascript">
-    $("#show").click(function (){
+    $("#show").click(function () {
         alert("show");
     });
 </script>
