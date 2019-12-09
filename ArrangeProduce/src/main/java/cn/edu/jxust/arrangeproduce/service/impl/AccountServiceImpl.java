@@ -27,12 +27,8 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public ServerResponse createAccount(Account account) {
-        Account save = accountRepository.save(account);
-        if (save == null) {
-            return ServerResponse.createByError();
-        } else {
-            return ServerResponse.createBySuccess();
-        }
+        accountRepository.save(account);
+        return ServerResponse.createBySuccess();
     }
 
     @Override

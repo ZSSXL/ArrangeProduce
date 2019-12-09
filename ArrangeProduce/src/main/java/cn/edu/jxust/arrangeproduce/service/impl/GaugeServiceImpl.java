@@ -29,12 +29,8 @@ public class GaugeServiceImpl implements GaugeService {
 
     @Override
     public ServerResponse createGauge(Gauge gauge) {
-        Gauge save = gaugeRepository.save(gauge);
-        if (save != null) {
-            return ServerResponse.createBySuccessMessage("添加线规成功");
-        } else {
-            return ServerResponse.createByErrorMessage("添加线规失败");
-        }
+        gaugeRepository.save(gauge);
+        return ServerResponse.createBySuccessMessage("添加线规成功");
     }
 
     @Override

@@ -31,13 +31,9 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public ServerResponse createAdmin(Admin admin) {
-        Admin save = adminRepository.save(admin);
-        if (save != null) {
-            log.info("create admin : {} success", admin.getAdminName());
-            return ServerResponse.createBySuccessMessage("添加管理员成功");
-        } else {
-            return ServerResponse.createByErrorMessage("添加管理员失败");
-        }
+        adminRepository.save(admin);
+        log.info("create admin : {} success", admin.getAdminName());
+        return ServerResponse.createBySuccessMessage("添加管理员成功");
     }
 
     @Override

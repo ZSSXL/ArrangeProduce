@@ -30,12 +30,8 @@ public class ArrangeServiceImpl implements ArrangeService {
 
     @Override
     public ServerResponse createArrange(Arrange arrange) {
-        Arrange save = arrangeRepository.save(arrange);
-        if (save != null) {
-            return ServerResponse.createBySuccess();
-        } else {
-            return ServerResponse.createByError();
-        }
+        arrangeRepository.save(arrange);
+        return ServerResponse.createBySuccess();
     }
 
     @Override

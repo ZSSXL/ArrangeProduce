@@ -26,12 +26,8 @@ public class EnterpriseServiceImpl implements EnterpriseService {
 
     @Override
     public ServerResponse createEnterprise(Enterprise enterprise) {
-        Enterprise save = enterpriseRepository.save(enterprise);
-        if (save != null) {
-            return ServerResponse.createBySuccessMessage("添加企业成功");
-        } else {
-            return ServerResponse.createByErrorMessage("添加企业失败");
-        }
+        enterpriseRepository.save(enterprise);
+        return ServerResponse.createBySuccessMessage("添加企业成功");
     }
 
     @Override

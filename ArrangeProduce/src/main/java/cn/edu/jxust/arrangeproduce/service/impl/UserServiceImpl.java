@@ -26,12 +26,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ServerResponse createUser(User user) {
-        User save = userRepository.save(user);
-        if (save != null) {
-            return ServerResponse.createBySuccess();
-        } else {
-            return ServerResponse.createByError();
-        }
+        userRepository.save(user);
+        return ServerResponse.createBySuccess();
     }
 
     @Override
