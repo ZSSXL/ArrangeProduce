@@ -21,6 +21,7 @@
         <zxing.version>3.3.3</zxing.version>
         <commons-lang3.version>3.8.1</commons-lang3.version>
         <joda.version>2.9.9</joda.version>
+        <jedis-client.version>3.1.0</jedis-client.version>
     </properties>
 
     <dependencies>
@@ -81,6 +82,14 @@
             <artifactId>joda-time</artifactId>
             <version>${joda.version}</version>
         </dependency>
+
+        <!-- jedis -->
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>${jedis-client.version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>
