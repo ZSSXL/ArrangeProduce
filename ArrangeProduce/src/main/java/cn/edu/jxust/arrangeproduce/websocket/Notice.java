@@ -6,7 +6,6 @@ import cn.edu.jxust.arrangeproduce.util.RedisPoolUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
-import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
@@ -25,7 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 @Component
 @ServerEndpoint("/notice/{userId}")
-public class Notice extends TextWebSocketHandler {
+public class Notice{
 
     public static UserService userService;
 
@@ -61,7 +60,7 @@ public class Notice extends TextWebSocketHandler {
      * @param session session
      */
     @OnOpen
-    public void onOpen(@PathParam("userId") String userId, Session session) {
+    public synchronized void onOpen(@PathParam("userId") String userId, Session session) {
         if (StringUtils.isEmpty(userId)) {
             log.error("参数错误");
             try {
@@ -78,6 +77,8 @@ public class Notice extends TextWebSocketHandler {
                 this.key = user.getEnterpriseId() + user.getUserId();
                 noticeMap.put(this.key, this);
                 addOnlineCount();
+                Thread thread = Thread.currentThread();
+                System.out.println("thread name on open: " + thread.getName());
                 log.info("New connection, currently online : {}", onlineCount);
             } else {
                 log.warn("query user failed, the userId is : " + userId);
@@ -107,6 +108,8 @@ public class Notice extends TextWebSocketHandler {
     @OnMessage
     public void onMessage(String message, Session session) {
         log.info("get message : {} by session : {}", message, session.getId());
+        Thread thread = Thread.currentThread();
+        System.out.println("thread name on message : " + thread.getName());
         sendAll();
     }
 
@@ -116,8 +119,8 @@ public class Notice extends TextWebSocketHandler {
     public void sendAll() {
         // 发送数据给所有用户
         // 模糊查询map的key
+        System.out.println("I'm here : " + this.enterpriseId);
         List<Notice> likeByMap = getLikeByMap(noticeMap, this.enterpriseId);
-        System.out.println("size : " + likeByMap.size());
         if (likeByMap.size() <= 1) {
             // 说明就只有本人在线，没有员工在线，所以将消息提示放在redis中、
             String s = RedisPoolUtil.get(this.enterpriseId + "Arrange");

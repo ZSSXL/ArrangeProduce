@@ -8,6 +8,7 @@ import cn.edu.jxust.arrangeproduce.entity.po.Arrange;
 import cn.edu.jxust.arrangeproduce.entity.po.User;
 import cn.edu.jxust.arrangeproduce.entity.vo.ArrangeVo;
 import cn.edu.jxust.arrangeproduce.service.ArrangeService;
+import cn.edu.jxust.arrangeproduce.util.RedisPoolUtil;
 import cn.edu.jxust.arrangeproduce.util.UUIDUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -20,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.util.List;
 
 /**
  * @author ZSS
@@ -45,7 +45,6 @@ public class ArrangeController extends BaseController {
      * @param arrangeVo 排产Vo实体
      * @param session   session
      * @param result    错误结果
-     * @return ServerResponse
      */
     @PostMapping
     @RequiredPermission
@@ -60,7 +59,7 @@ public class ArrangeController extends BaseController {
             } else {
                 String arrangeId = UUIDUtil.getId();
                 try {
-                    return arrangeService.createArrange(Arrange.builder()
+                    arrangeService.createArrange(Arrange.builder()
                             .arrangeId(arrangeId)
                             .arrangeDate(arrangeVo.getArrangeDate())
                             .gauge(arrangeVo.getGauge())
@@ -72,8 +71,14 @@ public class ArrangeController extends BaseController {
                             .status(0)
                             .build());
                 } catch (Exception e) {
-                    log.error("create arrange error {}", e.getClass());
+                    log.error("create arrange error {}", e.getMessage());
                     return ServerResponse.createByErrorMessage("新建排产任务异常");
+                }
+                try {
+                    return ServerResponse.createBySuccess();
+                } catch (Exception e) {
+                    log.error("notice message has error : {}", e.getMessage());
+                    return ServerResponse.createByError();
                 }
             }
         }
@@ -96,6 +101,42 @@ public class ArrangeController extends BaseController {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         } else {
             return arrangeService.getAllArrangeByEnterpriseId(user.getEnterpriseId(), PageRequest.of(page, size));
+        }
+    }
+
+    /**
+     * 员工上线后查看是否有未读消息
+     *
+     * @param session session
+     * @return ServeResponse
+     */
+    @GetMapping("/message")
+    @RequiredPermission("employee")
+    public ServerResponse<String> getMessage(HttpSession session) {
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
+        String result = RedisPoolUtil.get(user.getEnterpriseId() + "Arrange");
+        if (StringUtils.isEmpty(result)) {
+            return ServerResponse.createByErrorMessage("没有信息新消息");
+        } else {
+            return ServerResponse.createBySuccess("有新消息", result);
+        }
+    }
+
+    /**
+     * 员工查确认了消息后，删除Redis中的记录
+     *
+     * @param session session
+     * @return ServerResponse
+     */
+    @DeleteMapping("/message")
+    @RequiredPermission("employee")
+    public ServerResponse delMessage(HttpSession session) {
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
+        Long del = RedisPoolUtil.del(user.getEnterpriseId() + "Arrange");
+        if (del == 1) {
+            return ServerResponse.createBySuccess();
+        } else {
+            return ServerResponse.createByErrorMessage("没有什么好删除的了");
         }
     }
 

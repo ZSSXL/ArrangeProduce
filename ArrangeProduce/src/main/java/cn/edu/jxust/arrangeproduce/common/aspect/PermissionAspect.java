@@ -58,7 +58,7 @@ public class PermissionAspect {
                     if (StringUtils.equals(permission, user.getRole())) {
                         return joinPoint.proceed();
                     } else {
-                        return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(), "权限错误, ");
+                        return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(), "权限错误");
                     }
                 }
             }

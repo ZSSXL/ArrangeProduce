@@ -11,6 +11,7 @@ import cn.edu.jxust.arrangeproduce.service.ArrangeService;
 import cn.edu.jxust.arrangeproduce.util.DateUtil;
 import cn.edu.jxust.arrangeproduce.util.QrCodeUtil;
 import cn.edu.jxust.arrangeproduce.util.UUIDUtil;
+import cn.edu.jxust.arrangeproduce.websocket.Notice;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,20 +54,17 @@ public class QrCodeController extends BaseController {
         } else {
             User user = (User) session.getAttribute(Const.CURRENT_USER);
             Boolean conflict = arrangeService.isConflict(arrangeVo.getArrangeDate(), arrangeVo.getShift(), arrangeVo.getMachine(), user.getEnterpriseId());
-            String qrCode;
+            String qrCode = generateQrCode(arrangeVo);
             if (conflict) {
                 // 如果存在，直接打印
-                qrCode = generateQrCode(arrangeVo);
                 if (qrCode == null) {
                     return ServerResponse.createByErrorMessage("生成二维码失败");
                 } else {
                     // todo 讲道理，这里打印之后也要改变数据库中的排产打印状态，但是好麻烦，但是不影响大局，后面有时间再改
-                    qrCode = qrCode.replaceAll("\\n", "").replaceAll("\\r", "").replaceAll("\\r\\n", "");
                     return ServerResponse.createBySuccess(qrCode);
                 }
             } else {
                 // 如果不存在，先保存，后打印
-                qrCode = generateQrCode(arrangeVo);
                 if (qrCode == null) {
                     return ServerResponse.createByErrorMessage("生成二维码失败");
                 } else {
@@ -84,6 +82,9 @@ public class QrCodeController extends BaseController {
                                 // 更新打印状态为已打印(1)
                                 .status(1)
                                 .build());
+                        // 推送消息
+                        Notice notice = new Notice();
+                        notice.sendAll();
                     } catch (Exception e) {
                         log.error("create arrange error {}", e.getClass());
                         return ServerResponse.createByErrorMessage("新建排产任务异常");

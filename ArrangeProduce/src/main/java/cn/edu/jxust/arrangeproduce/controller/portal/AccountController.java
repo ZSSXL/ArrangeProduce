@@ -3,11 +3,11 @@ package cn.edu.jxust.arrangeproduce.controller.portal;
 import cn.edu.jxust.arrangeproduce.common.Const;
 import cn.edu.jxust.arrangeproduce.common.ResponseCode;
 import cn.edu.jxust.arrangeproduce.common.ServerResponse;
-import cn.edu.jxust.arrangeproduce.controller.portal.BaseController;
 import cn.edu.jxust.arrangeproduce.entity.po.User;
 import cn.edu.jxust.arrangeproduce.entity.vo.LoginVo;
 import cn.edu.jxust.arrangeproduce.service.AccountService;
 import cn.edu.jxust.arrangeproduce.service.UserService;
+import cn.edu.jxust.arrangeproduce.util.DateUtil;
 import cn.edu.jxust.arrangeproduce.util.EncryptionUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,7 +77,7 @@ public class AccountController extends BaseController {
     @PostMapping("/logout")
     public ServerResponse logout(HttpSession session) {
         session.removeAttribute(Const.CURRENT_USER);
-        log.info("退出登录");
+        log.info("退出登录 : {}", DateUtil.getDateComplete());
         return ServerResponse.createBySuccessMessage("退出登录成功");
     }
 }
