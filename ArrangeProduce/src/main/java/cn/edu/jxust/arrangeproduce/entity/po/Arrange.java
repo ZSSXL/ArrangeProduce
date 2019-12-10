@@ -84,6 +84,12 @@ public class Arrange implements Serializable {
     private Integer status;
 
     /**
+     * 创建者
+     */
+    @Column(nullable = false, columnDefinition = "varchar(100) comment '这条排产信息的创建者'")
+    private String creator;
+
+    /**
      * 创建日期
      */
     @Column(updatable = false, columnDefinition = "bigint(20) comment'创建时间'")

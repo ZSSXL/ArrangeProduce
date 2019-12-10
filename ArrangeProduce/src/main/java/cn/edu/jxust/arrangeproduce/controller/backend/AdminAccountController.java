@@ -8,7 +8,10 @@ import cn.edu.jxust.arrangeproduce.entity.vo.LoginVo;
 import cn.edu.jxust.arrangeproduce.service.AccountService;
 import cn.edu.jxust.arrangeproduce.service.AdminService;
 import cn.edu.jxust.arrangeproduce.util.EncryptionUtil;
+import cn.edu.jxust.arrangeproduce.util.MapUtil;
+import cn.edu.jxust.arrangeproduce.util.TokenUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,23 +34,24 @@ public class AdminAccountController {
 
     private final AdminService adminService;
     private final AccountService accountService;
+    private final TokenUtil tokenUtil;
 
     @Autowired
-    public AdminAccountController(AdminService adminService, AccountService accountService) {
+    public AdminAccountController(AdminService adminService, AccountService accountService, TokenUtil tokenUtil) {
         this.adminService = adminService;
         this.accountService = accountService;
+        this.tokenUtil = tokenUtil;
     }
 
     /**
      * 管理员登录
      *
      * @param loginVo 登录Vo
-     * @param session session
      * @param result  错误结果
      * @return ServerResponse<String>
      */
     @PostMapping
-    public ServerResponse<String> login(@RequestBody @Valid LoginVo loginVo, HttpSession session, BindingResult result) {
+    public ServerResponse<String> login(@RequestBody @Valid LoginVo loginVo, BindingResult result) {
         if (result.hasErrors()) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.PARAMETER_ERROR.getCode(), ResponseCode.PARAMETER_ERROR.getDesc());
         } else {
@@ -55,8 +59,15 @@ public class AdminAccountController {
             if (login.isSuccess()) {
                 Admin admin = adminService.getAdminById(login.getData());
                 if (admin != null) {
-                    session.setAttribute(Const.CURRENT_USER, admin);
-                    return login;
+                    String token = tokenUtil.createJwt(MapUtil.create(
+                            "tokenId", admin.getAdminId(),
+                            "username", admin.getAdminName(),
+                            "role", admin.getRole()));
+                    if (StringUtils.isEmpty(token)) {
+                        return ServerResponse.createBySuccess(token);
+                    } else {
+                        return ServerResponse.createByErrorMessage("登录失败，创建token失败");
+                    }
                 } else {
                     log.error("管理员登录失败，保存session错误");
                     return ServerResponse.createByErrorMessage("管理员登录失败, 保存session错误");

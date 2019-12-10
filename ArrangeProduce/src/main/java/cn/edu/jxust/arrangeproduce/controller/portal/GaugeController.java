@@ -1,12 +1,11 @@
 package cn.edu.jxust.arrangeproduce.controller.portal;
 
 import cn.edu.jxust.arrangeproduce.annotation.RequiredPermission;
-import cn.edu.jxust.arrangeproduce.common.Const;
 import cn.edu.jxust.arrangeproduce.common.ResponseCode;
 import cn.edu.jxust.arrangeproduce.common.ServerResponse;
 import cn.edu.jxust.arrangeproduce.entity.po.Gauge;
-import cn.edu.jxust.arrangeproduce.entity.po.User;
 import cn.edu.jxust.arrangeproduce.service.GaugeService;
+import cn.edu.jxust.arrangeproduce.util.TokenUtil;
 import cn.edu.jxust.arrangeproduce.util.UUIDUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -15,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
 import javax.validation.constraints.NotEmpty;
 import java.math.BigDecimal;
 import java.util.List;
@@ -31,29 +29,31 @@ import java.util.List;
 public class GaugeController extends BaseController {
 
     private final GaugeService gaugeService;
+    private final TokenUtil tokenUtil;
 
     @Autowired
-    public GaugeController(GaugeService gaugeService) {
+    public GaugeController(GaugeService gaugeService, TokenUtil tokenUtil) {
         this.gaugeService = gaugeService;
+        this.tokenUtil = tokenUtil;
     }
 
     /**
      * 添加线规
      *
-     * @param gauge 线规
-     * @param session session
-     * @param result  错误结果
+     * @param gauge  线规
+     * @param token  token
+     * @param result 错误结果
      * @return ServerResponse
      */
     @PostMapping
     @RequiredPermission
-    public ServerResponse createGauge(@RequestBody @NotEmpty String gauge, HttpSession session, BindingResult result) {
+    public ServerResponse createGauge(@RequestBody @NotEmpty String gauge, @RequestHeader("token") String token, BindingResult result) {
         if (result.hasErrors()) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.PARAMETER_ERROR.getCode(), ResponseCode.PARAMETER_ERROR.getDesc());
         } else {
-            User user = (User) session.getAttribute(Const.CURRENT_USER);
+            String enterpriseId = tokenUtil.getClaim(token, "enterpriseId").asString();
             BigDecimal gaugeDecimal = new BigDecimal(gauge);
-            Boolean exist = gaugeService.existInDb(user.getEnterpriseId(), gaugeDecimal);
+            Boolean exist = gaugeService.existInDb(enterpriseId, gaugeDecimal);
             if (exist) {
                 return ServerResponse.createByErrorMessage("改线规已存在，请仔细查找");
             } else {
@@ -62,7 +62,7 @@ public class GaugeController extends BaseController {
                     return gaugeService.createGauge(Gauge.builder()
                             .gaugeId(gaugeId)
                             .gauge(gaugeDecimal)
-                            .enterpriseId(user.getEnterpriseId())
+                            .enterpriseId(enterpriseId)
                             .build());
                 } catch (Exception e) {
                     log.error("create gauge error : {}", e.getMessage());
@@ -75,14 +75,14 @@ public class GaugeController extends BaseController {
     /**
      * 查询所有的线规
      *
-     * @param session session
+     * @param token token
      * @return ServerResponse<List < Gauge>>
      */
     @GetMapping
     @RequiredPermission
-    public ServerResponse<List<Gauge>> getAllGauge(HttpSession session) {
-        User user = (User) session.getAttribute(Const.CURRENT_USER);
-        return gaugeService.getAllGaugeByEnterpriseId(user.getEnterpriseId());
+    public ServerResponse<List<Gauge>> getAllGauge(@RequestHeader("token") String token) {
+        String enterpriseId = tokenUtil.getClaim(token, "enterpriseId").asString();
+        return gaugeService.getAllGaugeByEnterpriseId(enterpriseId);
     }
 
     /**
@@ -94,18 +94,18 @@ public class GaugeController extends BaseController {
     @RequiredPermission
     @DeleteMapping("/{gaugeId}")
     @Transactional(rollbackFor = Exception.class)
-    public ServerResponse deleteGaugeById(@PathVariable("gaugeId") String gaugeId){
-        if(StringUtils.isEmpty(gaugeId)){
+    public ServerResponse deleteGaugeById(@PathVariable("gaugeId") String gaugeId) {
+        if (StringUtils.isEmpty(gaugeId)) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.PARAMETER_ERROR.getCode(), ResponseCode.PARAMETER_ERROR.getDesc());
         } else {
             try {
                 Boolean delete = gaugeService.deleteGaugeByGaugeId(gaugeId);
-                if(delete){
+                if (delete) {
                     return ServerResponse.createBySuccessMessage("删除成功");
                 } else {
                     return ServerResponse.createByErrorMessage("删除失败, 请重试");
                 }
-            } catch (Exception e){
+            } catch (Exception e) {
                 log.error("delete gauge error : {}", e.getMessage());
                 return ServerResponse.createByErrorMessage("删除一条线规发生未知异常");
             }

@@ -1,23 +1,21 @@
 package cn.edu.jxust.arrangeproduce.common.aspect;
 
 import cn.edu.jxust.arrangeproduce.annotation.RequiredPermission;
-import cn.edu.jxust.arrangeproduce.common.Const;
 import cn.edu.jxust.arrangeproduce.common.ResponseCode;
 import cn.edu.jxust.arrangeproduce.common.ServerResponse;
-import cn.edu.jxust.arrangeproduce.entity.po.Admin;
-import cn.edu.jxust.arrangeproduce.entity.po.User;
+import cn.edu.jxust.arrangeproduce.util.TokenUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 /**
  * @author ZSS
@@ -29,6 +27,13 @@ import javax.servlet.http.HttpSession;
 @Component
 public class PermissionAspect {
 
+    private final TokenUtil tokenUtil;
+
+    @Autowired
+    public PermissionAspect(TokenUtil tokenUtil) {
+        this.tokenUtil = tokenUtil;
+    }
+
     @Around(value = "@annotation(cn.edu.jxust.arrangeproduce.annotation.RequiredPermission)")
     public Object aroundPermission(ProceedingJoinPoint joinPoint) throws Throwable {
         // 获取注解中的参数
@@ -39,28 +44,18 @@ public class PermissionAspect {
         ServletRequestAttributes sra = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         if (sra != null) {
             HttpServletRequest request = sra.getRequest();
-            HttpSession session = request.getSession();
-            Object object = session.getAttribute(Const.CURRENT_USER);
-            if (object == null) {
-                return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "请先登录");
-            } else {
-                // 查看注解参数是否为admin
-                // todo 普通用户访问admin接口会发生强制转换异常
-                if (StringUtils.equals(permission, Const.Role.ROLE_ADMIN)) {
-                    Admin admin = (Admin) object;
-                    if (StringUtils.equals(permission, admin.getRole())) {
-                        return joinPoint.proceed();
-                    } else {
-                        return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(), "权限错误, 你不是管理员");
-                    }
+            String token = request.getHeader("token");
+            log.info("user token : {}", token);
+            if (tokenUtil.isValid(token)) {
+                String role = tokenUtil.getClaim(token, "role").asString();
+                System.out.println("role : " + role);
+                if (StringUtils.equals(permission, role)) {
+                    return joinPoint.proceed();
                 } else {
-                    User user = (User) object;
-                    if (StringUtils.equals(permission, user.getRole())) {
-                        return joinPoint.proceed();
-                    } else {
-                        return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(), "权限错误");
-                    }
+                    return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(), "权限错误");
                 }
+            } else {
+                return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "请先登录");
             }
         } else {
             log.error("权限校验拦截失败");

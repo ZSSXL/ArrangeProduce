@@ -1,15 +1,14 @@
 package cn.edu.jxust.arrangeproduce.controller.portal;
 
 import cn.edu.jxust.arrangeproduce.annotation.RequiredPermission;
-import cn.edu.jxust.arrangeproduce.common.Const;
 import cn.edu.jxust.arrangeproduce.common.ResponseCode;
 import cn.edu.jxust.arrangeproduce.common.ServerResponse;
 import cn.edu.jxust.arrangeproduce.entity.po.Arrange;
-import cn.edu.jxust.arrangeproduce.entity.po.User;
 import cn.edu.jxust.arrangeproduce.entity.vo.ArrangeVo;
 import cn.edu.jxust.arrangeproduce.service.ArrangeService;
 import cn.edu.jxust.arrangeproduce.util.DateUtil;
 import cn.edu.jxust.arrangeproduce.util.QrCodeUtil;
+import cn.edu.jxust.arrangeproduce.util.TokenUtil;
 import cn.edu.jxust.arrangeproduce.util.UUIDUtil;
 import cn.edu.jxust.arrangeproduce.websocket.Notice;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 /**
@@ -32,28 +30,30 @@ import javax.validation.Valid;
 public class QrCodeController extends BaseController {
 
     private final ArrangeService arrangeService;
+    private final TokenUtil tokenUtil;
 
     @Autowired
-    public QrCodeController(ArrangeService arrangeService) {
+    public QrCodeController(ArrangeService arrangeService, TokenUtil tokenUtil) {
         this.arrangeService = arrangeService;
+        this.tokenUtil = tokenUtil;
     }
 
     /**
      * 新建排产任务并打印二维码
      *
      * @param arrangeVo 排产Vo实体
-     * @param session   session
+     * @param token     token
      * @param result    错误结果
      * @return ServerResponse
      */
     @PostMapping
     @RequiredPermission
-    public ServerResponse<String> printQrCode(@RequestBody @Valid ArrangeVo arrangeVo, HttpSession session, BindingResult result) {
+    public ServerResponse<String> printQrCode(@RequestBody @Valid ArrangeVo arrangeVo, @RequestHeader("token") String token, BindingResult result) {
         if (result.hasErrors()) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.PARAMETER_ERROR.getCode(), ResponseCode.PARAMETER_ERROR.getDesc());
         } else {
-            User user = (User) session.getAttribute(Const.CURRENT_USER);
-            Boolean conflict = arrangeService.isConflict(arrangeVo.getArrangeDate(), arrangeVo.getShift(), arrangeVo.getMachine(), user.getEnterpriseId());
+            String enterpriseId = tokenUtil.getClaim(token, "enterpriseId").asString();
+            Boolean conflict = arrangeService.isConflict(arrangeVo.getArrangeDate(), arrangeVo.getShift(), arrangeVo.getMachine(), enterpriseId);
             String qrCode = generateQrCode(arrangeVo);
             if (conflict) {
                 // 如果存在，直接打印
@@ -68,6 +68,7 @@ public class QrCodeController extends BaseController {
                 if (qrCode == null) {
                     return ServerResponse.createByErrorMessage("生成二维码失败");
                 } else {
+                    String username = tokenUtil.getClaim(token, "username").asString();
                     String arrangeId = UUIDUtil.getId();
                     try {
                         arrangeService.createArrange(Arrange.builder()
@@ -76,11 +77,12 @@ public class QrCodeController extends BaseController {
                                 .gauge(arrangeVo.getGauge())
                                 .machine(arrangeVo.getMachine())
                                 .shift(arrangeVo.getShift())
-                                .enterpriseId(user.getEnterpriseId())
+                                .enterpriseId(enterpriseId)
                                 .weight(arrangeVo.getWeight())
                                 .tolerance(arrangeVo.getTolerance())
                                 // 更新打印状态为已打印(1)
                                 .status(1)
+                                .creator(username)
                                 .build());
                         // 推送消息
                         Notice notice = new Notice();
@@ -99,15 +101,15 @@ public class QrCodeController extends BaseController {
      * 从历史记录中打印二维码
      *
      * @param arrangeId 排产Id
+     * @param token     token
      * @return ServerResponse<String>
      */
     @GetMapping("/{arrangeId}")
-    public ServerResponse<String> printByArrangeId(@PathVariable("arrangeId") String arrangeId, HttpSession session) {
+    public ServerResponse<String> printByArrangeId(@PathVariable("arrangeId") String arrangeId, @RequestHeader("token") String token) {
         if (StringUtils.isEmpty(arrangeId)) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.PARAMETER_ERROR.getCode(), ResponseCode.PARAMETER_ERROR.getDesc());
         } else {
-            Object attribute = session.getAttribute(Const.CURRENT_USER);
-            if (attribute == null) {
+            if (StringUtils.isEmpty(token)) {
                 return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
             } else {
                 Arrange arrange = arrangeService.getArrangeById(arrangeId);

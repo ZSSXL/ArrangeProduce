@@ -1,15 +1,16 @@
 package cn.edu.jxust.arrangeproduce.controller.portal;
 
-import cn.edu.jxust.arrangeproduce.common.Const;
 import cn.edu.jxust.arrangeproduce.common.ResponseCode;
 import cn.edu.jxust.arrangeproduce.common.ServerResponse;
 import cn.edu.jxust.arrangeproduce.entity.po.User;
 import cn.edu.jxust.arrangeproduce.entity.vo.LoginVo;
 import cn.edu.jxust.arrangeproduce.service.AccountService;
 import cn.edu.jxust.arrangeproduce.service.UserService;
-import cn.edu.jxust.arrangeproduce.util.DateUtil;
 import cn.edu.jxust.arrangeproduce.util.EncryptionUtil;
+import cn.edu.jxust.arrangeproduce.util.MapUtil;
+import cn.edu.jxust.arrangeproduce.util.TokenUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 /**
@@ -32,23 +32,24 @@ public class AccountController extends BaseController {
 
     private final AccountService accountService;
     private final UserService userService;
+    private final TokenUtil tokenUtil;
 
     @Autowired
-    public AccountController(AccountService accountService, UserService userService) {
+    public AccountController(AccountService accountService, UserService userService, TokenUtil tokenUtil) {
         this.accountService = accountService;
         this.userService = userService;
+        this.tokenUtil = tokenUtil;
     }
 
     /**
      * 主管和员工登录
      *
      * @param loginVo 登录Vo
-     * @param session session
      * @param result  错误结果
      * @return ServerResponse<String>
      */
     @PostMapping
-    public ServerResponse<String> login(@RequestBody @Valid LoginVo loginVo, HttpSession session, BindingResult result) {
+    public ServerResponse<String> login(@RequestBody @Valid LoginVo loginVo, BindingResult result) {
         if (result.hasErrors()) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.PARAMETER_ERROR.getCode(), ResponseCode.PARAMETER_ERROR.getDesc());
         } else {
@@ -56,28 +57,23 @@ public class AccountController extends BaseController {
             if (login.isSuccess()) {
                 User user = userService.getUserById(login.getData());
                 if (user != null) {
-                    session.setAttribute(Const.CURRENT_USER, user);
-                    return login;
+                    String token = tokenUtil.createJwt(MapUtil.create(
+                            "tokenId", user.getUserId(),
+                            "username", user.getUserName(),
+                            "role", user.getRole(),
+                            "enterpriseId", user.getEnterpriseId()));
+                    if (StringUtils.isEmpty(token)) {
+                        return ServerResponse.createByErrorMessage("登录失败，创建token失败");
+                    } else {
+                        return ServerResponse.createBySuccess(token);
+                    }
                 } else {
-                    log.error("登录失败，保存session错误");
-                    return ServerResponse.createByErrorMessage("登录失败, 保存session错误");
+                    log.error("登录失败");
+                    return ServerResponse.createByErrorMessage("登录失败");
                 }
             } else {
                 return login;
             }
         }
-    }
-
-    /**
-     * 退出
-     *
-     * @param session session
-     * @return ServerResponse
-     */
-    @PostMapping("/logout")
-    public ServerResponse logout(HttpSession session) {
-        session.removeAttribute(Const.CURRENT_USER);
-        log.info("退出登录 : {}", DateUtil.getDateComplete());
-        return ServerResponse.createBySuccessMessage("退出登录成功");
     }
 }

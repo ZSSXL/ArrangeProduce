@@ -5,10 +5,10 @@ import cn.edu.jxust.arrangeproduce.common.Const;
 import cn.edu.jxust.arrangeproduce.common.ResponseCode;
 import cn.edu.jxust.arrangeproduce.common.ServerResponse;
 import cn.edu.jxust.arrangeproduce.entity.po.Arrange;
-import cn.edu.jxust.arrangeproduce.entity.po.User;
 import cn.edu.jxust.arrangeproduce.entity.vo.ArrangeVo;
 import cn.edu.jxust.arrangeproduce.service.ArrangeService;
 import cn.edu.jxust.arrangeproduce.util.RedisPoolUtil;
+import cn.edu.jxust.arrangeproduce.util.TokenUtil;
 import cn.edu.jxust.arrangeproduce.util.UUIDUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 /**
@@ -33,27 +32,29 @@ import javax.validation.Valid;
 public class ArrangeController extends BaseController {
 
     private final ArrangeService arrangeService;
+    private final TokenUtil tokenUtil;
 
     @Autowired
-    public ArrangeController(ArrangeService arrangeService) {
+    public ArrangeController(ArrangeService arrangeService, TokenUtil tokenUtil) {
         this.arrangeService = arrangeService;
+        this.tokenUtil = tokenUtil;
     }
 
     /**
      * 新建排产任务
      *
      * @param arrangeVo 排产Vo实体
-     * @param session   session
+     * @param token     token
      * @param result    错误结果
      */
     @PostMapping
     @RequiredPermission
-    public ServerResponse createArrange(@RequestBody @Valid ArrangeVo arrangeVo, HttpSession session, BindingResult result) {
+    public ServerResponse createArrange(@RequestHeader("token") String token, @RequestBody @Valid ArrangeVo arrangeVo, BindingResult result) {
         if (result.hasErrors()) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.PARAMETER_ERROR.getCode(), ResponseCode.PARAMETER_ERROR.getDesc());
         } else {
-            User user = (User) session.getAttribute(Const.CURRENT_USER);
-            Boolean conflict = arrangeService.isConflict(arrangeVo.getArrangeDate(), arrangeVo.getShift(), arrangeVo.getMachine(), user.getEnterpriseId());
+            String enterpriseId = tokenUtil.getClaim(token, "enterpriseId").asString();
+            Boolean conflict = arrangeService.isConflict(arrangeVo.getArrangeDate(), arrangeVo.getShift(), arrangeVo.getMachine(), enterpriseId);
             if (conflict) {
                 return ServerResponse.createByErrorMessage("任务时间冲突，请修改生产时间或者机器");
             } else {
@@ -65,10 +66,11 @@ public class ArrangeController extends BaseController {
                             .gauge(arrangeVo.getGauge())
                             .machine(arrangeVo.getMachine())
                             .shift(arrangeVo.getShift())
-                            .enterpriseId(user.getEnterpriseId())
+                            .enterpriseId(enterpriseId)
                             .weight(arrangeVo.getWeight())
                             .tolerance(arrangeVo.getTolerance())
                             .status(0)
+                            .creator(enterpriseId)
                             .build());
                 } catch (Exception e) {
                     log.error("create arrange error {}", e.getMessage());
@@ -87,34 +89,34 @@ public class ArrangeController extends BaseController {
     /**
      * 分页获取所有的排产信息
      *
-     * @param session session
-     * @param page    分页页数
-     * @param size    分页大小
+     * @param token token
+     * @param page  分页页数
+     * @param size  分页大小
      * @return ServerResponse<List < Arrange>>
      */
     @GetMapping
-    public ServerResponse<Page<Arrange>> getAllArrangeByEmployee(HttpSession session
+    public ServerResponse<Page<Arrange>> getAllArrangeByEmployee(@RequestHeader("token") String token
             , @RequestParam(value = "page", defaultValue = Const.DEFAULT_PAGE_NUMBER) Integer page
             , @RequestParam(value = "size", defaultValue = Const.DEFAULT_PAGE_SIZE) Integer size) {
-        User user = (User) session.getAttribute(Const.CURRENT_USER);
-        if (user == null) {
+        if (StringUtils.isEmpty(token)) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         } else {
-            return arrangeService.getAllArrangeByEnterpriseId(user.getEnterpriseId(), PageRequest.of(page, size));
+            String enterpriseId = tokenUtil.getClaim(token, "enterpriseId").asString();
+            return arrangeService.getAllArrangeByEnterpriseId(enterpriseId, PageRequest.of(page, size));
         }
     }
 
     /**
      * 员工上线后查看是否有未读消息
      *
-     * @param session session
+     * @param token token
      * @return ServeResponse
      */
     @GetMapping("/message")
     @RequiredPermission("employee")
-    public ServerResponse<String> getMessage(HttpSession session) {
-        User user = (User) session.getAttribute(Const.CURRENT_USER);
-        String result = RedisPoolUtil.get(user.getEnterpriseId() + "Arrange");
+    public ServerResponse<String> getMessage(@RequestHeader("token") String token) {
+        String enterpriseId = tokenUtil.getClaim(token, "enterpriseId").asString();
+        String result = RedisPoolUtil.get(enterpriseId + "Arrange");
         if (StringUtils.isEmpty(result)) {
             return ServerResponse.createByErrorMessage("没有信息新消息");
         } else {
@@ -125,14 +127,14 @@ public class ArrangeController extends BaseController {
     /**
      * 员工查确认了消息后，删除Redis中的记录
      *
-     * @param session session
+     * @param token token
      * @return ServerResponse
      */
     @DeleteMapping("/message")
     @RequiredPermission("employee")
-    public ServerResponse delMessage(HttpSession session) {
-        User user = (User) session.getAttribute(Const.CURRENT_USER);
-        Long del = RedisPoolUtil.del(user.getEnterpriseId() + "Arrange");
+    public ServerResponse delMessage(@RequestHeader("token") String token) {
+        String enterpriseId = tokenUtil.getClaim(token, "enterpriseId").asString();
+        Long del = RedisPoolUtil.del(enterpriseId + "Arrange");
         if (del == 1) {
             return ServerResponse.createBySuccess();
         } else {
