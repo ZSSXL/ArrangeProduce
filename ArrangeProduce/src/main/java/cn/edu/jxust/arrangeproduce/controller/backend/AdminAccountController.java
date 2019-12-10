@@ -64,9 +64,9 @@ public class AdminAccountController {
                             "username", admin.getAdminName(),
                             "role", admin.getRole()));
                     if (StringUtils.isEmpty(token)) {
-                        return ServerResponse.createBySuccess(token);
-                    } else {
                         return ServerResponse.createByErrorMessage("登录失败，创建token失败");
+                    } else {
+                        return ServerResponse.createBySuccess(token);
                     }
                 } else {
                     log.error("管理员登录失败，保存session错误");
