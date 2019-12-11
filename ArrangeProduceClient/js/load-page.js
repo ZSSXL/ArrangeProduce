@@ -3,7 +3,6 @@ $("#load-arrange").click(function () {
     $("#load-area").load("/arrange.html");
     $(this).attr("class", "active");
     $("#load-aw").removeAttr("class");
-    $("#load-history").removeAttr("class");
     $("#load-setting").removeAttr("class");
     $("#load-employee").removeAttr("class");
     getAllGaugeSelected();
@@ -15,17 +14,6 @@ $("#load-aw").click(function () {
     $("#load-area").load("/aw.html");
     $(this).attr("class", "active");
     $("#load-arrange").removeAttr("class");
-    $("#load-history").removeAttr("class");
-    $("#load-setting").removeAttr("class");
-    $("#load-employee").removeAttr("class");
-});
-
-$("#load-history").click(function () {
-    localStorage.setItem("arrangeCurrentPage", "history");
-    $("#load-area").load("/history.html");
-    $(this).attr("class", "active");
-    $("#load-aw").removeAttr("class");
-    $("#load-arrange").removeAttr("class");
     $("#load-setting").removeAttr("class");
     $("#load-employee").removeAttr("class");
 });
@@ -36,7 +24,6 @@ $("#load-setting").click(function () {
     $(this).attr("class", "active");
     $("#load-aw").removeAttr("class");
     $("#load-arrange").removeAttr("class");
-    $("#load-history").removeAttr("class");
     $("#load-employee").removeAttr("class");
 });
 
@@ -46,7 +33,6 @@ $("#load-employee").click(function () {
     $(this).attr("class", "active");
     $("#load-aw").removeAttr("class");
     $("#load-arrange").removeAttr("class");
-    $("#load-history").removeAttr("class");
     $("#load-setting").removeAttr("class");
 });
 

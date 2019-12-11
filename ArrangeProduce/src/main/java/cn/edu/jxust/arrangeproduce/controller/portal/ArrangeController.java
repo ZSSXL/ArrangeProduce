@@ -62,6 +62,7 @@ public class ArrangeController extends BaseController {
                 try {
                     arrangeService.createArrange(Arrange.builder()
                             .arrangeId(arrangeId)
+                            .sort(arrangeVo.getSort())
                             .arrangeDate(arrangeVo.getArrangeDate())
                             .gauge(arrangeVo.getGauge())
                             .machine(arrangeVo.getMachine())
@@ -70,10 +71,11 @@ public class ArrangeController extends BaseController {
                             .weight(arrangeVo.getWeight())
                             .tolerance(arrangeVo.getTolerance())
                             .status(0)
+                            .push(Const.DEFAULT_NO_PUSH)
                             .creator(enterpriseId)
                             .build());
                 } catch (Exception e) {
-                    log.error("create arrange error {}", e.getMessage());
+                    log.error("create : {} arrange error {}", arrangeVo.getSort(), e.getMessage());
                     return ServerResponse.createByErrorMessage("新建排产任务异常");
                 }
                 try {

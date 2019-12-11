@@ -36,10 +36,22 @@ public class Arrange implements Serializable {
     private String arrangeId;
 
     /**
+     * 小拉/退火/绕线
+     */
+    @Column(nullable = false, columnDefinition = "varchar(20) comment '小拉/退火/绕线' ")
+    private String sort;
+
+    /**
      * 安排日期, 精确到日
      */
-    @Column(nullable = false, columnDefinition = "bigint(20) comment '安排日期, 精确到日'")
+    @Column(columnDefinition = "bigint(20) comment '安排日期, 精确到日'")
     private Long arrangeDate;
+
+    /**
+     * 安排班次 A为早班，B为晚班
+     */
+    @Column(columnDefinition = "varchar(10) comment '安排班次 1为早班，为晚班'")
+    private String shift;
 
     /**
      * 安排小拉机
@@ -60,12 +72,6 @@ public class Arrange implements Serializable {
     private String weight;
 
     /**
-     * 安排班次 A为早班，B为晚班
-     */
-    @Column(nullable = false, columnDefinition = "varchar(10) comment '安排班次 1为早班，为晚班'")
-    private String shift;
-
-    /**
      * 公差
      */
     @Column(columnDefinition = "varchar(10) default '0' comment '公差'")
@@ -82,6 +88,12 @@ public class Arrange implements Serializable {
      */
     @Column(nullable = false, columnDefinition = "int(2) comment '打印状态，是否打印过，0为未打印，1为已打印'")
     private Integer status;
+
+    /**
+     * 是否已推送，yes/no
+     */
+    @Column(columnDefinition = "varchar(8) comment '是否已推送，yes/no'")
+    private String push;
 
     /**
      * 创建者

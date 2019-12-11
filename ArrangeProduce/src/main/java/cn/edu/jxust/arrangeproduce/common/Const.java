@@ -18,9 +18,36 @@ public class Const {
     public static final String DEFAULT_PAGE_NUMBER = "0";
 
     /**
+     * 默认推送状态
+     */
+    public static final String DEFAULT_NO_PUSH = "no";
+
+    /**
      * 分页默认显示条数
      */
     public static final String DEFAULT_PAGE_SIZE = "20";
+
+    /**
+     * 排序种类
+     */
+    public interface Sort {
+
+        /**
+         * 小拉机
+         */
+        String SORT_DRAW = "draw";
+
+        /**
+         * 退火机
+         */
+        String SORT_ANNEALING = "annealing";
+
+        /**
+         * 绕线机
+         */
+        String SORT_WINDING = "winding";
+
+    }
 
     /**
      * 角色

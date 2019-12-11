@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -16,8 +17,13 @@ import javax.validation.constraints.NotNull;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@NotNull
 public class ArrangeVo {
+
+    /**
+     * 小拉/退火/绕线 draw/annealing/winding
+     */
+    @NotEmpty
+    private String sort;
 
     /**
      * 安排日期, 精确到日
@@ -25,18 +31,21 @@ public class ArrangeVo {
     private Long arrangeDate;
 
     /**
-     * 安排小拉机
+     * 安排的机器
      */
+    @NotEmpty
     private String machine;
 
     /**
      * 设定线规
      */
+    @NotEmpty
     private String gauge;
 
     /**
      * 安排重量
      */
+    @NotEmpty
     private String weight;
 
     /**
@@ -47,6 +56,7 @@ public class ArrangeVo {
     /**
      * 公差
      */
+    @NotEmpty
     private String tolerance;
 
 }
