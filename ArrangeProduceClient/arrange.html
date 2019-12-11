@@ -25,30 +25,7 @@
                                 <h3>小拉机</h3>
                             </label>
                             <div class="col-lg-7 col-sm-7">
-                                <select name="machine" class="form-control mb-3 mb-3">
-                                    <option>小拉机1号</option>
-                                    <option>小拉机2号</option>
-                                    <option>小拉机3号</option>
-                                    <option>小拉机4号</option>
-                                </select>
-                            </div>
-                            <div class="col-lg-2 col-sm-2">
-                                <button class="btn btn-outline-warning" id="gauge-setting">设置</button>
-                            </div>
-                        </div>
-                        <div class="line"></div>
-                        <div class="form-group row">
-                            <label class="col-lg-3 col-sm-3 form-control-label">
-                                <h3>线规</h3>
-                            </label>
-                            <div class="col-lg-7 col-sm-7">
-                                <select name="machine" class="form-control mb-3 mb-3">
-                                    <option>0.095</option>
-                                    <option>0.090</option>
-                                    <option>0.085</option>
-                                    <option>0.080</option>
-                                    <option>0.075</option>
-                                    <option>0.070</option>
+                                <select id="machine" name="machine" class="form-control mb-3 mb-3">
                                 </select>
                             </div>
                             <div class="col-lg-2 col-sm-2">
@@ -57,32 +34,43 @@
                         </div>
                         <div class="line"></div>
                         <div class="form-group row">
+                            <label class="col-lg-3 col-sm-3 form-control-label">
+                                <h3>线规(mm)</h3>
+                            </label>
+                            <div class="col-lg-7 col-sm-7">
+                                <select id="gauge" name="gauge" class="form-control mb-3 mb-3">
+                                </select>
+                            </div>
+                            <div class="col-lg-2 col-sm-2">
+                                <button class="btn btn-outline-warning" id="gauge-setting">设置</button>
+                            </div>
+                        </div>
+                        <div class="line"></div>
+                        <div class="form-group row">
                             <label class="col-sm-3 form-control-label">
-                                <h3>公差</h3>
+                                <h3>公差(mm)</h3>
                             </label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" value="+0.005">
+                                <input id="tolerance" type="text" class="form-control" placeholder="例: +0.005">
                                 <small class="text-primary">请注意正负符号不要遗漏</small>
                             </div>
                         </div>
                         <div class="line"></div>
                         <div class="form-group row">
                             <label class="col-sm-3 form-control-label">
-                                <h3>重量</h3>
+                                <h3>重量(kg)</h3>
                             </label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" value="3473">
+                                <input id="weight" type="text" class="form-control" value="">
                             </div>
                         </div>
                         <div class="line"></div>
                         <div class="form-group row">
                             <label class="col-sm-3 form-control-label">
-                                <h3>
-                                    生产时间
-                                </h3>
+                                <h3>生产时间</h3>
                             </label>
                             <div class="col-sm-9">
-                                <input type="date" class="form-control">
+                                <input id="arrange-date" type="date" class="form-control">
                             </div>
                         </div>
                         <div class="line"></div>
@@ -121,7 +109,7 @@
 </section>
 
 <!-- javascript -->
-
+<script src="js/function/arrange.js"></script>
 <script type="text/javascript">
     $("#gauge-setting").click(function () {
         $("#modal-area").load("/sub/gauge.html");
@@ -131,11 +119,7 @@
 
     $("#machine-setting").click(function () {
         $("#modal-area").load("/sub/machine.html");
-        $("#load-modal").modal("show");
-    });
-
-    $("#print-btn").click(function () {
-        $("#modal-area").load("/sub/print.html");
+        getAllMachine();
         $("#load-modal").modal("show");
     });
 
@@ -143,13 +127,57 @@
         $.ajax({
             url: serverUrl + "/gauge",
             contentType: "application/json; charset=utf-8",
-            beforeSend: function(XMLHttpRequest) {
-                XMLHttpRequest.setRequestHeader("token", localStorage.getItem("arrangeToken"));
+            beforeSend: function (XMLHttpRequest) {
+                XMLHttpRequest.setRequestHeader("token", token);
             },
             type: "GET",
             success: function (result) {
                 console.log(result);
+                if (result.status === 0) {
+                    showGaugeHad(result.data);
+                } else {
+                    Notiflix.Notify.Failure(result.msg);
+                }
             }
         });
     }
+
+    function getAllMachine() {
+        $.ajax({
+            url: serverUrl + "/machine",
+            contentType: "application/json; charset=utf-8",
+            beforeSend: function (XMLHttpRequest) {
+                XMLHttpRequest.setRequestHeader("token", token);
+            },
+            type: "GET",
+            success: function (result) {
+                if (result.status === 0) {
+                    showMachineHad(result.data)
+                } else {
+                    Notiflix.Notify.Failure(result.msg);
+                }
+            }
+        });
+    }
+
+    function showGaugeHad(data) {
+        $("#gauge-area").empty();
+        $.each(data, function (index, item) {
+            let gaugeDiv = $("<div class='delete-gauge' style='cursor: pointer;' data-placement='top' title='点击删除'></div>").append(item.gauge).attr("gauge-id", item.gaugeId);
+            $("<div class='col-lg-2 col-sm-3 text-center'></div>").append(gaugeDiv).appendTo("#gauge-area");
+        });
+    }
+
+    function showMachineHad(data) {
+        $("#machine-area").empty();
+        $.each(data, function (index, item) {
+            let machineDiv = $("<div class='delete-machine' style='cursor: pointer;' data-placement='top'></div>")
+                .append(item.machineNumber).attr({
+                    "machine-id": item.machineId,
+                    "title": "点击删除 [ " + item.machineName + " ]"
+                });
+            $("<div class='col-lg-2 col-sm-3 text-center'></div>").append(machineDiv).appendTo("#machine-area");
+        });
+    }
+
 </script>

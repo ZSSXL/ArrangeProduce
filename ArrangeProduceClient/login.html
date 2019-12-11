@@ -107,7 +107,7 @@
     });
 
     function logout() {
-        console.log("退出登录成功");
+        localStorage.removeItem("arrangeToken");
     }
 
     function analysisResult(result) {
