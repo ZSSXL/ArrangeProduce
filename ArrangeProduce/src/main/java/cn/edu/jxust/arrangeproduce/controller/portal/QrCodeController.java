@@ -10,7 +10,6 @@ import cn.edu.jxust.arrangeproduce.util.DateUtil;
 import cn.edu.jxust.arrangeproduce.util.QrCodeUtil;
 import cn.edu.jxust.arrangeproduce.util.TokenUtil;
 import cn.edu.jxust.arrangeproduce.util.UUIDUtil;
-import cn.edu.jxust.arrangeproduce.websocket.Notice;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,9 +83,6 @@ public class QrCodeController extends BaseController {
                                 .status(1)
                                 .creator(username)
                                 .build());
-                        // 推送消息
-                        Notice notice = new Notice();
-                        notice.sendAll();
                     } catch (Exception e) {
                         log.error("create arrange error {}", e.getClass());
                         return ServerResponse.createByErrorMessage("新建排产任务异常");
