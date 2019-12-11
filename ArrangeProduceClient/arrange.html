@@ -143,6 +143,9 @@
         $.ajax({
             url: serverUrl + "/gauge",
             contentType: "application/json; charset=utf-8",
+            beforeSend: function(XMLHttpRequest) {
+                XMLHttpRequest.setRequestHeader("token", localStorage.getItem("arrangeToken"));
+            },
             type: "GET",
             success: function (result) {
                 console.log(result);

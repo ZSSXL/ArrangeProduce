@@ -45,10 +45,8 @@ public class PermissionAspect {
         if (sra != null) {
             HttpServletRequest request = sra.getRequest();
             String token = request.getHeader("token");
-            log.info("user token : {}", token);
             if (tokenUtil.isValid(token)) {
                 String role = tokenUtil.getClaim(token, "role").asString();
-                System.out.println("role : " + role);
                 if (StringUtils.equals(permission, role)) {
                     return joinPoint.proceed();
                 } else {
