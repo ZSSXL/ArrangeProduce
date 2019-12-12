@@ -44,10 +44,7 @@ function getDate() {
     let arrangeDate = new Date($('#arrange-date').val()).getTime();
     let shift = $("input[name='shift']:checked").val();
 
-    let data = {gauge, machine, tolerance, weight, arrangeDate, shift};
-
-    console.log(data);
-    return data;
+    return {gauge, machine, tolerance, weight, arrangeDate, shift};
 }
 
 /**
@@ -79,7 +76,7 @@ function saveArrange(data) {
  */
 function saveAndPrint(data) {
     $.ajax({
-        url: serverUrl + "/qr",
+        url: serverUrl + "/arrange/print",
         contentType: "application/json; charset=utf-8",
         type: "POST",
         beforeSend: function (XMLHttpRequest) {

@@ -56,7 +56,8 @@
     $("#add-machine").click(function () {
         let machineName = $("#new-machine-name").val();
         let machineNumber = $("#new-machine-number").val();
-        let data = {machineName, machineNumber};
+        let machineSort = "draw";
+        let data = {machineSort, machineName, machineNumber};
         $.ajax({
             url: serverUrl + "/machine",
             contentType: "application/json; charset=utf-8",
@@ -68,7 +69,7 @@
             success: function (result) {
                 if (result.status === 0) {
                     before();
-                    getAllMachine();
+                    getAllDraw();
                     Notiflix.Notify.Success("添加成功");
                 } else {
                     Notiflix.Notify.Failure(result.msg);
@@ -78,7 +79,6 @@
     });
 
     $(document).on("click", ".delete-machine", function () {
-        const innerText = $(this).text();
         const machineId = $(this).attr("machine-id");
         $.ajax({
             url: serverUrl + "/machine/" + machineId,
@@ -89,7 +89,7 @@
             },
             success: function (result) {
                 if (result.status === 0) {
-                    getAllMachine();
+                    getAllDraw();
                 } else {
                     Notiflix.Notify.Failure(result.msg);
                 }

@@ -97,7 +97,6 @@
                         <div class="form-group row">
                             <div class="col-lg-9 col-sm-9 ml-auto">
                                 <button id="save-btn" type="submit" class="btn btn-outline-info">保存</button>
-                                <button class="btn btn-outline-success">啥？</button>
                                 <button id="reset-btn" class="btn btn-outline-secondary">重置</button>
                                 <button id="print-btn" type="submit" class="btn btn-outline-warning">打印预览</button>
                             </div>
@@ -124,10 +123,11 @@
                                 <th>重量(kg)</th>
                                 <th>安排时间</th>
                                 <th>班次</th>
+                                <th>推送状态</th>
                                 <th>操作</th>
                             </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="arrange-history-area">
                             <tr>
                                 <th scope="row">1</th>
                                 <td>第一台</td>
@@ -135,7 +135,8 @@
                                 <td>+0.005</td>
                                 <td>2387</td>
                                 <td>2019-12-02</td>
-                                <td>早</td>
+                                <td>早班</td>
+                                <td>已推送</td>
                                 <td>
                                     <button class="btn btn-outline-info">详情</button>
                                     <button class="btn btn-outline-danger">删除</button>
@@ -148,176 +149,8 @@
                                 <td>+0.005</td>
                                 <td>2387</td>
                                 <td>2019-12-02</td>
-                                <td>晚</td>
-                                <td>
-                                    <button class="btn btn-outline-info">详情</button>
-                                    <button class="btn btn-outline-danger">删除</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row">3</th>
-                                <td>第三台</td>
-                                <td>0.080</td>
-                                <td>-0.005</td>
-                                <td>2387</td>
-                                <td>2019-12-02</td>
-                                <td>早</td>
-                                <td>
-                                    <button class="btn btn-outline-info">详情</button>
-                                    <button class="btn btn-outline-danger">删除</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row">4</th>
-                                <td>第四台</td>
-                                <td>0.075</td>
-                                <td>+0.008</td>
-                                <td>2387</td>
-                                <td>2019-12-02</td>
-                                <td>晚</td>
-                                <td>
-                                    <button class="btn btn-outline-info">详情</button>
-                                    <button class="btn btn-outline-danger">删除</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row">4</th>
-                                <td>第四台</td>
-                                <td>0.075</td>
-                                <td>+0.008</td>
-                                <td>2387</td>
-                                <td>2019-12-02</td>
-                                <td>晚</td>
-                                <td>
-                                    <button class="btn btn-outline-info">详情</button>
-                                    <button class="btn btn-outline-danger">删除</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row">4</th>
-                                <td>第四台</td>
-                                <td>0.075</td>
-                                <td>+0.008</td>
-                                <td>2387</td>
-                                <td>2019-12-02</td>
-                                <td>晚</td>
-                                <td>
-                                    <button class="btn btn-outline-info">详情</button>
-                                    <button class="btn btn-outline-danger">删除</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row">4</th>
-                                <td>第四台</td>
-                                <td>0.075</td>
-                                <td>+0.008</td>
-                                <td>2387</td>
-                                <td>2019-12-02</td>
-                                <td>晚</td>
-                                <td>
-                                    <button class="btn btn-outline-info">详情</button>
-                                    <button class="btn btn-outline-danger">删除</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row">4</th>
-                                <td>第四台</td>
-                                <td>0.075</td>
-                                <td>+0.008</td>
-                                <td>2387</td>
-                                <td>2019-12-02</td>
-                                <td>晚</td>
-                                <td>
-                                    <button class="btn btn-outline-info">详情</button>
-                                    <button class="btn btn-outline-danger">删除</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row">4</th>
-                                <td>第四台</td>
-                                <td>0.075</td>
-                                <td>+0.008</td>
-                                <td>2387</td>
-                                <td>2019-12-02</td>
-                                <td>晚</td>
-                                <td>
-                                    <button class="btn btn-outline-info">详情</button>
-                                    <button class="btn btn-outline-danger">删除</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row">4</th>
-                                <td>第四台</td>
-                                <td>0.075</td>
-                                <td>+0.008</td>
-                                <td>2387</td>
-                                <td>2019-12-02</td>
-                                <td>晚</td>
-                                <td>
-                                    <button class="btn btn-outline-info">详情</button>
-                                    <button class="btn btn-outline-danger">删除</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row">4</th>
-                                <td>第四台</td>
-                                <td>0.075</td>
-                                <td>+0.008</td>
-                                <td>2387</td>
-                                <td>2019-12-02</td>
-                                <td>晚</td>
-                                <td>
-                                    <button class="btn btn-outline-info">详情</button>
-                                    <button class="btn btn-outline-danger">删除</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row">4</th>
-                                <td>第四台</td>
-                                <td>0.075</td>
-                                <td>+0.008</td>
-                                <td>2387</td>
-                                <td>2019-12-02</td>
-                                <td>晚</td>
-                                <td>
-                                    <button class="btn btn-outline-info">详情</button>
-                                    <button class="btn btn-outline-danger">删除</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row">4</th>
-                                <td>第四台</td>
-                                <td>0.075</td>
-                                <td>+0.008</td>
-                                <td>2387</td>
-                                <td>2019-12-02</td>
-                                <td>晚</td>
-                                <td>
-                                    <button class="btn btn-outline-info">详情</button>
-                                    <button class="btn btn-outline-danger">删除</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row">4</th>
-                                <td>第四台</td>
-                                <td>0.075</td>
-                                <td>+0.008</td>
-                                <td>2387</td>
-                                <td>2019-12-02</td>
-                                <td>晚</td>
-                                <td>
-                                    <button class="btn btn-outline-info">详情</button>
-                                    <button class="btn btn-outline-danger">删除</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row">4</th>
-                                <td>第四台</td>
-                                <td>0.075</td>
-                                <td>+0.008</td>
-                                <td>2387</td>
-                                <td>2019-12-02</td>
-                                <td>晚</td>
+                                <td>晚班</td>
+                                <td>未推送</td>
                                 <td>
                                     <button class="btn btn-outline-info">详情</button>
                                     <button class="btn btn-outline-danger">删除</button>
@@ -325,6 +158,25 @@
                             </tr>
                             </tbody>
                         </table>
+                    </div>
+                    <div class="text-center">
+                        <div class="row">
+                            <div class="col-lg-12 col-sm-12 text-center">
+                                <h3 id="no-message">没有数据</h3>
+                            </div>
+                        </div>
+                        <div class="row text-center" id="nav-message">
+                            <!-- 分页信息 -->
+                            <!-- 分页文字信息 -->
+                            <div class="col-lg-12 col-sm-12" id="page_info_area"
+                                 style="text-align: center; margin-bottom: 10px;">
+                            </div>
+                            <!-- 分页条信息 -->
+                            <div class="col-lg-12 col-sm-12" style="display: none; text-align: center;">
+                                <nav id="page-ul">
+                                </nav>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -344,7 +196,7 @@
 
     $("#machine-setting").click(function () {
         $("#modal-area").load("/sub/machine.html");
-        getAllMachine();
+        getAllDraw();
         $("#load-modal").modal("show");
     });
 
@@ -357,7 +209,6 @@
             },
             type: "GET",
             success: function (result) {
-                console.log(result);
                 if (result.status === 0) {
                     showGaugeHad(result.data);
                 } else {
@@ -367,9 +218,12 @@
         });
     }
 
-    function getAllMachine() {
+    /**
+     * 获取所有小拉机信息
+     */
+    function getAllDraw() {
         $.ajax({
-            url: serverUrl + "/machine",
+            url: serverUrl + "/machine/draw",
             contentType: "application/json; charset=utf-8",
             beforeSend: function (XMLHttpRequest) {
                 XMLHttpRequest.setRequestHeader("token", token);
@@ -397,9 +251,9 @@
         $("#machine-area").empty();
         $.each(data, function (index, item) {
             let machineDiv = $("<div class='delete-machine' style='cursor: pointer;' data-placement='top'></div>")
-                .append(item.machineNumber).attr({
+                .append(item.machineName + "(" + item.machineNumber + ")").attr({
                     "machine-id": item.machineId,
-                    "title": "点击删除 [ " + item.machineName + " ]"
+                    "title": "点击删除"
                 });
             $("<div class='col-lg-2 col-sm-3 text-center'></div>").append(machineDiv).appendTo("#machine-area");
         });
