@@ -56,8 +56,8 @@ public class AwArrangeController extends BaseController {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.PARAMETER_ERROR.getCode(), ResponseCode.PARAMETER_ERROR.getDesc());
         } else {
             String enterpriseId = tokenUtil.getClaim(token, "enterpriseId").asString();
-            Boolean conflict = awArrangeService.isConflict(awArrangeVo.getArrangeDate(), awArrangeVo.getShift(), awArrangeVo.getMachine(), enterpriseId);
-            if (!conflict) {
+            Boolean conflict = awArrangeService.isConflict(awArrangeVo.getArrangeDate(), awArrangeVo.getShift(), awArrangeVo.getMachine(), awArrangeVo.getSort(), enterpriseId);
+            if (conflict) {
                 return ServerResponse.createByErrorMessage("任务时间冲突，请修改生产时间或者机器");
             } else {
                 String awArrangeId = UUIDUtil.getId();
@@ -128,6 +128,27 @@ public class AwArrangeController extends BaseController {
     }
 
     /**
+     * 批量修改
+     *
+     * @param token           用户token
+     * @param awArrangeIdList id数组
+     * @return ServerResponse
+     */
+    @PutMapping
+    @RequiredPermission
+    public ServerResponse updateAwArrangePush(@RequestHeader("token") String token, @RequestBody String[] awArrangeIdList) {
+        if (awArrangeIdList == null) {
+            return ServerResponse.createByErrorMessage("参数错误");
+        } else {
+            System.out.println("token : " + token);
+            for (String awArrangeId : awArrangeIdList) {
+                System.out.println("awArrangeId : " + awArrangeId);
+            }
+        }
+        return ServerResponse.createBySuccess();
+    }
+
+    /**
      * 删除一条排产
      *
      * @param awArrangeId 排产Id
@@ -162,7 +183,7 @@ public class AwArrangeController extends BaseController {
      * @return ServerResponse<String>
      */
     @GetMapping("/{awArrangeId}")
-    public ServerResponse<String> printByAwArrangeId(@PathVariable("awArrangeId") String awArrangeId, String token) {
+    public ServerResponse<String> printByAwArrangeId(@PathVariable("awArrangeId") String awArrangeId, @RequestHeader("token") String token) {
         if (StringUtils.isEmpty(awArrangeId)) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.PARAMETER_ERROR.getCode(), ResponseCode.PARAMETER_ERROR.getDesc());
         } else {

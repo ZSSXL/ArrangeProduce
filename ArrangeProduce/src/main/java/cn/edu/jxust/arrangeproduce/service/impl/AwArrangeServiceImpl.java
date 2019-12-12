@@ -28,13 +28,13 @@ public class AwArrangeServiceImpl implements AwArrangeService {
 
     @Override
     public ServerResponse createAwArrange(AwArrange awArrange) {
-        AwArrange save = awArrangeRepository.save(awArrange);
+        awArrangeRepository.save(awArrange);
         return ServerResponse.createBySuccess();
     }
 
     @Override
-    public Boolean isConflict(Long awArrangeDate, String shift, String machine, String enterpriseId) {
-        return awArrangeRepository.findByArrangeDateAndShiftAndMachineAndEnterpriseId(awArrangeDate, shift, machine, enterpriseId).isPresent();
+    public Boolean isConflict(Long awArrangeDate, String shift, String machine, String sort, String enterpriseId) {
+        return awArrangeRepository.findByArrangeDateAndShiftAndMachineAndSortAndEnterpriseId(awArrangeDate, shift, machine, sort, enterpriseId).isPresent();
     }
 
     @Override

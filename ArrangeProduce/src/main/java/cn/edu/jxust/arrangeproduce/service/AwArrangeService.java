@@ -27,10 +27,11 @@ public interface AwArrangeService {
      * @param awArrangeDate 安排任务时间
      * @param shift         班次
      * @param machine       机器
+     * @param sort          种类
      * @param enterpriseId  企业Id
      * @return Boolean
      */
-    Boolean isConflict(Long awArrangeDate, String shift, String machine, String enterpriseId);
+    Boolean isConflict(Long awArrangeDate, String shift, String machine, String sort, String enterpriseId);
 
     /**
      * 分页获取所有的排产信息

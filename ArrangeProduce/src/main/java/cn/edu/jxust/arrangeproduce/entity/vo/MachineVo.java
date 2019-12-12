@@ -29,6 +29,6 @@ public class MachineVo {
     private String machineName;
 
     @NotNull
-    private Integer machineNumber;
+    private String machineNumber;
 
 }

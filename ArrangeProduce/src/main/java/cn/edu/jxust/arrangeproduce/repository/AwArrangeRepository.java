@@ -22,10 +22,11 @@ public interface AwArrangeRepository extends JpaRepository<AwArrange, String> {
      * @param arrangeDate  安排时间
      * @param shift        班次
      * @param machine      机器
+     * @param sort         分类
      * @param enterpriseId 企业Id
      * @return Optional<AwArrange>
      */
-    Optional<AwArrange> findByArrangeDateAndShiftAndMachineAndEnterpriseId(Long arrangeDate, String shift, String machine, String enterpriseId);
+    Optional<AwArrange> findByArrangeDateAndShiftAndMachineAndSortAndEnterpriseId(Long arrangeDate, String shift, String machine, String sort, String enterpriseId);
 
     /**
      * 分页查找所有分页信息

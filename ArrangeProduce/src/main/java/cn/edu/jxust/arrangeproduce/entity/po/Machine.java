@@ -49,8 +49,8 @@ public class Machine implements Serializable {
     /**
      * 小拉机比那好
      */
-    @Column(columnDefinition = "int(8) comment '机器编号，如：2001/3001'")
-    private Integer machineNumber;
+    @Column(columnDefinition = "varchar(8) comment '机器编号，如：2001/3001'")
+    private String machineNumber;
 
     /**
      * 所属企业

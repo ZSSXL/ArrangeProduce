@@ -36,7 +36,7 @@ public interface MachineService {
      * @param machineNumber 小拉机编号
      * @return Boolean
      */
-    Boolean existInDb(String enterpriseId, Integer machineNumber);
+    Boolean existInDb(String enterpriseId, String machineNumber);
 
     /**
      * 删除该企业所有的小拉机

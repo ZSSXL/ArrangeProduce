@@ -24,7 +24,7 @@ public interface MachineRepository extends JpaRepository<Machine, String> {
      * @param machineNumber 小拉机号码
      * @return Optional<Machine>
      */
-    Optional<Machine> findByEnterpriseIdAndMachineNumber(String enterpriseId, Integer machineNumber);
+    Optional<Machine> findByEnterpriseIdAndMachineNumber(String enterpriseId, String machineNumber);
 
     /**
      * 查询该企业的所有设备,并排序

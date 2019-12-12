@@ -43,7 +43,7 @@ public class MachineServiceImpl implements MachineService {
     }
 
     @Override
-    public Boolean existInDb(String enterpriseId, Integer machineNumber) {
+    public Boolean existInDb(String enterpriseId, String machineNumber) {
         return machineRepository.findByEnterpriseIdAndMachineNumber(enterpriseId, machineNumber).isPresent();
     }
 
