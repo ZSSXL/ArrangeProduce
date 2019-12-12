@@ -55,7 +55,7 @@ public class ArrangeController extends BaseController {
         } else {
             String enterpriseId = tokenUtil.getClaim(token, "enterpriseId").asString();
             String conflict = arrangeService.isConflict(arrangeVo.getArrangeDate(), arrangeVo.getShift(), arrangeVo.getMachine(), enterpriseId);
-            if (StringUtils.isEmpty(conflict)) {
+            if (!StringUtils.isEmpty(conflict)) {
                 return ServerResponse.createByErrorMessage("任务时间冲突，请修改生产时间或者机器");
             } else {
                 String username = tokenUtil.getClaim(token, "username").asString();

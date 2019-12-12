@@ -59,7 +59,7 @@ public class AwArrangeController extends BaseController {
         } else {
             String enterpriseId = tokenUtil.getClaim(token, "enterpriseId").asString();
             String conflict = awArrangeService.isConflict(awArrangeVo.getArrangeDate(), awArrangeVo.getShift(), awArrangeVo.getMachine(), awArrangeVo.getSort(), enterpriseId);
-            if (StringUtils.isEmpty(conflict)) {
+            if (!StringUtils.isEmpty(conflict)) {
                 return ServerResponse.createByErrorMessage("任务时间冲突，请修改生产时间或者机器");
             } else {
                 String awArrangeId = UUIDUtil.getId();
