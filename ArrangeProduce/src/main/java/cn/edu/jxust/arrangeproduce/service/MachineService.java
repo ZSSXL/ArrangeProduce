@@ -24,9 +24,10 @@ public interface MachineService {
      * 查询该企业的所有设备
      *
      * @param enterpriseId 企业ID
+     * @param sort         机器种类
      * @return ServerResponse<List < Machine>>
      */
-    ServerResponse<List<Machine>> getAllMachineByEnterpriseId(String enterpriseId);
+    ServerResponse<List<Machine>> getAllMachineByEnterpriseIdAndSort(String enterpriseId, String sort);
 
     /**
      * 查看该企业是否已存在该小拉机

@@ -1,6 +1,7 @@
 package cn.edu.jxust.arrangeproduce.controller.portal;
 
 import cn.edu.jxust.arrangeproduce.annotation.RequiredPermission;
+import cn.edu.jxust.arrangeproduce.common.Const;
 import cn.edu.jxust.arrangeproduce.common.ResponseCode;
 import cn.edu.jxust.arrangeproduce.common.ServerResponse;
 import cn.edu.jxust.arrangeproduce.entity.po.Machine;
@@ -38,9 +39,9 @@ public class MachineController extends BaseController {
     }
 
     /**
-     * 添加小拉机
+     * 添加机器
      *
-     * @param machineVo 小拉机Vo实体
+     * @param machineVo 机器Vo实体
      * @param token     token
      * @param result    错误结果
      * @return ServerResponse
@@ -54,7 +55,7 @@ public class MachineController extends BaseController {
             String enterpriseId = tokenUtil.getClaim(token, "enterpriseId").asString();
             Boolean exist = machineService.existInDb(enterpriseId, machineVo.getMachineNumber());
             if (exist) {
-                return ServerResponse.createBySuccessMessage("该小拉机已添加");
+                return ServerResponse.createBySuccessMessage("该机器已存在");
             } else {
                 String machineId = UUIDUtil.getId();
                 try {
@@ -63,32 +64,59 @@ public class MachineController extends BaseController {
                             .machineName(machineVo.getMachineName())
                             .machineNumber(machineVo.getMachineNumber())
                             .enterpriseId(enterpriseId)
+                            .sort(machineVo.getMachineSort())
                             .build());
                 } catch (Exception e) {
                     log.error("create machine error : {}", e.getMessage());
-                    return ServerResponse.createBySuccessMessage("添加小拉机发生异常错误");
+                    return ServerResponse.createBySuccessMessage("添加机器发生异常错误");
                 }
             }
         }
     }
 
     /**
-     * 获取所有的小拉机信息
+     * 获取所有小拉机
      *
      * @param token token
      * @return ServerResponse<List < Machine>>
      */
-    @GetMapping
+    @GetMapping("/draw")
     @RequiredPermission
-    public ServerResponse<List<Machine>> getAllMachine(@RequestHeader("token") String token) {
+    public ServerResponse<List<Machine>> getAllDraw(@RequestHeader("token") String token) {
         String enterpriseId = tokenUtil.getClaim(token, "enterpriseId").asString();
-        return machineService.getAllMachineByEnterpriseId(enterpriseId);
+        return machineService.getAllMachineByEnterpriseIdAndSort(enterpriseId, Const.Sort.SORT_DRAW);
     }
 
     /**
-     * 删除个小拉机
+     * 获取所有退火机
      *
-     * @param machineId 小拉机Id
+     * @param token 用户token
+     * @return ServerResponse<List < Machine>>
+     */
+    @GetMapping("/annealing")
+    @RequiredPermission
+    public ServerResponse<List<Machine>> getAllAnnealing(@RequestHeader("token") String token) {
+        String enterpriseId = tokenUtil.getClaim(token, "enterpriseId").asString();
+        return machineService.getAllMachineByEnterpriseIdAndSort(enterpriseId, Const.Sort.SORT_ANNEALING);
+    }
+
+    /**
+     * 获取所有绕线机
+     *
+     * @param token 用户token
+     * @return ServerResponse<List < Machine>>
+     */
+    @GetMapping("/winding")
+    @RequiredPermission
+    public ServerResponse<List<Machine>> getAllWind(@RequestHeader("token") String token) {
+        String enterpriseId = tokenUtil.getClaim(token, "enterpriseId").asString();
+        return machineService.getAllMachineByEnterpriseIdAndSort(enterpriseId, Const.Sort.SORT_WINDING);
+    }
+
+    /**
+     * 删除一个机器
+     *
+     * @param machineId 机器Id
      * @return ServerResponse
      */
     @RequiredPermission
@@ -107,7 +135,7 @@ public class MachineController extends BaseController {
                 }
             } catch (Exception e) {
                 log.error("delete machine error : {}", e.getMessage());
-                return ServerResponse.createByErrorMessage("删除一个小拉机发生未知异常");
+                return ServerResponse.createByErrorMessage("删除一个机器发生未知异常");
             }
         }
     }

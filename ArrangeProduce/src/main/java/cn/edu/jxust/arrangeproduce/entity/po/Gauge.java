@@ -54,10 +54,4 @@ public class Gauge implements Serializable {
     @Column(updatable = false, columnDefinition = "bigint(20) comment'创建时间'")
     @CreatedDate
     private Long createTime;
-    /**
-     * 修改日期
-     */
-    @LastModifiedDate
-    @Column(columnDefinition = "bigint(20) comment'创建时间'")
-    private Long updateTime;
 }

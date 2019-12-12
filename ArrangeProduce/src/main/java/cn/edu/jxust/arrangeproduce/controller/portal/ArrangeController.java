@@ -7,9 +7,7 @@ import cn.edu.jxust.arrangeproduce.common.ServerResponse;
 import cn.edu.jxust.arrangeproduce.entity.po.Arrange;
 import cn.edu.jxust.arrangeproduce.entity.vo.ArrangeVo;
 import cn.edu.jxust.arrangeproduce.service.ArrangeService;
-import cn.edu.jxust.arrangeproduce.util.RedisPoolUtil;
-import cn.edu.jxust.arrangeproduce.util.TokenUtil;
-import cn.edu.jxust.arrangeproduce.util.UUIDUtil;
+import cn.edu.jxust.arrangeproduce.util.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,11 +56,11 @@ public class ArrangeController extends BaseController {
             if (conflict) {
                 return ServerResponse.createByErrorMessage("任务时间冲突，请修改生产时间或者机器");
             } else {
+                String username = tokenUtil.getClaim(token, "username").asString();
                 String arrangeId = UUIDUtil.getId();
                 try {
-                    arrangeService.createArrange(Arrange.builder()
+                    return arrangeService.createArrange(Arrange.builder()
                             .arrangeId(arrangeId)
-                            .sort(arrangeVo.getSort())
                             .arrangeDate(arrangeVo.getArrangeDate())
                             .gauge(arrangeVo.getGauge())
                             .machine(arrangeVo.getMachine())
@@ -72,17 +70,11 @@ public class ArrangeController extends BaseController {
                             .tolerance(arrangeVo.getTolerance())
                             .status(0)
                             .push(Const.DEFAULT_NO_PUSH)
-                            .creator(enterpriseId)
+                            .creator(username)
                             .build());
                 } catch (Exception e) {
-                    log.error("create : {} arrange error {}", arrangeVo.getSort(), e.getMessage());
+                    log.error("create arrange error {}", e.getMessage());
                     return ServerResponse.createByErrorMessage("新建排产任务异常");
-                }
-                try {
-                    return ServerResponse.createBySuccess();
-                } catch (Exception e) {
-                    log.error("notice message has error : {}", e.getMessage());
-                    return ServerResponse.createByError();
                 }
             }
         }
@@ -97,7 +89,8 @@ public class ArrangeController extends BaseController {
      * @return ServerResponse<List < Arrange>>
      */
     @GetMapping
-    public ServerResponse<Page<Arrange>> getAllArrangeByEmployee(@RequestHeader("token") String token
+    @RequiredPermission
+    public ServerResponse<Page<Arrange>> getAllArrangeByManager(@RequestHeader("token") String token
             , @RequestParam(value = "page", defaultValue = Const.DEFAULT_PAGE_NUMBER) Integer page
             , @RequestParam(value = "size", defaultValue = Const.DEFAULT_PAGE_SIZE) Integer size) {
         if (StringUtils.isEmpty(token)) {
@@ -109,38 +102,23 @@ public class ArrangeController extends BaseController {
     }
 
     /**
-     * 员工上线后查看是否有未读消息
+     * 分页获取所有的排产信息
      *
      * @param token token
-     * @return ServeResponse
+     * @param page  分页页数
+     * @param size  分页大小
+     * @return ServerResponse<List < Arrange>>
      */
-    @GetMapping("/message")
+    @GetMapping("/employee")
     @RequiredPermission("employee")
-    public ServerResponse<String> getMessage(@RequestHeader("token") String token) {
-        String enterpriseId = tokenUtil.getClaim(token, "enterpriseId").asString();
-        String result = RedisPoolUtil.get(enterpriseId + "Arrange");
-        if (StringUtils.isEmpty(result)) {
-            return ServerResponse.createByErrorMessage("没有信息新消息");
+    public ServerResponse<Page<Arrange>> getAllArrangeByEmployee(@RequestHeader("token") String token
+            , @RequestParam(value = "page", defaultValue = Const.DEFAULT_PAGE_NUMBER) Integer page
+            , @RequestParam(value = "size", defaultValue = Const.DEFAULT_PAGE_SIZE) Integer size) {
+        if (StringUtils.isEmpty(token)) {
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         } else {
-            return ServerResponse.createBySuccess("有新消息", result);
-        }
-    }
-
-    /**
-     * 员工查确认了消息后，删除Redis中的记录
-     *
-     * @param token token
-     * @return ServerResponse
-     */
-    @DeleteMapping("/message")
-    @RequiredPermission("employee")
-    public ServerResponse delMessage(@RequestHeader("token") String token) {
-        String enterpriseId = tokenUtil.getClaim(token, "enterpriseId").asString();
-        Long del = RedisPoolUtil.del(enterpriseId + "Arrange");
-        if (del == 1) {
-            return ServerResponse.createBySuccess();
-        } else {
-            return ServerResponse.createByErrorMessage("没有什么好删除的了");
+            String enterpriseId = tokenUtil.getClaim(token, "enterpriseId").asString();
+            return arrangeService.getAllArrangeByEnterpriseIdAndPush(enterpriseId, Const.PUSH, PageRequest.of(page, size));
         }
     }
 
@@ -170,5 +148,136 @@ public class ArrangeController extends BaseController {
             }
         }
     }
+
+    /**
+     * 新建排产任务并打印二维码
+     *
+     * @param arrangeVo 排产Vo实体
+     * @param token     token
+     * @param result    错误结果
+     * @return ServerResponse
+     */
+    @PostMapping("/print")
+    @RequiredPermission
+    public ServerResponse<String> printQrCode(@RequestBody @Valid ArrangeVo arrangeVo, @RequestHeader("token") String token, BindingResult result) {
+        if (result.hasErrors()) {
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.PARAMETER_ERROR.getCode(), ResponseCode.PARAMETER_ERROR.getDesc());
+        } else {
+            String enterpriseId = tokenUtil.getClaim(token, "enterpriseId").asString();
+            Boolean conflict = arrangeService.isConflict(arrangeVo.getArrangeDate(), arrangeVo.getShift(), arrangeVo.getMachine(), enterpriseId);
+            String qrCode = generateQrCode(arrangeVo);
+            if (conflict) {
+                // 如果存在，直接打印
+                if (qrCode == null) {
+                    return ServerResponse.createByErrorMessage("生成二维码失败");
+                } else {
+                    // todo 讲道理，这里打印之后也要改变数据库中的排产打印状态，但是好麻烦，但是不影响大局，后面有时间再改
+                    return ServerResponse.createBySuccess(qrCode);
+                }
+            } else {
+                // 如果不存在，先保存，后打印
+                if (qrCode == null) {
+                    return ServerResponse.createByErrorMessage("生成二维码失败");
+                } else {
+                    String username = tokenUtil.getClaim(token, "username").asString();
+                    String arrangeId = UUIDUtil.getId();
+                    try {
+                        arrangeService.createArrange(Arrange.builder()
+                                .arrangeId(arrangeId)
+                                .arrangeDate(arrangeVo.getArrangeDate())
+                                .gauge(arrangeVo.getGauge())
+                                .machine(arrangeVo.getMachine())
+                                .shift(arrangeVo.getShift())
+                                .enterpriseId(enterpriseId)
+                                .weight(arrangeVo.getWeight())
+                                .tolerance(arrangeVo.getTolerance())
+                                // 更新打印状态为已打印(1)
+                                .status(1)
+                                .creator(username)
+                                .build());
+                    } catch (Exception e) {
+                        log.error("create arrange error {}", e.getClass());
+                        return ServerResponse.createByErrorMessage("新建排产任务异常");
+                    }
+                    return ServerResponse.createBySuccess(qrCode);
+                }
+            }
+        }
+    }
+
+    /**
+     * 从历史记录中打印二维码
+     *
+     * @param arrangeId 排产Id
+     * @param token     token
+     * @return ServerResponse<String>
+     */
+    @GetMapping("/{arrangeId}")
+    public ServerResponse<String> printByArrangeId(@PathVariable("arrangeId") String arrangeId, @RequestHeader("token") String token) {
+        if (StringUtils.isEmpty(arrangeId)) {
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.PARAMETER_ERROR.getCode(), ResponseCode.PARAMETER_ERROR.getDesc());
+        } else {
+            if (StringUtils.isEmpty(token)) {
+                return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
+            } else {
+                Arrange arrange = arrangeService.getArrangeById(arrangeId);
+                if (arrange == null) {
+                    return ServerResponse.createByErrorMessage("打印失败，没有该排产信息");
+                } else {
+                    String qrCode = generateQrCode(ArrangeVo.builder()
+                            .machine(arrange.getMachine())
+                            .gauge(arrange.getGauge())
+                            .tolerance(arrange.getTolerance())
+                            .arrangeDate(arrange.getArrangeDate())
+                            .shift(arrange.getShift())
+                            .build());
+                    if (StringUtils.isEmpty(qrCode)) {
+                        return ServerResponse.createByErrorMessage("生成二维码失败");
+                    } else {
+                        // 更新排产打印状态
+                        arrange.setStatus(1);
+                        ServerResponse response = arrangeService.createArrange(arrange);
+                        if (response.isSuccess()) {
+                            return ServerResponse.createBySuccess(qrCode);
+                        } else {
+                            return ServerResponse.createBySuccess("打印成功，但是更新排产信息打印状态失败", qrCode);
+                        }
+
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * 生成二维码
+     *
+     * @return String
+     */
+    private String generateQrCode(ArrangeVo arrangeVo) {
+        StringBuilder qrMessage = new StringBuilder();
+        // 打码时间
+        qrMessage.append("8").append(DateUtil.getDateSimple()).append("*");
+        // 小拉机编号
+        qrMessage.append(arrangeVo.getMachine()).append("*");
+        // 线规
+        qrMessage.append(arrangeVo.getGauge()).append("*");
+        // 公差
+        qrMessage.append(arrangeVo.getTolerance()).append("*");
+        // 任务生产时间
+        qrMessage.append(DateUtil.timestampToDate(arrangeVo.getArrangeDate())).append("*");
+        // 早晚班： 1是早班， 0是晚班
+        qrMessage.append(arrangeVo.getShift()).append("*");
+        // 流水号 随机四位数
+        qrMessage.append((int) (Math.random() * 9000 + 1000));
+        log.info("generate QrCode message : {}", qrMessage);
+        String qrCode = QrCodeUtil.createQrCode(qrMessage.toString());
+        if (qrCode != null) {
+            return qrCode.replaceAll("\\n", "").replaceAll("\\r", "").replaceAll("\\r\\n", "");
+        } else {
+            return null;
+        }
+    }
+
 
 }

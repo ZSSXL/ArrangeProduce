@@ -3,6 +3,7 @@ package cn.edu.jxust.arrangeproduce.service;
 import cn.edu.jxust.arrangeproduce.common.ServerResponse;
 import cn.edu.jxust.arrangeproduce.entity.po.Arrange;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
@@ -61,7 +62,18 @@ public interface ArrangeService {
      * 分页获取所有的排产信息
      *
      * @param enterpriseId 企业Id
+     * @param pageable 分页信息
      * @return ServerResponse<List < Arrange>>
      */
     ServerResponse<Page<Arrange>> getAllArrangeByEnterpriseId(String enterpriseId, Pageable pageable);
+
+    /**
+     * 分页获取所有排产信息
+     *
+     * @param enterpriseId 企业Id
+     * @param push         推送状态
+     * @param pageable     分页信息
+     * @return ServerResponse<Page < Arrange>>
+     */
+    ServerResponse<Page<Arrange>> getAllArrangeByEnterpriseIdAndPush(String enterpriseId, String push, Pageable pageable);
 }

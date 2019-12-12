@@ -33,12 +33,12 @@ public class MachineServiceImpl implements MachineService {
     }
 
     @Override
-    public ServerResponse<List<Machine>> getAllMachineByEnterpriseId(String enterpriseId) {
-        List<Machine> list = machineRepository.findAllByEnterpriseIdOrderByMachineNumber(enterpriseId);
+    public ServerResponse<List<Machine>> getAllMachineByEnterpriseIdAndSort(String enterpriseId, String sort) {
+        List<Machine> list = machineRepository.findAllByEnterpriseIdAndSortOrderByMachineNumber(enterpriseId, sort);
         if (list != null) {
             return ServerResponse.createBySuccess(list);
         } else {
-            return ServerResponse.createByErrorMessage("查询小拉机失败");
+            return ServerResponse.createByErrorMessage("查询机器失败");
         }
     }
 

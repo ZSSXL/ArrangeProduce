@@ -30,9 +30,10 @@ public interface MachineRepository extends JpaRepository<Machine, String> {
      * 查询该企业的所有设备,并排序
      *
      * @param enterpriseId 企业Id
+     * @param sort         机器种类
      * @return List<Machine>
      */
-    List<Machine> findAllByEnterpriseIdOrderByMachineNumber(String enterpriseId);
+    List<Machine> findAllByEnterpriseIdAndSortOrderByMachineNumber(String enterpriseId, String sort);
 
     /**
      * 删除该企业的所有小拉机

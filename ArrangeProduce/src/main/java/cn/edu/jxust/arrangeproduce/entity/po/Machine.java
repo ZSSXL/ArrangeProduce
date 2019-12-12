@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.Column;
@@ -20,7 +19,7 @@ import java.io.Serializable;
  * @description 设备实体
  */
 @Entity(name = "ap_machine")
-@org.hibernate.annotations.Table(appliesTo = "ap_machine", comment = "账户表")
+@org.hibernate.annotations.Table(appliesTo = "ap_machine", comment = "机器表")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -29,22 +28,28 @@ import java.io.Serializable;
 public class Machine implements Serializable {
 
     /**
-     * 小拉机Id
+     * 机器Id
      */
     @Id
-    @Column(columnDefinition = "varchar(255) comment '小拉机Id'")
+    @Column(columnDefinition = "varchar(255) comment '机器Id'")
     private String machineId;
+
+    /**
+     * 机器种类 小拉机/退火绕线机 draw/aw
+     */
+    @Column(columnDefinition = "varchar(20) comment '机器种类 小拉机 draw/退火绕线机 aw'")
+    private String sort;
 
     /**
      * 小拉机名称
      */
-    @Column(columnDefinition = "varchar(50) comment '小拉机名称'")
+    @Column(columnDefinition = "varchar(50) comment '机器名称'")
     private String machineName;
 
     /**
      * 小拉机比那好
      */
-    @Column(columnDefinition = "int(8) comment '小拉机编号，如：2001'")
+    @Column(columnDefinition = "int(8) comment '机器编号，如：2001/3001'")
     private Integer machineNumber;
 
     /**
@@ -59,10 +64,4 @@ public class Machine implements Serializable {
     @Column(updatable = false, columnDefinition = "bigint(20) comment'创建时间'")
     @CreatedDate
     private Long createTime;
-    /**
-     * 修改日期
-     */
-    @LastModifiedDate
-    @Column(columnDefinition = "bigint(20) comment'创建时间'")
-    private Long updateTime;
 }

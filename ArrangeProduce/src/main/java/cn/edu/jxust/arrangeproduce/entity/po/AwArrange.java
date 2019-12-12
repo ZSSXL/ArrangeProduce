@@ -16,24 +16,30 @@ import java.io.Serializable;
 
 /**
  * @author ZSS
- * @date 2019/11/30 9:40
- * @description 排产实体
+ * @date 2019/12/12 9:13
+ * @description annealing & winding Arrange
  */
-@Entity(name = "ap_arrange")
-@org.hibernate.annotations.Table(appliesTo = "ap_arrange", comment = "排产表")
+@Entity(name = "ap_awarrange")
+@org.hibernate.annotations.Table(appliesTo = "ap_awarrange", comment = "退火/绕线排产表")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class Arrange implements Serializable {
+public class AwArrange implements Serializable {
 
     /**
-     * 排产Id
+     * 退货/绕线机排产Id
      */
     @Id
-    @Column(unique = true, nullable = false, columnDefinition = "varchar(100) comment '排产Id'")
-    private String arrangeId;
+    @Column(columnDefinition = "varchar(255) comment '退货/绕线机排产Id'")
+    private String awArrangeId;
+
+    /**
+     * 退火/绕线
+     */
+    @Column(nullable = false, columnDefinition = "varchar(20) comment '退火/绕线' ")
+    private String sort;
 
     /**
      * 安排日期, 精确到日
@@ -48,9 +54,9 @@ public class Arrange implements Serializable {
     private String shift;
 
     /**
-     * 安排小拉机
+     * 安排退火机/绕线机
      */
-    @Column(nullable = false, columnDefinition = "varchar(20) comment '安排小拉机'")
+    @Column(nullable = false, columnDefinition = "varchar(20) comment '安排退火机/绕线机'")
     private String machine;
 
     /**

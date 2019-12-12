@@ -23,9 +23,15 @@ public class Const {
     public static final String DEFAULT_NO_PUSH = "no";
 
     /**
+     * 推送
+     */
+    public static final String PUSH = "yes";
+
+    /**
      * 分页默认显示条数
      */
     public static final String DEFAULT_PAGE_SIZE = "20";
+
 
     /**
      * 排序种类

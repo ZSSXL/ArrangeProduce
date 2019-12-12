@@ -10,8 +10,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 /**
  * @author ZSS
  * @date 2019/11/30 9:58
@@ -60,8 +58,18 @@ public class ArrangeServiceImpl implements ArrangeService {
 
     @Override
     public ServerResponse<Page<Arrange>> getAllArrangeByEnterpriseId(String enterpriseId, Pageable pageable) {
-        Page<Arrange> arrangeList = arrangeRepository.findAllByEnterpriseId(enterpriseId, pageable);
-        if(arrangeList == null){
+        Page<Arrange> arrangeList = arrangeRepository.findAllByEnterpriseIdOrderByCreateTimeDesc(enterpriseId, pageable);
+        if (arrangeList == null) {
+            return ServerResponse.createByErrorMessage("查询信息失败");
+        } else {
+            return ServerResponse.createBySuccess(arrangeList);
+        }
+    }
+
+    @Override
+    public ServerResponse<Page<Arrange>> getAllArrangeByEnterpriseIdAndPush(String enterpriseId, String push, Pageable pageable) {
+        Page<Arrange> arrangeList = arrangeRepository.findAllByEnterpriseIdAndPushOrderByCreateTimeDesc(enterpriseId, push, pageable);
+        if (arrangeList == null) {
             return ServerResponse.createByErrorMessage("查询信息失败");
         } else {
             return ServerResponse.createBySuccess(arrangeList);

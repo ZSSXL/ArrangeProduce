@@ -57,6 +57,15 @@ public interface ArrangeRepository extends JpaRepository<Arrange, String> {
      * @param pageable     分页信息
      * @return Page<Arrange>
      */
-    Page<Arrange> findAllByEnterpriseId(String enterpriseId, Pageable pageable);
+    Page<Arrange> findAllByEnterpriseIdOrderByCreateTimeDesc(String enterpriseId, Pageable pageable);
+
+    /**
+     * 分页获取已经推送了的排产数据
+     * @param enterpriseId 企业Id
+     * @param push 推送状态
+     * @param pageable 分页信息
+     * @return Page<Arrange>
+     */
+    Page<Arrange> findAllByEnterpriseIdAndPushOrderByCreateTimeDesc(String enterpriseId, String push, Pageable pageable);
 
 }

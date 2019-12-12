@@ -10,14 +10,19 @@ import javax.validation.constraints.NotNull;
 
 /**
  * @author ZSS
- * @date 2019/12/4 9:17
- * @description arrange Vo
+ * @date 2019/12/12 10:43
+ * @description awArrange Vo
  */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ArrangeVo {
+public class AwArrangeVo {
+    /**
+     * 退火/绕线 annealing/winding
+     */
+    @NotEmpty
+    private String sort;
 
     /**
      * 安排日期, 精确到日
@@ -47,12 +52,11 @@ public class ArrangeVo {
      * 安排班次 A为早班，B为晚班
      */
     @NotEmpty
-    private String shift;
+   private String shift;
 
     /**
      * 公差
      */
     @NotEmpty
     private String tolerance;
-
 }

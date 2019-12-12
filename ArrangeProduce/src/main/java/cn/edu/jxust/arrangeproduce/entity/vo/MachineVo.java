@@ -19,6 +19,12 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class MachineVo {
 
+    /**
+     * 机器种类
+     */
+    @NotEmpty
+    private String machineSort;
+
     @NotEmpty
     private String machineName;
 
