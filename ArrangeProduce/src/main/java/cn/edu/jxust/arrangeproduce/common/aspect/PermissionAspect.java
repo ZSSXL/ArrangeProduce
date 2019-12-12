@@ -41,6 +41,7 @@ public class PermissionAspect {
         RequiredPermission requiredPermission = ms.getMethod().getAnnotation(RequiredPermission.class);
         String permission = requiredPermission.value();
 
+        // 获取requestHeader
         ServletRequestAttributes sra = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         if (sra != null) {
             HttpServletRequest request = sra.getRequest();

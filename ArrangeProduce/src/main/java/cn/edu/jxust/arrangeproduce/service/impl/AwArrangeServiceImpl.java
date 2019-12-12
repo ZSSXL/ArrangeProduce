@@ -1,5 +1,6 @@
 package cn.edu.jxust.arrangeproduce.service.impl;
 
+import cn.edu.jxust.arrangeproduce.common.Const;
 import cn.edu.jxust.arrangeproduce.common.ServerResponse;
 import cn.edu.jxust.arrangeproduce.entity.po.AwArrange;
 import cn.edu.jxust.arrangeproduce.repository.AwArrangeRepository;
@@ -9,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @author ZSS
@@ -33,8 +36,13 @@ public class AwArrangeServiceImpl implements AwArrangeService {
     }
 
     @Override
-    public Boolean isConflict(Long awArrangeDate, String shift, String machine, String sort, String enterpriseId) {
-        return awArrangeRepository.findByArrangeDateAndShiftAndMachineAndSortAndEnterpriseId(awArrangeDate, shift, machine, sort, enterpriseId).isPresent();
+    public String isConflict(Long awArrangeDate, String shift, String machine, String sort, String enterpriseId) {
+        AwArrange awArrange = awArrangeRepository.findByArrangeDateAndShiftAndMachineAndSortAndEnterpriseId(awArrangeDate, shift, machine, sort, enterpriseId).orElse(null);
+        if (awArrange != null) {
+            return awArrange.getAwArrangeId();
+        } else {
+            return null;
+        }
     }
 
     @Override
@@ -67,5 +75,21 @@ public class AwArrangeServiceImpl implements AwArrangeService {
     @Override
     public AwArrange getAwArrangeById(String awArrangeId) {
         return awArrangeRepository.findById(awArrangeId).orElse(null);
+    }
+
+    @Override
+    public ServerResponse updatePush(String enterpriseId, List<String> awArrangeList) {
+        for (String awArrangeId : awArrangeList) {
+            Integer integer = awArrangeRepository.update(Const.PUSH, awArrangeId, enterpriseId);
+            log.info("update awArrange : {} result : {}", awArrangeId, integer);
+        }
+        return ServerResponse.createBySuccessMessage("更新成功");
+    }
+
+    @Override
+    public Boolean updateStatus(String awArrangeId, String enterpriseId) {
+        Integer integer = awArrangeRepository.updateStatus(awArrangeId, enterpriseId);
+        log.info("update arrange print status : {}", integer == 1);
+        return integer == 1;
     }
 }

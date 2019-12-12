@@ -21,6 +21,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author ZSS
@@ -56,8 +58,8 @@ public class AwArrangeController extends BaseController {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.PARAMETER_ERROR.getCode(), ResponseCode.PARAMETER_ERROR.getDesc());
         } else {
             String enterpriseId = tokenUtil.getClaim(token, "enterpriseId").asString();
-            Boolean conflict = awArrangeService.isConflict(awArrangeVo.getArrangeDate(), awArrangeVo.getShift(), awArrangeVo.getMachine(), awArrangeVo.getSort(), enterpriseId);
-            if (conflict) {
+            String conflict = awArrangeService.isConflict(awArrangeVo.getArrangeDate(), awArrangeVo.getShift(), awArrangeVo.getMachine(), awArrangeVo.getSort(), enterpriseId);
+            if (StringUtils.isEmpty(conflict)) {
                 return ServerResponse.createByErrorMessage("任务时间冲突，请修改生产时间或者机器");
             } else {
                 String awArrangeId = UUIDUtil.getId();
@@ -136,16 +138,20 @@ public class AwArrangeController extends BaseController {
      */
     @PutMapping
     @RequiredPermission
+    @Transactional(rollbackFor = Exception.class)
     public ServerResponse updateAwArrangePush(@RequestHeader("token") String token, @RequestBody String[] awArrangeIdList) {
         if (awArrangeIdList == null) {
             return ServerResponse.createByErrorMessage("参数错误");
         } else {
-            System.out.println("token : " + token);
-            for (String awArrangeId : awArrangeIdList) {
-                System.out.println("awArrangeId : " + awArrangeId);
+            String enterpriseId = tokenUtil.getClaim(token, "enterpriseId").asString();
+            List<String> list = Arrays.asList(awArrangeIdList);
+            try {
+                return awArrangeService.updatePush(enterpriseId, list);
+            } catch (Exception e) {
+                log.error("An exception occurred during the update : {} ", e.getMessage());
+                return ServerResponse.createByErrorMessage("更新的时候发生了未知异常，请查看日志");
             }
         }
-        return ServerResponse.createBySuccess();
     }
 
     /**
@@ -199,9 +205,9 @@ public class AwArrangeController extends BaseController {
                         return ServerResponse.createByErrorMessage("生成二维码失败");
                     } else {
                         // 更新排产打印状态
-                        awArrange.setStatus(1);
-                        ServerResponse response = awArrangeService.createAwArrange(awArrange);
-                        if (response.isSuccess()) {
+                        String enterpriseId = tokenUtil.getClaim(token, "enterpriseId").asString();
+                        Boolean update = awArrangeService.updateStatus(awArrangeId, enterpriseId);
+                        if (update) {
                             return ServerResponse.createBySuccess(qrCode);
                         } else {
                             return ServerResponse.createBySuccess("打印成功，但是更新排产信息打印状态失败", qrCode);

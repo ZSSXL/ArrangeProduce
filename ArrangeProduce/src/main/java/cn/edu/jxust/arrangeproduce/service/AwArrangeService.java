@@ -3,8 +3,9 @@ package cn.edu.jxust.arrangeproduce.service;
 import cn.edu.jxust.arrangeproduce.common.ServerResponse;
 import cn.edu.jxust.arrangeproduce.entity.po.AwArrange;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+
+import java.util.List;
 
 /**
  * @author ZSS
@@ -31,7 +32,7 @@ public interface AwArrangeService {
      * @param enterpriseId  企业Id
      * @return Boolean
      */
-    Boolean isConflict(Long awArrangeDate, String shift, String machine, String sort, String enterpriseId);
+    String isConflict(Long awArrangeDate, String shift, String machine, String sort, String enterpriseId);
 
     /**
      * 分页获取所有的排产信息
@@ -67,4 +68,22 @@ public interface AwArrangeService {
      * @return AwArrange
      */
     AwArrange getAwArrangeById(String awArrangeId);
+
+    /**
+     * 更新推送状态
+     *
+     * @param enterpriseId  企业Id
+     * @param awArrangeList id
+     * @return ServerResponse
+     */
+    ServerResponse updatePush(String enterpriseId, List<String> awArrangeList);
+
+    /**
+     * 更新打印状态
+     *
+     * @param awArrangeId    排产Id
+     * @param enterpriseId 企业Id
+     * @return Boolean
+     */
+    Boolean updateStatus(String awArrangeId, String enterpriseId);
 }

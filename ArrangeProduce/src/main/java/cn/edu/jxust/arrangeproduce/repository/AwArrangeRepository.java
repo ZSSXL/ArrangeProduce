@@ -4,7 +4,10 @@ import cn.edu.jxust.arrangeproduce.entity.po.AwArrange;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -53,5 +56,32 @@ public interface AwArrangeRepository extends JpaRepository<AwArrange, String> {
      * @param awArrangeId Id
      * @return Integer
      */
+    @Modifying
+    @Transactional(rollbackFor = Exception.class)
     Integer deleteByAwArrangeId(String awArrangeId);
+
+    /**
+     * 更新打印状态
+     *
+     * @param awArrangeId  排产Id
+     * @param enterpriseId 企业Id
+     * @return Integer
+     */
+    @Modifying
+    @Transactional(rollbackFor = Exception.class)
+    @Query(value = "update ap_awarrange aa set aa.status = 1 where aa.aw_arrange_id = ?1 and aa.enterprise_id = ?2 ", nativeQuery = true)
+    Integer updateStatus(String awArrangeId, String enterpriseId);
+
+    /**
+     * 更新推送状态
+     *
+     * @param push         推送
+     * @param awArrangeId  id
+     * @param enterpriseId 企业Id
+     * @return Integer
+     */
+    @Modifying
+    @Transactional(rollbackFor = Exception.class)
+    @Query(value = "update ap_awarrange aa set aa.push = ?1 where aa.aw_arrange_id = ?2 and aa.enterprise_id = ?3 ", nativeQuery = true)
+    Integer update(String push, String awArrangeId, String enterpriseId);
 }

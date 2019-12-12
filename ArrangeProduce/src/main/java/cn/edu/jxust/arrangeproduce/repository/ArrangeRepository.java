@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -61,11 +62,36 @@ public interface ArrangeRepository extends JpaRepository<Arrange, String> {
 
     /**
      * 分页获取已经推送了的排产数据
+     *
      * @param enterpriseId 企业Id
-     * @param push 推送状态
-     * @param pageable 分页信息
+     * @param push         推送状态
+     * @param pageable     分页信息
      * @return Page<Arrange>
      */
     Page<Arrange> findAllByEnterpriseIdAndPushOrderByCreateTimeDesc(String enterpriseId, String push, Pageable pageable);
 
+    /**
+     * 更新打印状态
+     *
+     * @param arrangeId    排产Id
+     * @param enterpriseId 企业Id
+     * @return Integer
+     */
+    @Modifying
+    @Transactional(rollbackFor = Exception.class)
+    @Query(value = "update ap_arrange aa set aa.status = 1 where aa.arrange_id = ?1 and aa.enterprise_id = ?2 ", nativeQuery = true)
+    Integer updateStatus(String arrangeId, String enterpriseId);
+
+    /**
+     * 更新推送状态
+     *
+     * @param push         推送
+     * @param arrangeId    id
+     * @param enterpriseId 企业Id
+     * @return Integer
+     */
+    @Modifying
+    @Transactional(rollbackFor = Exception.class)
+    @Query(value = "update ap_arrange aa set aa.push = ?1 where aa.arrange_id = ?2 and aa.enterprise_id = ?3 ", nativeQuery = true)
+    Integer update(String push, String arrangeId, String enterpriseId);
 }

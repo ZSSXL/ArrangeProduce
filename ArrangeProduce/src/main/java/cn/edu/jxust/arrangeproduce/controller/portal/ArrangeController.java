@@ -18,6 +18,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author ZSS
@@ -52,8 +54,8 @@ public class ArrangeController extends BaseController {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.PARAMETER_ERROR.getCode(), ResponseCode.PARAMETER_ERROR.getDesc());
         } else {
             String enterpriseId = tokenUtil.getClaim(token, "enterpriseId").asString();
-            Boolean conflict = arrangeService.isConflict(arrangeVo.getArrangeDate(), arrangeVo.getShift(), arrangeVo.getMachine(), enterpriseId);
-            if (conflict) {
+            String conflict = arrangeService.isConflict(arrangeVo.getArrangeDate(), arrangeVo.getShift(), arrangeVo.getMachine(), enterpriseId);
+            if (StringUtils.isEmpty(conflict)) {
                 return ServerResponse.createByErrorMessage("任务时间冲突，请修改生产时间或者机器");
             } else {
                 String username = tokenUtil.getClaim(token, "username").asString();
@@ -150,6 +152,31 @@ public class ArrangeController extends BaseController {
     }
 
     /**
+     * 批量修改
+     *
+     * @param token       用户token
+     * @param arrangeList id数组
+     * @return ServerResponse
+     */
+    @PutMapping
+    @RequiredPermission
+    @Transactional(rollbackFor = Exception.class)
+    public ServerResponse updateArrangePush(@RequestHeader("token") String token, @RequestBody String[] arrangeList) {
+        if (arrangeList == null) {
+            return ServerResponse.createByErrorMessage("参数错误");
+        } else {
+            String enterpriseId = tokenUtil.getClaim(token, "enterpriseId").asString();
+            List<String> list = Arrays.asList(arrangeList);
+            try {
+                return arrangeService.updatePush(enterpriseId, list);
+            } catch (Exception e) {
+                log.error("An exception occurred during the update arrange push : {} ", e.getMessage());
+                return ServerResponse.createByErrorMessage("更新的时候发生了未知异常，请查看日志");
+            }
+        }
+    }
+
+    /**
      * 新建排产任务并打印二维码
      *
      * @param arrangeVo 排产Vo实体
@@ -164,15 +191,19 @@ public class ArrangeController extends BaseController {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.PARAMETER_ERROR.getCode(), ResponseCode.PARAMETER_ERROR.getDesc());
         } else {
             String enterpriseId = tokenUtil.getClaim(token, "enterpriseId").asString();
-            Boolean conflict = arrangeService.isConflict(arrangeVo.getArrangeDate(), arrangeVo.getShift(), arrangeVo.getMachine(), enterpriseId);
+            String conflict = arrangeService.isConflict(arrangeVo.getArrangeDate(), arrangeVo.getShift(), arrangeVo.getMachine(), enterpriseId);
             String qrCode = generateQrCode(arrangeVo);
-            if (conflict) {
+            if (!StringUtils.isEmpty(conflict)) {
                 // 如果存在，直接打印
                 if (qrCode == null) {
                     return ServerResponse.createByErrorMessage("生成二维码失败");
                 } else {
-                    // todo 讲道理，这里打印之后也要改变数据库中的排产打印状态，但是好麻烦，但是不影响大局，后面有时间再改
-                    return ServerResponse.createBySuccess(qrCode);
+                    Boolean update = arrangeService.updateStatus(conflict, enterpriseId);
+                    if (update) {
+                        return ServerResponse.createBySuccess(qrCode);
+                    } else {
+                        return ServerResponse.createBySuccess("打印成功，但是更新排产信息打印状态失败", qrCode);
+                    }
                 }
             } else {
                 // 如果不存在，先保存，后打印
@@ -235,9 +266,9 @@ public class ArrangeController extends BaseController {
                         return ServerResponse.createByErrorMessage("生成二维码失败");
                     } else {
                         // 更新排产打印状态
-                        arrange.setStatus(1);
-                        ServerResponse response = arrangeService.createArrange(arrange);
-                        if (response.isSuccess()) {
+                        String enterpriseId = tokenUtil.getClaim(token, "enterpriseId").asString();
+                        Boolean update = arrangeService.updateStatus(arrangeId, enterpriseId);
+                        if (update) {
                             return ServerResponse.createBySuccess(qrCode);
                         } else {
                             return ServerResponse.createBySuccess("打印成功，但是更新排产信息打印状态失败", qrCode);

@@ -29,7 +29,7 @@ public class MachineServiceImpl implements MachineService {
     @Override
     public ServerResponse createMachine(Machine machine) {
         machineRepository.save(machine);
-        return ServerResponse.createBySuccessMessage("添加小拉机成功");
+        return ServerResponse.createBySuccessMessage("添加机器成功");
     }
 
     @Override
