@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.Column;
@@ -64,4 +65,10 @@ public class Machine implements Serializable {
     @Column(updatable = false, columnDefinition = "bigint(20) comment'创建时间'")
     @CreatedDate
     private Long createTime;
+    /**
+     * 修改日期
+     */
+    @LastModifiedDate
+    @Column(columnDefinition = "bigint(20) comment'创建时间'")
+    private Long updateTime;
 }
