@@ -125,7 +125,7 @@ function getAllArrange(page, size) {
         type: "GET",
         success: function (result) {
             if (result.status === 0) {
-                analyticalBound(result);
+                analyticalArrange(result);
                 build_page_info(result);
                 build_page_li(result);
             } else {
@@ -135,7 +135,7 @@ function getAllArrange(page, size) {
     });
 }
 
-function analyticalBound(result) {
+function analyticalArrange(result) {
     $("#arrange-history-area").empty();
     const data = result.data.content;
     if (data.length === 0) {
@@ -163,7 +163,12 @@ function analyticalBound(result) {
             } else {
                 pushTd.append("未推送");
             }
-            let detailBtn = $("<button class='btn btn-outline-info arrange-detail'>详情</button>");
+            let detailBtn = $("<button class='btn btn-outline-info arrange-detail'>详情</button>").attr({
+                "print-status": item.status,
+                "creator": item.creator,
+                "create-time": item.createTime,
+                "arrange-id": item.arrangeId
+            });
             let deleteBtn = $("<button class='btn btn-outline-danger delete-arrange'>删除</button>").attr("arrange-id", item.arrangeId);
             let btnTd = $("<td></td>").append(detailBtn).append(deleteBtn);
             $("<tr></tr>").append(checkboxId)
