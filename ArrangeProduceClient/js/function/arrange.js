@@ -62,6 +62,7 @@ function saveArrange(data) {
         data: JSON.stringify(data),
         success: function (result) {
             if (result.status === 0) {
+                getAllArrange(0, 20);
                 Notiflix.Notify.Success("新建排产任务成功");
             } else {
                 Notiflix.Notify.Failure(result.msg);
@@ -112,3 +113,86 @@ function generateQrCode(data, qrCode) {
         $("#shift-value").text("早班");
     }
 }
+
+// 表格相关
+
+/**
+ * 全选
+ */
+$(document).on("click", "#ck", function () {
+    const arr = document.getElementsByName('good');
+    const ck = document.getElementById('ck');
+    for (i in arr) {
+        arr[i].checked = ck.checked; // 全选
+        //arr[i].checked=!arr[i].checked; 反向全选
+    }
+});
+
+/**
+ * 删除排产信息
+ */
+$(document).on("click", ".delete-arrange", function () {
+    let arrangeId = $(this).attr("arrange-id");
+    console.log(arrangeId);
+    $.ajax({
+        url: serverUrl + "/arrange/" + arrangeId,
+        contentType: "application/json; charset=utf-8",
+        type: "DELETE",
+        beforeSend: function (XMLHttpRequest) {
+            XMLHttpRequest.setRequestHeader("token", token);
+        },
+        success: function (result) {
+            if (result.status === 0) {
+                Notiflix.Notify.Success(result.msg);
+                getAllArrange(0, 20);
+            } else {
+                Notiflix.Notify.Failure(result.msg);
+            }
+        }
+    });
+});
+
+/**
+ * 推送
+ */
+$("#push").click(function () {
+    const arrangeIdList = [];
+    $("input[name='good']:checked").each(function (index, item) {
+        arrangeIdList.push($(this).val());
+    });
+    if (arrangeIdList.length === 0) {
+        Notiflix.Notify.Warning("请选勾线要推送的排产信息");
+    } else {
+        $.ajax({
+            url: serverUrl + "/arrange",
+            contentType: "application/json; charset=utf-8",
+            type: "PUT",
+            beforeSend: function (XMLHttpRequest) {
+                XMLHttpRequest.setRequestHeader("token", token);
+            },
+            data: JSON.stringify(arrangeIdList),
+            success: function (result) {
+                if (result.status === 0) {
+                    Notiflix.Notify.Success(result.msg);
+                    getAllArrange(0, 20);
+                } else {
+                    Notiflix.Notify.Failure(result.msg);
+                }
+            }
+        });
+    }
+});
+
+// 线规详情
+
+$(document).on("click", ".arrange-detail", function () {
+    $("#modal-area").load("/sub/arrangeDetail.html");
+    getArrangeDetail(this);
+    $("#load-modal").modal("show");
+});
+
+function getArrangeDetail(dom) {
+    let attr = $(dom).attr("class");
+    console.log(attr);
+}
+

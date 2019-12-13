@@ -9,7 +9,7 @@ $("#load-arrange").click(function () {
     $("#load-aw").removeAttr("class");
     $("#load-setting").removeAttr("class");
     $("#load-employee").removeAttr("class");
-    getAllArrange();
+    getAllArrange(0, 20);
     getAllGaugeSelected();
     getAllMachineDraw();
 });
@@ -124,7 +124,6 @@ function getAllArrange(page, size) {
         },
         type: "GET",
         success: function (result) {
-            console.log(result);
             if (result.status === 0) {
                 analyticalBound(result);
                 build_page_info(result);
@@ -137,7 +136,7 @@ function getAllArrange(page, size) {
 }
 
 function analyticalBound(result) {
-    $("#operatorList").empty();
+    $("#arrange-history-area").empty();
     const data = result.data.content;
     if (data.length === 0) {
         $("#no-message").css("display", "none");
@@ -145,8 +144,39 @@ function analyticalBound(result) {
         $("#no-message").css("display", "none");
         $("#nav-message").css("display", "inline-block");
         $.each(data, function (index, item) {
-
-        })
+            let checkboxId = $("<td></td>").append($("<input type='checkbox' name='good'>").attr("value", item.arrangeId));
+            let numTd = $("<th scope='row'></th>").append(index + 1);
+            let machineTd = $("<td></td>").append(item.machine);
+            let gaugeTd = $("<td></td>").append(item.gauge);
+            let toleranceTd = $("<td></td>").append(item.tolerance);
+            let weightTd = $("<td></td>").append(item.weight);
+            let arrangeDateTd = $("<td></td>").append(printTimeFormat(item.arrangeDate));
+            let shiftTd = $("<td></td>");
+            if (item.shift === "1") {
+                shiftTd.append("晚班");
+            } else {
+                shiftTd.append("早班");
+            }
+            let pushTd = $("<td></td>");
+            if (item.push === "yes") {
+                pushTd.append("已推送");
+            } else {
+                pushTd.append("未推送");
+            }
+            let detailBtn = $("<button class='btn btn-outline-info arrange-detail'>详情</button>");
+            let deleteBtn = $("<button class='btn btn-outline-danger delete-arrange'>删除</button>").attr("arrange-id", item.arrangeId);
+            let btnTd = $("<td></td>").append(detailBtn).append(deleteBtn);
+            $("<tr></tr>").append(checkboxId)
+                .append(numTd)
+                .append(machineTd)
+                .append(gaugeTd)
+                .append(toleranceTd)
+                .append(weightTd)
+                .append(arrangeDateTd)
+                .append(shiftTd)
+                .append(pushTd)
+                .append(btnTd).appendTo("#arrange-history-area");
+        });
     }
 }
 
@@ -164,9 +194,9 @@ function build_page_info(result) {
 function build_page_li(result) {
     $("#page-ul").empty();
 
-    var ul = $("<ul class='pagination pagination-sm justify-content-center bg-dark'></ul>");
+    var ul = $("<ul class='pagination pagination-sm justify-content-center'></ul>");
     // 首页
-    var firstPageLi = $("<li class='page-item'></li>").append($("<a class='page-link' href='#' style='color:#000000;'></a>").append("首页"));
+    var firstPageLi = $("<li class='page-item'></li>").append($("<a class='page-link' href='#'></a>").append("首页"));
     // 前一页
     var prePageLi = $("<li class='page-item'></li>")
         .append($("<a class='page-link' href='#' aria-label='Previous'></a>")
@@ -190,7 +220,7 @@ function build_page_li(result) {
     if (totalPages >= 5) {
         if (currentArrangePage >= 2) {
             for (i = currentArrangePage - 2; i <= currentArrangePage + 2; i++) {
-                var numLi = $("<li class='page-item'></li>").append($("<a class='page-link page-jump' style='color:#000000;'></a>").append(i + 1));
+                var numLi = $("<li class='page-item'></li>").append($("<a class='page-link page-jump'></a>").append(i + 1));
                 if (currentArrangePage === i) {
                     numLi.addClass("active");
                 }
@@ -201,7 +231,7 @@ function build_page_li(result) {
             }
         } else {
             for (i = 0; i < 5; i++) {
-                let numLi = $("<li class='page-item'></li>").append($("<a class='page-link page-jump' style='color:#000000;'></a>").append(i + 1));
+                let numLi = $("<li class='page-item'></li>").append($("<a class='page-link page-jump'></a>").append(i + 1));
                 if (currentArrangePage === i) {
                     numLi.addClass("active");
                 }
@@ -210,7 +240,7 @@ function build_page_li(result) {
         }
     } else {
         for (i = 0; i < totalPages; i++) {
-            let numLi = $("<li class='page-item'></li>").append($("<a class='page-link page-jump' style='color:#000000;'></a>").append(i + 1));
+            let numLi = $("<li class='page-item'></li>").append($("<a class='page-link page-jump'></a>").append(i + 1));
             if (currentArrangePage === i) {
                 numLi.addClass("active");
             }
@@ -225,7 +255,7 @@ function build_page_li(result) {
         .append($("<a class='page-link' href='#' aria-label='Next'></a>")
             .append($("<span aria-hidden='true'>&raquo;</span>")).append($("<span class='sr-only'>Next</span>")));
     // 尾页
-    var lastPageLi = $("<li class='page-item'></li>").append($("<a class='page-link' href='#' style='color:#000000;'></a>").append("尾页"));
+    var lastPageLi = $("<li class='page-item'></li>").append($("<a class='page-link' href='#'></a>").append("尾页"));
     // 判断时候还有下一页，没有则disable
     if (result.data.last === true) {
         nextPageLi.addClass("disabled");
