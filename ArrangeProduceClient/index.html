@@ -110,8 +110,12 @@
 <script type="text/javascript">
 
     let token; //用户token
+    var machineSort = "annealing"; // 分类,默认退火机
 
     Notiflix.Notify.Init();
+    Notiflix.Confirm.Init({
+        position: 'center-top'
+    });
 
     window.onload = function () {
         token = localStorage.getItem("arrangeToken");

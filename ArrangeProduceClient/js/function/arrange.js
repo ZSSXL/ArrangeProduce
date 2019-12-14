@@ -133,22 +133,24 @@ $(document).on("click", "#ck", function () {
  */
 $(document).on("click", ".delete-arrange", function () {
     let arrangeId = $(this).attr("arrange-id");
-    console.log(arrangeId);
-    $.ajax({
-        url: serverUrl + "/arrange/" + arrangeId,
-        contentType: "application/json; charset=utf-8",
-        type: "DELETE",
-        beforeSend: function (XMLHttpRequest) {
-            XMLHttpRequest.setRequestHeader("token", token);
-        },
-        success: function (result) {
-            if (result.status === 0) {
-                Notiflix.Notify.Success(result.msg);
-                getAllArrange(0, 20);
-            } else {
-                Notiflix.Notify.Failure(result.msg);
+    Notiflix.Confirm.Show("警告", "是否确认删除", "确定", "取消", function () {
+        console.log(arrangeId);
+        $.ajax({
+            url: serverUrl + "/arrange/" + arrangeId,
+            contentType: "application/json; charset=utf-8",
+            type: "DELETE",
+            beforeSend: function (XMLHttpRequest) {
+                XMLHttpRequest.setRequestHeader("token", token);
+            },
+            success: function (result) {
+                if (result.status === 0) {
+                    Notiflix.Notify.Success(result.msg);
+                    getAllArrange(0, 20);
+                } else {
+                    Notiflix.Notify.Failure(result.msg);
+                }
             }
-        }
+        });
     });
 });
 

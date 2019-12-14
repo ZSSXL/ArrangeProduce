@@ -1,5 +1,5 @@
 <div class="modal-header">
-    <h4 class="modal-title">MACHINE 小拉机操作</h4>
+    <h4 class="modal-title">MACHINE 机器操作</h4>
     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
     </button>
 </div>
@@ -7,8 +7,8 @@
     <div class="row">
         <div class="input-group col-lg-8 col-sm-8 offset-lg-2 offset-sm-2">
             <div class="input-group-prepend"><span class="input-group-text">新小拉机</span></div>
-            <input type="text" class="form-control" id="new-machine-number" placeholder="请输入小拉机编号">
-            <input style="display: none;" type="text" class="form-control" id="new-machine-name" placeholder="请输入小拉机名称">
+            <input type="text" class="form-control" id="new-machine-number" placeholder="请输入机器编号">
+            <input style="display: none;" type="text" class="form-control" id="new-machine-name" placeholder="请输入机器名称">
             <div class="input-group-append">
                 <button style="display: none;" class="btn btn-outline-info" id="add-machine">添加</button>
                 <button class="btn btn-outline-info" id="next">下一步</button>
@@ -56,7 +56,6 @@
     $("#add-machine").click(function () {
         let machineName = $("#new-machine-name").val();
         let machineNumber = $("#new-machine-number").val();
-        let machineSort = "draw";
         let data = {machineSort, machineName, machineNumber};
         $.ajax({
             url: serverUrl + "/machine",
@@ -69,7 +68,13 @@
             success: function (result) {
                 if (result.status === 0) {
                     before();
-                    getAllDraw();
+                    if (machineSort === "draw") {
+                        getAllDraw();
+                    } else if (machineSort === "annealing") {
+                        console.log("add annealing machine")
+                    } else if (machineSort === "windding") {
+                        console.log("add winding machine");
+                    }
                     Notiflix.Notify.Success("添加成功");
                 } else {
                     Notiflix.Notify.Failure(result.msg);

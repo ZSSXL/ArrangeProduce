@@ -9,8 +9,9 @@ $("#load-arrange").click(function () {
     $("#load-aw").removeAttr("class");
     $("#load-setting").removeAttr("class");
     $("#load-employee").removeAttr("class");
+    machineSort = "draw";
     getAllArrange(0, 20);
-    getAllGaugeSelected();
+    getAllGaugeSelected("arrange");
     getAllMachineDraw();
 });
 
@@ -21,6 +22,8 @@ $("#load-aw").click(function () {
     $("#load-arrange").removeAttr("class");
     $("#load-setting").removeAttr("class");
     $("#load-employee").removeAttr("class");
+    getAllMachineAnnealing();
+    getAllGaugeSelected("aw");
 });
 
 $("#load-setting").click(function () {
@@ -45,21 +48,28 @@ function currentPage() {
     let arrangeCurrentPage = localStorage.getItem("arrangeCurrentPage");
     if (arrangeCurrentPage === null) {
         $("#load-area").load("/arrange.html");
-        getAllMachineSelected();
-        getAllGaugeSelected();
+        machineSort = "draw";
+        getAllMachineDraw();
+        getAllGaugeSelected("arrange");
         $("#load-arrange").attr("class", "active");
     } else {
         $("#load-" + arrangeCurrentPage).attr("class", "active");
         if (arrangeCurrentPage === "arrange") {
+            machineSort = "draw";
             getAllArrange(0, 20);
-            getAllGaugeSelected();
+            getAllGaugeSelected("arrange");
             getAllMachineDraw();
+        } else if (arrangeCurrentPage === "aw") {
+            // 默认获取退火机设备
+            machineSort = "annealing";
+            getAllMachineAnnealing();
+            getAllGaugeSelected("aw");
         }
         $("#load-area").load("\\" + arrangeCurrentPage + ".html");
     }
 }
 
-function getAllGaugeSelected() {
+function getAllGaugeSelected(choice) {
     $.ajax({
         url: serverUrl + "/gauge",
         contentType: "application/json; charset=utf-8",
@@ -69,7 +79,11 @@ function getAllGaugeSelected() {
         type: "GET",
         success: function (result) {
             if (result.status === 0) {
-                showGauge(result.data);
+                if(choice === "arrange"){
+                    showGaugeToArrange(result.data);
+                } else if(choice === "aw"){
+                    showGaugeToAw(result.data);
+                }
             } else {
                 Notiflix.Notify.Failure(result.msg);
             }
@@ -95,12 +109,21 @@ function getAllMachineDraw() {
     });
 }
 
-function showGauge(data) {
+function showGaugeToArrange(data) {
     $("#gauge").empty();
     $.each(data, function (index, item) {
         const option = $("<option></option>").append(item.gauge);
         option.attr("value", item.gauge);
         $("#gauge").append(option);
+    })
+}
+
+function showGaugeToAw(data) {
+    $("#gauge").empty();
+    $.each(data, function (index, item) {
+        const option = $("<option></option>").append(item.gauge);
+        option.attr("value", item.gauge);
+        $("#gauge-aw").append(option);
     })
 }
 
@@ -283,5 +306,34 @@ $(document).on("click", ".page-jump", function () {
     var page = $(this).text();
     getAllArrange(page - 1, 20);
 });
+
+
+// ---------------------- aw ------------------------ //
+
+function getAllMachineAnnealing() {
+    $.ajax({
+        url: serverUrl + "/machine/annealing",
+        contentType: "application/json; charset=utf-8",
+        beforeSend: function (XMLHttpRequest) {
+            XMLHttpRequest.setRequestHeader("token", token);
+        },
+        type: "GET",
+        success: function (result) {
+            if (result.status === 0) {
+                showMachineToAw(result.data);
+            } else {
+                Notiflix.Notify.Failure(result.msg);
+            }
+        }
+    });
+}
+
+function showMachineToAw(data) {
+    $("#machine-aw").empty();
+    $.each(data, function (index, item) {
+        const option = $("<option></option>").append(item.machineName).attr("value", item.machineNumber);
+        $("#machine-aw").append(option);
+    })
+}
 
 

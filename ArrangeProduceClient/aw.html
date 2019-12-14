@@ -1,42 +1,176 @@
 <div class="page-header">
     <div class="container-fluid">
-        <h2 class="h5 no-margin-bottom">防错</h2>
+        <h2 class="h5 no-margin-bottom">退火/绕线机排产</h2>
     </div>
 </div>
 <section class="no-padding-top no-padding-bottom">
-    <div class="container-fluid" id="load-area">
+
+    <!-- 模态框 -->
+    <div class="modal fade" tabindex="-1" role="dialog" id="load-modal-aw">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content" id="modal-area-aw">
+                <!-- 模态框内容动态加载 -->
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <div class="container-fluid">
         <div class="row">
-            <div class="col-md-12 col-sm-12">
-                <div class="statistic-block block">
-                    <div class="progress-details d-flex align-items-end justify-content-between">
-                        <div class="title">
-                            <div class="icon"><i class="icon-user-1"></i></div>
-                            <strong>New Clients</strong>
+            <!-- Form Elements -->
+            <div class="col-lg-12">
+                <div class="block">
+                    <div class="block-body">
+                        <div class="form-group row">
+                            <label class="col-lg-3 col-sm-3 form-control-label">
+                                <h3 class="text-white">退火/绕线</h3>
+                            </label>
+                            <div class="col-lg-2 col-sm-3">
+                                <div class="i-checks">
+                                    <input id="sort-annealing" type="radio" checked="" value="annealing" name="sort"
+                                           class="radio-template">
+                                    <label for="radioCustom2">退火机</label>
+                                </div>
+                            </div>
+                            <div class="col-lg-7 col-sm-3">
+                                <div class="i-checks">
+                                    <input id="sort-winding" type="radio" value="winding" name="sort"
+                                           class="radio-template">
+                                    <label for="radioCustom1">绕线机</label>
+                                </div>
+                            </div>
                         </div>
-                        <div class="number dashtext-1">27</div>
-                    </div>
-                    <div class="progress progress-template">
-                        <div role="progressbar" style="width: 30%" aria-valuenow="30" aria-valuemin="0"
-                             aria-valuemax="100" class="progress-bar progress-bar-template dashbg-1"></div>
+                        <div class="form-group row">
+                            <label class="col-lg-3 col-sm-3 form-control-label">
+                                <h3 class="text-white">机器</h3>
+                            </label>
+                            <div class="col-lg-7 col-sm-7">
+                                <select id="machine-aw" name="machine" class="form-control mb-3 mb-3">
+                                </select>
+                            </div>
+                            <div class="col-lg-2 col-sm-2">
+                                <button class="btn btn-outline-warning" id="machine-setting-aw">设置</button>
+                            </div>
+                        </div>
+                        <div class="line"></div>
+                        <div class="form-group row">
+                            <label class="col-lg-3 col-sm-3 form-control-label">
+                                <h3 class="text-white">线规(mm)</h3>
+                            </label>
+                            <div class="col-lg-7 col-sm-7">
+                                <select id="gauge-aw" name="gauge" class="form-control mb-3 mb-3">
+                                </select>
+                            </div>
+                            <div class="col-lg-2 col-sm-2">
+                                <button class="btn btn-outline-warning" id="gauge-setting-aw">设置</button>
+                            </div>
+                        </div>
+                        <div class="line"></div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 form-control-label">
+                                <h3 class="text-white">公差(mm)</h3>
+                            </label>
+                            <div class="col-sm-9">
+                                <input id="tolerance-aw" type="text" class="form-control" placeholder="例: +0.005">
+                                <small class="text-primary">请注意正负符号不要遗漏</small>
+                            </div>
+                        </div>
+                        <div class="line"></div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 form-control-label">
+                                <h3 class="text-white">重量(kg)</h3>
+                            </label>
+                            <div class="col-sm-9">
+                                <input id="weight-aw" type="text" class="form-control" value="">
+                            </div>
+                        </div>
+                        <div class="line"></div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 form-control-label">
+                                <h3 class="text-white">生产时间</h3>
+                            </label>
+                            <div class="col-sm-9">
+                                <input id="arrange-date-aw" type="date" class="form-control">
+                            </div>
+                        </div>
+                        <div class="line"></div>
+                        <div class="form-group row">
+                            <label class="col-lg-3 col-sm-3 form-control-label">
+                                <h3 class="text-white">班次</h3>
+                            </label>
+                            <div class="col-lg-2 col-sm-3">
+                                <div class="i-checks">
+                                    <input id="radioCustom2" type="radio" checked="" value="1" name="shift-aw"
+                                           class="radio-template">
+                                    <label for="radioCustom2">早班</label>
+                                </div>
+                            </div>
+                            <div class="col-lg-7 col-sm-3">
+                                <div class="i-checks">
+                                    <input id="radioCustom1" type="radio" value="0" name="shift-aw"
+                                           class="radio-template">
+                                    <label for="radioCustom1">晚班</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="line"></div>
+                        <div class="form-group row">
+                            <div class="col-lg-9 col-sm-9 ml-auto">
+                                <button id="save-btn-aw" type="submit" class="btn btn-outline-info">保存</button>
+                                <button id="reset-btn-aw" class="btn btn-outline-secondary">重置</button>
+                                <button id="print-btn-aw" type="submit" class="btn btn-outline-warning">打印预览</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6 col-sm-12">
-                <button class="btn btn-info" id="show">消息</button>
-            </div>
-            <div class="col-md-6 col-sm-12">
-                <button class="btn btn-outline-danger">危险</button>
             </div>
         </div>
     </div>
 </section>
 
 <!-- javascript -->
-
+<script src="js/function/aw.js"></script>
 <script type="text/javascript">
-    $("#show").click(function (){
-        alert("show");
+
+    $("#sort-annealing").change(function () {
+        machineSort = $(this).val();
+        getAllMachineAnnealing();
     });
+
+    $("#sort-winding").change(function () {
+        machineSort = $(this).val();
+        getAllMachineWinding();
+    });
+
+    $("#gauge-setting-aw").click(function () {
+        $("#modal-area-aw").load("/sub/gauge.html");
+        getAllGauge();
+        $("#load-modal-aw").modal("show");
+    });
+
+    function getAllGauge() {
+        $.ajax({
+            url: serverUrl + "/gauge",
+            contentType: "application/json; charset=utf-8",
+            beforeSend: function (XMLHttpRequest) {
+                XMLHttpRequest.setRequestHeader("token", token);
+            },
+            type: "GET",
+            success: function (result) {
+                if (result.status === 0) {
+                    showGaugeHad(result.data);
+                } else {
+                    Notiflix.Notify.Failure(result.msg);
+                }
+            }
+        });
+    }
+
+    function showGaugeHad(data) {
+        $("#gauge-area").empty();
+        $.each(data, function (index, item) {
+            let gaugeDiv = $("<div class='delete-gauge' style='cursor: pointer;' data-placement='top' title='点击删除'></div>").append(item.gauge).attr("gauge-id", item.gaugeId);
+            $("<div class='col-lg-2 col-sm-3 text-center'></div>").append(gaugeDiv).appendTo("#gauge-area");
+        });
+    }
+
 </script>
