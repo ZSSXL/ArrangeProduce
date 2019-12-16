@@ -126,7 +126,61 @@
         </div>
     </div>
 </section>
-
+<section class="no-padding-top no-padding-bottom">
+    <div class="container-fluid" id="load-area">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12">
+                <div class="block">
+                    <div class="row">
+                        <div class="col-lg-2 col-sm-2 offset-lg-10 offset-sm-10">
+                            <button class="btn btn-warning btn-lg" id="push-aw">推送</button>
+                        </div>
+                    </div>
+                    <hr/>
+                    <div class="row">
+                        <table class="table table-striped table-sm">
+                            <thead class="text-center text-white">
+                            <tr>
+                                <th>全选<input type="checkbox" id="ck-aw"></th>
+                                <th>#</th>
+                                <th>设备</th>
+                                <th>线规(mm)</th>
+                                <th>公差(mm)</th>
+                                <th>重量(kg)</th>
+                                <th>安排时间</th>
+                                <th>班次</th>
+                                <th>推送状态</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody id="aw-arrange-history-area" class="text-center">
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="text-center">
+                        <div class="row">
+                            <div class="col-lg-12 col-sm-12 text-center">
+                                <h3 id="no-message-aw">没有数据</h3>
+                            </div>
+                        </div>
+                        <div class="row text-center" id="nav-message-aw">
+                            <!-- 分页信息 -->
+                            <!-- 分页文字信息 -->
+                            <div class="col-lg-12 col-sm-12" id="page_info_area-aw"
+                                 style="text-align: center; margin-bottom: 10px;">
+                            </div>
+                            <!-- 分页条信息 -->
+                            <div class="col-lg-12 col-sm-12" style="display: inline-block; text-align: center;">
+                                <nav id="page-ul-aw">
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 <!-- javascript -->
 <script src="js/function/aw.js"></script>
 <script type="text/javascript">
@@ -170,6 +224,36 @@
         $.each(data, function (index, item) {
             let gaugeDiv = $("<div class='delete-gauge' style='cursor: pointer;' data-placement='top' title='点击删除'></div>").append(item.gauge).attr("gauge-id", item.gaugeId);
             $("<div class='col-lg-2 col-sm-3 text-center'></div>").append(gaugeDiv).appendTo("#gauge-area");
+        });
+    }
+
+    function getAllMachine(sort){
+        $.ajax({
+            url: serverUrl + "/machine/" + sort,
+            contentType: "application/json; charset=utf-8",
+            beforeSend: function (XMLHttpRequest) {
+                XMLHttpRequest.setRequestHeader("token", token);
+            },
+            type: "GET",
+            success: function (result) {
+                if (result.status === 0) {
+                    showMachineHad(result.data)
+                } else {
+                    Notiflix.Notify.Failure(result.msg);
+                }
+            }
+        });
+    }
+
+    function showMachineHad(data) {
+        $("#machine-area").empty();
+        $.each(data, function (index, item) {
+            let machineDiv = $("<div class='delete-machine' style='cursor: pointer;' data-placement='top'></div>")
+                .append(item.machineName + "(" + item.machineNumber + ")").attr({
+                    "machine-id": item.machineId,
+                    "title": "点击删除"
+                });
+            $("<div class='col-lg-2 col-sm-3 text-center'></div>").append(machineDiv).appendTo("#machine-area");
         });
     }
 

@@ -228,6 +228,33 @@ function getArrangeDetail(dom) {
     }
 }
 
+$(document).on("click", ".delete-machine", function () {
+    const machineId = $(this).attr("machine-id");
+    Notiflix.Confirm.Show("警告", "是否确认删除", "确定", "取消", function () {
+        $.ajax({
+            url: serverUrl + "/machine/" + machineId,
+            contentType: "application/json; charset=utf-8",
+            type: "DELETE",
+            beforeSend: function (XMLHttpRequest) {
+                XMLHttpRequest.setRequestHeader("token", token);
+            },
+            success: function (result) {
+                if (result.status === 0) {
+                    if (machineSort === "draw") {
+                        getAllDraw();
+                    } else {
+                        console.log(machineSort);
+                        getAllMachine(machineSort);
+                    }
+                    Notiflix.Notify.Success(result.msg);
+                } else {
+                    Notiflix.Notify.Failure(result.msg);
+                }
+            }
+        });
+    });
+});
+
 // 有 bug， 先放着
 /*$("#print-history").click(function () {
     let arrangeId = $(this).attr("arrange-id");
