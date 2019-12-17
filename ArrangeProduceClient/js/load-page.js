@@ -512,3 +512,23 @@ $(document).on("click", ".page-jump-aw", function () {
     let page = $(this).text();
     getAllAwArrange(page - 1, 20);
 });
+
+// ======================== 员工页面操作 ========================== //
+
+function getAllEmployee(page, size){
+    $.ajax({
+        url: serverUrl + "/user",
+        data: "page=" + page + "&size=" + size,
+        beforeSend: function (XMLHttpRequest) {
+            XMLHttpRequest.setRequestHeader("token", token);
+        },
+        type: "GET",
+        success: function (result) {
+            if (result.status === 0) {
+                console.log(result);
+            } else {
+                Notiflix.Notify.Failure(result.msg);
+            }
+        }
+    });
+}
