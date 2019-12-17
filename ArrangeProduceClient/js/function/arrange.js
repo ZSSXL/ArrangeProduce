@@ -131,10 +131,9 @@ $(document).on("click", "#ck", function () {
 /**
  * 删除排产信息
  */
-$(document).on("click", ".delete-arrange", function () {
-    let arrangeId = $(this).attr("arrange-id");
+$(document).on("click", ".delete-arrange-aw", function () {
+    let arrangeId = $(this).attr("aw-arrange-id");
     Notiflix.Confirm.Show("警告", "是否确认删除", "确定", "取消", function () {
-        console.log(arrangeId);
         $.ajax({
             url: serverUrl + "/arrange/" + arrangeId,
             contentType: "application/json; charset=utf-8",
@@ -227,6 +226,33 @@ function getArrangeDetail(dom) {
         $("#detail-print").val("已打印");
     }
 }
+
+$(document).on("click", ".delete-machine", function () {
+    const machineId = $(this).attr("machine-id");
+    Notiflix.Confirm.Show("警告", "是否确认删除", "确定", "取消", function () {
+        $.ajax({
+            url: serverUrl + "/machine/" + machineId,
+            contentType: "application/json; charset=utf-8",
+            type: "DELETE",
+            beforeSend: function (XMLHttpRequest) {
+                XMLHttpRequest.setRequestHeader("token", token);
+            },
+            success: function (result) {
+                if (result.status === 0) {
+                    if (machineSort === "draw") {
+                        getAllDraw();
+                    } else {
+                        console.log(machineSort);
+                        getAllMachine(machineSort);
+                    }
+                    Notiflix.Notify.Success(result.msg);
+                } else {
+                    Notiflix.Notify.Failure(result.msg);
+                }
+            }
+        });
+    });
+});
 
 // 有 bug， 先放着
 /*$("#print-history").click(function () {

@@ -114,7 +114,11 @@
 
     Notiflix.Notify.Init();
     Notiflix.Confirm.Init({
-        position: 'center-top'
+        okButtonColor: "#f8f1f1",
+        okButtonBackground: "#f30000",
+        titleColor: "#f80000",
+        position: 'center-top',
+        zindex: 10000
     });
 
     window.onload = function () {
