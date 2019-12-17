@@ -2,6 +2,8 @@ package cn.edu.jxust.arrangeproduce.service;
 
 import cn.edu.jxust.arrangeproduce.common.ServerResponse;
 import cn.edu.jxust.arrangeproduce.entity.po.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 /**
  * @author ZSS
@@ -49,4 +51,14 @@ public interface UserService {
      * @return Boolean
      */
     Boolean deleteUserById(String userId);
+
+    /**
+     * 获取所有的员工信息
+     *
+     * @param enterpriseId 企业Id
+     * @param role         用户角色
+     * @param pageable     分页信息
+     * @return ServerResponse<Page < User>>
+     */
+    ServerResponse<Page<User>> getAllUserByRole(String enterpriseId, String role, Pageable pageable);
 }

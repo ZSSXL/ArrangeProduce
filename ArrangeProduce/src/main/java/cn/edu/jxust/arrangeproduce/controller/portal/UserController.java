@@ -15,6 +15,8 @@ import cn.edu.jxust.arrangeproduce.util.UUIDUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -89,6 +91,23 @@ public class UserController extends BaseController {
     }
 
     /**
+     * 获取所有的员工信息
+     *
+     * @param token 用户token
+     * @param page  当前页数
+     * @param size  每页大小
+     * @return ServerResponse<Page < User>>
+     */
+    @GetMapping
+    @RequiredPermission
+    public ServerResponse<Page<User>> getAllEmployee(@RequestHeader("token") String token
+            , @RequestParam(value = "page", defaultValue = Const.DEFAULT_PAGE_NUMBER) Integer page
+            , @RequestParam(value = "size", defaultValue = Const.DEFAULT_PAGE_SIZE) Integer size) {
+        String enterpriseId = tokenUtil.getClaim(token, "enterpriseId").asString();
+        return userService.getAllUserByRole(enterpriseId, Const.Role.ROLE_EMPLOYEE, PageRequest.of(page, size));
+    }
+
+    /**
      * 修改个人信息
      *
      * @param phone 电话
@@ -146,6 +165,23 @@ public class UserController extends BaseController {
                 log.error("{} failed to modify personal password : {}", username, e.getMessage());
                 return ServerResponse.createByErrorMessage("修改个人密码发生未知异常");
             }
+        }
+    }
+
+    /**
+     * 删除用户
+     *
+     * @param userId 用户Id
+     * @return ServerResponse
+     */
+    @DeleteMapping("/{userId}")
+    @RequiredPermission
+    public ServerResponse deleteEmployee(@PathVariable("userId") String userId) {
+        Boolean delete = userService.deleteUserById(userId);
+        if (delete) {
+            return ServerResponse.createBySuccess();
+        } else {
+            return ServerResponse.createByError();
         }
     }
 

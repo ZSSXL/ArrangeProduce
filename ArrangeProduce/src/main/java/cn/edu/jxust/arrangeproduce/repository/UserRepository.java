@@ -1,6 +1,8 @@
 package cn.edu.jxust.arrangeproduce.repository;
 
 import cn.edu.jxust.arrangeproduce.entity.po.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -47,4 +49,13 @@ public interface UserRepository extends JpaRepository<User, String> {
     @Query(value = "delete au, aa from ap_user au, ap_account aa where au.user_id = aa.account_id and au.user_id = ?1", nativeQuery = true)
     Integer deleteByUserId(String userId);
 
+    /**
+     * 获取该企业所有用户
+     *
+     * @param enterpriseId 企业Id
+     * @param role         角色
+     * @param pageable     分页信息
+     * @return Page<User>
+     */
+    Page<User> findAllByEnterpriseIdAndRoleOrderByCreateTimeDesc(String enterpriseId, String role, Pageable pageable);
 }

@@ -1,11 +1,14 @@
 package cn.edu.jxust.arrangeproduce.service.impl;
 
+import cn.edu.jxust.arrangeproduce.common.Const;
 import cn.edu.jxust.arrangeproduce.common.ServerResponse;
 import cn.edu.jxust.arrangeproduce.entity.po.User;
 import cn.edu.jxust.arrangeproduce.repository.UserRepository;
 import cn.edu.jxust.arrangeproduce.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 /**
@@ -52,5 +55,15 @@ public class UserServiceImpl implements UserService {
         Integer integer = userRepository.deleteByUserId(userId);
         log.info("delete user result : {}", integer);
         return integer > 0;
+    }
+
+    @Override
+    public ServerResponse<Page<User>> getAllUserByRole(String enterpriseId, String role, Pageable pageable) {
+        Page<User> userPage = userRepository.findAllByEnterpriseIdAndRoleOrderByCreateTimeDesc(enterpriseId, role, pageable);
+        if (userPage == null) {
+            return ServerResponse.createByErrorMessage("查询失败");
+        } else {
+            return ServerResponse.createBySuccess(userPage);
+        }
     }
 }
