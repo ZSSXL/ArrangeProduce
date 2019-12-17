@@ -131,10 +131,9 @@ $(document).on("click", "#ck", function () {
 /**
  * 删除排产信息
  */
-$(document).on("click", ".delete-arrange", function () {
-    let arrangeId = $(this).attr("arrange-id");
+$(document).on("click", ".delete-arrange-aw", function () {
+    let arrangeId = $(this).attr("aw-arrange-id");
     Notiflix.Confirm.Show("警告", "是否确认删除", "确定", "取消", function () {
-        console.log(arrangeId);
         $.ajax({
             url: serverUrl + "/arrange/" + arrangeId,
             contentType: "application/json; charset=utf-8",
