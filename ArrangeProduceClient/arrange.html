@@ -138,92 +138,90 @@
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
-    <div class="container-fluid">
+    <div class="container-fluid block">
         <div class="row">
             <!-- Form Elements -->
             <div class="col-lg-12">
-                <div class="block">
-                    <div class="block-body">
-                        <div class="form-group row">
-                            <label class="col-lg-3 col-sm-3 form-control-label">
-                                <h3 class="text-white">小拉机</h3>
-                            </label>
-                            <div class="col-lg-7 col-sm-7">
-                                <select id="machine" name="machine" class="form-control mb-3 mb-3">
-                                </select>
-                            </div>
-                            <div class="col-lg-2 col-sm-2">
-                                <button class="btn btn-outline-warning" id="machine-setting">设置</button>
+                <div class="block-body">
+                    <div class="form-group row">
+                        <label class="col-lg-3 col-sm-3 form-control-label">
+                            <h3 class="text-white">小拉机</h3>
+                        </label>
+                        <div class="col-lg-7 col-sm-7">
+                            <select id="machine" name="machine" class="form-control mb-3 mb-3">
+                            </select>
+                        </div>
+                        <div class="col-lg-2 col-sm-2">
+                            <button class="btn btn-outline-warning" id="machine-setting">设置</button>
+                        </div>
+                    </div>
+                    <div class="line"></div>
+                    <div class="form-group row">
+                        <label class="col-lg-3 col-sm-3 form-control-label">
+                            <h3 class="text-white">线规(mm)</h3>
+                        </label>
+                        <div class="col-lg-7 col-sm-7">
+                            <select id="gauge" name="gauge" class="form-control mb-3 mb-3">
+                            </select>
+                        </div>
+                        <div class="col-lg-2 col-sm-2">
+                            <button class="btn btn-outline-warning" id="gauge-setting">设置</button>
+                        </div>
+                    </div>
+                    <div class="line"></div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 form-control-label">
+                            <h3 class="text-white">公差(mm)</h3>
+                        </label>
+                        <div class="col-sm-9">
+                            <input id="tolerance" type="text" class="form-control" placeholder="例: +0.005">
+                            <small class="text-primary">请注意正负符号不要遗漏</small>
+                        </div>
+                    </div>
+                    <div class="line"></div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 form-control-label">
+                            <h3 class="text-white">重量(kg)</h3>
+                        </label>
+                        <div class="col-sm-9">
+                            <input id="weight" type="text" class="form-control" value="">
+                        </div>
+                    </div>
+                    <div class="line"></div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 form-control-label">
+                            <h3 class="text-white">生产时间</h3>
+                        </label>
+                        <div class="col-sm-9">
+                            <input id="arrange-date" type="date" class="form-control">
+                        </div>
+                    </div>
+                    <div class="line"></div>
+                    <div class="form-group row">
+                        <label class="col-lg-3 col-sm-3 form-control-label">
+                            <h3 class="text-white">班次</h3>
+                        </label>
+                        <div class="col-lg-2 col-sm-3">
+                            <div class="i-checks">
+                                <input id="radioCustom2" type="radio" checked="" value="1" name="shift"
+                                       class="radio-template">
+                                <label for="radioCustom2">早班</label>
                             </div>
                         </div>
-                        <div class="line"></div>
-                        <div class="form-group row">
-                            <label class="col-lg-3 col-sm-3 form-control-label">
-                                <h3 class="text-white">线规(mm)</h3>
-                            </label>
-                            <div class="col-lg-7 col-sm-7">
-                                <select id="gauge" name="gauge" class="form-control mb-3 mb-3">
-                                </select>
-                            </div>
-                            <div class="col-lg-2 col-sm-2">
-                                <button class="btn btn-outline-warning" id="gauge-setting">设置</button>
+                        <div class="col-lg-7 col-sm-3">
+                            <div class="i-checks">
+                                <input id="radioCustom1" type="radio" value="0" name="shift"
+                                       class="radio-template">
+                                <label for="radioCustom1">晚班</label>
                             </div>
                         </div>
-                        <div class="line"></div>
-                        <div class="form-group row">
-                            <label class="col-sm-3 form-control-label">
-                                <h3 class="text-white">公差(mm)</h3>
-                            </label>
-                            <div class="col-sm-9">
-                                <input id="tolerance" type="text" class="form-control" placeholder="例: +0.005">
-                                <small class="text-primary">请注意正负符号不要遗漏</small>
-                            </div>
-                        </div>
-                        <div class="line"></div>
-                        <div class="form-group row">
-                            <label class="col-sm-3 form-control-label">
-                                <h3 class="text-white">重量(kg)</h3>
-                            </label>
-                            <div class="col-sm-9">
-                                <input id="weight" type="text" class="form-control" value="">
-                            </div>
-                        </div>
-                        <div class="line"></div>
-                        <div class="form-group row">
-                            <label class="col-sm-3 form-control-label">
-                                <h3 class="text-white">生产时间</h3>
-                            </label>
-                            <div class="col-sm-9">
-                                <input id="arrange-date" type="date" class="form-control">
-                            </div>
-                        </div>
-                        <div class="line"></div>
-                        <div class="form-group row">
-                            <label class="col-lg-3 col-sm-3 form-control-label">
-                                <h3 class="text-white">班次</h3>
-                            </label>
-                            <div class="col-lg-2 col-sm-3">
-                                <div class="i-checks">
-                                    <input id="radioCustom2" type="radio" checked="" value="1" name="shift"
-                                           class="radio-template">
-                                    <label for="radioCustom2">早班</label>
-                                </div>
-                            </div>
-                            <div class="col-lg-7 col-sm-3">
-                                <div class="i-checks">
-                                    <input id="radioCustom1" type="radio" value="0" name="shift"
-                                           class="radio-template">
-                                    <label for="radioCustom1">晚班</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="line"></div>
-                        <div class="form-group row">
-                            <div class="col-lg-9 col-sm-9 ml-auto">
-                                <button id="save-btn" type="submit" class="btn btn-outline-info">保存</button>
-                                <button id="reset-btn" class="btn btn-outline-secondary">重置</button>
-                                <button id="print-btn" type="submit" class="btn btn-outline-warning">打印预览</button>
-                            </div>
+                    </div>
+                    <div class="line"></div>
+                    <div class="form-group row">
+                        <div class="col-lg-9 col-sm-9 ml-auto">
+                            <button id="save-btn" type="submit" class="btn btn-outline-info">保存</button>
+                            <button id="reset-btn" class="btn btn-outline-secondary">重置</button>
+                            <button id="print-btn" type="submit" class="btn btn-outline-warning">打印预览</button>
                         </div>
                     </div>
                 </div>
@@ -232,53 +230,51 @@
     </div>
 </section>
 <section class="no-padding-top no-padding-bottom">
-    <div class="container-fluid" id="load-area">
+    <div class="container-fluid block" id="load-area">
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12">
-                <div class="block">
+                <div class="row">
+                    <div class="col-lg-2 col-sm-2 offset-lg-10 offset-sm-10">
+                        <button class="btn btn-warning btn-lg" id="push">推送</button>
+                    </div>
+                </div>
+                <hr/>
+                <div class="row">
+                    <table class="table table-striped table-sm">
+                        <thead class="text-center text-white">
+                        <tr>
+                            <th>全选<input type="checkbox" id="ck"></th>
+                            <th>#</th>
+                            <th>设备</th>
+                            <th>线规(mm)</th>
+                            <th>公差(mm)</th>
+                            <th>重量(kg)</th>
+                            <th>安排时间</th>
+                            <th>班次</th>
+                            <th>推送状态</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody id="arrange-history-area" class="text-center">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="text-center">
                     <div class="row">
-                        <div class="col-lg-2 col-sm-2 offset-lg-10 offset-sm-10">
-                            <button class="btn btn-warning btn-lg" id="push">推送</button>
+                        <div class="col-lg-12 col-sm-12 text-center">
+                            <h3 id="no-message">没有数据</h3>
                         </div>
                     </div>
-                    <hr/>
-                    <div class="row">
-                        <table class="table table-striped table-sm">
-                            <thead class="text-center text-white">
-                            <tr>
-                                <th>全选<input type="checkbox" id="ck"></th>
-                                <th>#</th>
-                                <th>设备</th>
-                                <th>线规(mm)</th>
-                                <th>公差(mm)</th>
-                                <th>重量(kg)</th>
-                                <th>安排时间</th>
-                                <th>班次</th>
-                                <th>推送状态</th>
-                                <th>操作</th>
-                            </tr>
-                            </thead>
-                            <tbody id="arrange-history-area" class="text-center">
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="text-center">
-                        <div class="row">
-                            <div class="col-lg-12 col-sm-12 text-center">
-                                <h3 id="no-message">没有数据</h3>
-                            </div>
+                    <div class="row text-center" id="nav-message">
+                        <!-- 分页信息 -->
+                        <!-- 分页文字信息 -->
+                        <div class="col-lg-12 col-sm-12" id="page_info_area"
+                             style="text-align: center; margin-bottom: 10px;">
                         </div>
-                        <div class="row text-center" id="nav-message">
-                            <!-- 分页信息 -->
-                            <!-- 分页文字信息 -->
-                            <div class="col-lg-12 col-sm-12" id="page_info_area"
-                                 style="text-align: center; margin-bottom: 10px;">
-                            </div>
-                            <!-- 分页条信息 -->
-                            <div class="col-lg-12 col-sm-12" style="display: inline-block; text-align: center;">
-                                <nav id="page-ul">
-                                </nav>
-                            </div>
+                        <!-- 分页条信息 -->
+                        <div class="col-lg-12 col-sm-12" style="display: inline-block; text-align: center;">
+                            <nav id="page-ul">
+                            </nav>
                         </div>
                     </div>
                 </div>
