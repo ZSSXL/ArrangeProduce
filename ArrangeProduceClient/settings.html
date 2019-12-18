@@ -12,29 +12,42 @@
                         <strong class="d-block">个人信息</strong>
                     </div>
                     <div class="block-body">
-                        <form class="form-horizontal">
-                            <div class="form-group row">
-                                <label class="col-sm-3 form-control-label">用户名</label>
-                                <div class="col-sm-9">
-                                    <input id="inputHorizontalSuccess" type="email" placeholder="User name"
-                                           class="form-control form-control-success">
-                                    <small class="form-text"> </small>
+                        <div class="row">
+                            <label class="col-lg-3 col-sm-3 form-control-label">修改电话</label>
+                            <div class="col-lg-9 col-sm-9">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <input id="new-phone" type="text" class="form-control" placeholder="请输入新的电话号码">
+                                        <div class="input-group-append">
+                                            <button id="change-phone" type="button" class="btn btn-primary">确认</button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="form-group row">
-                                <label class="col-sm-3 form-control-label">密码</label>
-                                <div class="col-sm-9">
-                                    <input id="inputHorizontalWarning" type="password" placeholder="Password"
-                                           class="form-control form-control-warning">
-                                    <small class="form-text"> </small>
+                        </div>
+                        <div class="row">
+                            <label class="col-lg-3 col-sm-3 form-control-label">修改密码</label>
+                            <div class="col-lg-9 col-sm-9">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <input id="password" type="password" class="form-control" placeholder="请输入新的密码">
+                                        <input id="confirm-password" type="password" class="form-control"
+                                               style="display: none;" placeholder="请确认密码">
+                                        <div class="input-group-append">
+                                            <button id="next" type="button" class="btn btn-info">
+                                                下一步
+                                            </button>
+                                            <button id="prior" type="button" class="btn btn-secondary"
+                                                    style="display: none;">上一步
+                                            </button>
+                                            <button id="change-password" type="button" class="btn btn-primary"
+                                                    style="display: none;">确认
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="form-group row">
-                                <div class="col-sm-9 offset-sm-3">
-                                    <input type="submit" value="Signin" class="btn btn-primary">
-                                </div>
-                            </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -43,3 +56,96 @@
 </section>
 
 <!-- javascript -->
+
+<script type="text/javascript">
+    $("#change-phone").click(function () {
+        let phone = $("#new-phone").val();
+        if (phone === "") {
+            Notiflix.Notify.Warning("请输入电话");
+            return false;
+        } else {
+            $.ajax({
+                url: serverUrl + "/user/info",
+                contentType: "application/json; charset=utf-8",
+                type: "PUT",
+                beforeSend: function (XMLHttpRequest) {
+                    XMLHttpRequest.setRequestHeader("token", token);
+                },
+                data: phone,
+                success: function (result) {
+                    console.log(result);
+                    if (result.status === 0) {
+                        Notiflix.Notify.Success("修改信息成功");
+                    } else {
+                        Notiflix.Notify.Failure(result.msg);
+                    }
+                }
+            });
+        }
+    });
+
+    $("#next").click(function () {
+        let password = $("#password").val();
+        if (password === "") {
+            Notiflix.Notify.Warning("输入密码不能为空");
+        } else {
+            next();
+        }
+    });
+
+    $("#prior").click(function () {
+        prior();
+    });
+
+    function next() {
+        $("#next").css("display", "none");
+        $("#prior").removeAttr("style");
+        $("#change-password").removeAttr("style");
+        $("#password").css("display", "none");
+        $("#confirm-password").removeAttr("style");
+    }
+
+    function prior() {
+        $("#prior").css("display", "none");
+        $("#change-password").css("display", "none");
+        $("#next").removeAttr("style");
+        $("#password").removeAttr("style");
+        $("#confirm-password").css("display", "none");
+    }
+
+    $("#change-password").click(function () {
+        let password = $("#password").val();
+        let confirmPass = $("#confirm-password").val();
+        if (confirmPass === "") {
+            Notiflix.Notify.Warning("确认密码不能为空");
+            next();
+        } else if (password !== confirmPass) {
+            Notiflix.Notify.Failure("新密码与确认密码不符, 请重新输入!!!");
+            next();
+        } else {
+            $.ajax({
+                url: serverUrl + "/user/pwd",
+                contentType: "application/json; charset=utf-8",
+                type: "PUT",
+                beforeSend: function (XMLHttpRequest) {
+                    XMLHttpRequest.setRequestHeader("token", token);
+                },
+                data: password,
+                success: function (result) {
+                    if (result.status === 0) {
+                        Notiflix.Notify.Success("修改密码成功");
+                        prior();
+                        backToLogin();
+                    } else {
+                        Notiflix.Notify.Failure(result.msg);
+                    }
+                }
+            });
+        }
+    });
+
+    function backToLogin() {
+        localStorage.removeItem("arrangeToken");
+        window.location.href = "/login.html";
+    }
+</script>
