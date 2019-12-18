@@ -86,13 +86,6 @@
         logout();
     };
 
-    document.onkeydown = function (event) {
-        var e = event || window.event;
-        if (e && e.keyCode === 13) {
-            $("#submit").click();
-        }
-    };
-
     $("#submit").click(function () {
         const username = $("#login-username").val();
         const password = $("#login-password").val();

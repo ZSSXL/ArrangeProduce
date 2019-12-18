@@ -37,7 +37,6 @@ $("#add-employee-btn").click(function () {
 
 $(document).on("click", ".delete-employee", function () {
     let userId = $(this).attr("user-id");
-    console.log(userId);
     $.ajax({
         url: serverUrl + "/user/" + userId,
         contentType: "application/json; charset=utf-8",
@@ -48,6 +47,7 @@ $(document).on("click", ".delete-employee", function () {
         success: function (result) {
             if (result.status === 0) {
                 Notiflix.Notify.Success("删除成功");
+                getAllEmployee(0, 20);
             } else {
                 Notiflix.Notify.Failure(result.msg);
             }
