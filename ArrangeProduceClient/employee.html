@@ -1,3 +1,48 @@
+<!-- 模态框 -->
+<div class="modal fade" tabindex="-1" role="dialog" id="load-employee-modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" id="modal-area-employee">
+            <div class="modal-header">
+                <h4 class="modal-title">EMPLOYEE 打印员工</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-12 col-sm-12">
+                        <div class="content">
+                            <form class="text-left form-validate" onsubmit="return false">
+                                <div class="form-group-material">
+                                    <label class="label-material">Username</label><br>
+                                    <input id="username" type="text" name="registerUsername" required
+                                           data-msg="Please enter employee username" class="input-material">
+                                </div>
+                                <div class="form-group-material">
+                                    <label class="label-material">Phone</label><br>
+                                    <input id="phone" type="text" name="registerPhone" required
+                                           data-msg="Please enter employee phone" class="input-material">
+                                </div>
+                                <div class="form-group-material">
+                                    <label class="label-material">Password </label><br>
+                                    <input id="password" type="password" name="registerPassword" required
+                                           data-msg="Please enter employee password" class="input-material">
+                                </div>
+                                <div class="form-group text-center">
+                                    <button class="btn btn-primary" id="add-employee-btn">添加</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
+            </div>
+            <!-- 模态框内容动态加载 -->
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 <div class="page-header">
     <div class="container-fluid">
         <h2 class="h5 no-margin-bottom">员工信息</h2>
@@ -7,14 +52,14 @@
     <div class="container-fluid block">
         <div class="row">
             <div class="col-lg-12 col-sm-12">
-                <button class="btn btn-outline-warning" style="float: right;">添加车间打印员</button>
+                <button id="add-employee" class="btn btn-outline-warning" style="float: right;">添加车间打印员</button>
             </div>
         </div>
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12">
                 <div class="table-responsive">
                     <table class="table table-striped table-sm">
-                        <thead>
+                        <thead class="text-center">
                         <tr>
                             <th>#</th>
                             <th>姓名</th>
@@ -23,49 +68,28 @@
                             <th>操作</th>
                         </tr>
                         </thead>
-                        <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>小王</td>
-                            <td>13759373948</td>
-                            <td>2019-12-09 18:57</td>
-                            <td>
-                                <button class="btn btn-outline-info">详情</button>
-                                <button class="btn btn-outline-danger">删除</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>小强</td>
-                            <td>13759373948</td>
-                            <td>2019-12-09 18:57</td>
-                            <td>
-                                <button class="btn btn-outline-info">详情</button>
-                                <button class="btn btn-outline-danger">删除</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">3</th>
-                            <td>小张</td>
-                            <td>139884738473</td>
-                            <td>2019-12-09 18:57</td>
-                            <td>
-                                <button class="btn btn-outline-info">详情</button>
-                                <button class="btn btn-outline-danger">删除</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">4</th>
-                            <td>小明</td>
-                            <td>13648374927</td>
-                            <td>2019-12-09 18:57</td>
-                            <td>
-                                <button class="btn btn-outline-info">详情</button>
-                                <button class="btn btn-outline-danger">删除</button>
-                            </td>
-                        </tr>
+                        <tbody id="show-all-employees" class="text-center">
                         </tbody>
                     </table>
+                </div>
+                <div class="text-center">
+                    <div class="row">
+                        <div class="col-lg-12 col-sm-12 text-center">
+                            <h3 id="no-message-user">没有数据</h3>
+                        </div>
+                    </div>
+                    <div class="row text-center" id="nav-message-user">
+                        <!-- 分页信息 -->
+                        <!-- 分页文字信息 -->
+                        <div class="col-lg-12 col-sm-12" id="page_info_area_user"
+                             style="text-align: center; margin-bottom: 10px;">
+                        </div>
+                        <!-- 分页条信息 -->
+                        <div class="col-lg-12 col-sm-12" style="display: inline-block; text-align: center;">
+                            <nav id="page-ul-user">
+                            </nav>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -73,7 +97,7 @@
 </section>
 
 <!-- javascript -->
-
+<script src="js/function/employee.js"></script>
 <script type="text/javascript">
 
 </script>

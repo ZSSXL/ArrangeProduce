@@ -43,6 +43,7 @@ $("#load-employee").click(function () {
     $("#load-aw").removeAttr("class");
     $("#load-arrange").removeAttr("class");
     $("#load-setting").removeAttr("class");
+    getAllEmployee(0, 20);
 });
 
 function currentPage() {
@@ -66,6 +67,8 @@ function currentPage() {
             getAllAwArrange(0, 20);
             getAllMachineAnnealing();
             getAllGaugeSelected("aw");
+        } else if (arrangeCurrentPage === "employee") {
+            getAllEmployee(0, 20);
         }
         $("#load-area").load("\\" + arrangeCurrentPage + ".html");
     }
@@ -515,7 +518,7 @@ $(document).on("click", ".page-jump-aw", function () {
 
 // ======================== 员工页面操作 ========================== //
 
-function getAllEmployee(page, size){
+function getAllEmployee(page, size) {
     $.ajax({
         url: serverUrl + "/user",
         data: "page=" + page + "&size=" + size,
@@ -525,10 +528,132 @@ function getAllEmployee(page, size){
         type: "GET",
         success: function (result) {
             if (result.status === 0) {
-                console.log(result);
+                analyticalUser(result);
+                build_page_info_user(result);
+                build_page_li_user(result);
             } else {
                 Notiflix.Notify.Failure(result.msg);
             }
         }
     });
+}
+
+function analyticalUser(result) {
+    $("#show-all-employees").empty();
+    const data = result.data.content;
+    if (data.length === 0) {
+        $("#no-message-user").css("display", "none");
+    } else {
+        $("#no-message-user").css("display", "none");
+        $("#nav-message-user").css("display", "inline-block");
+        $.each(data, function (index, item) {
+            let numTd = $("<td></td>").append(index + 1);
+            let usernameTd = $("<td></td>").append(item.userName);
+            let phoneTd = $("<td></td>").append(item.phone);
+            let createTimeTd = $("<td></td>").append(printTimeFormatComplete(item.createTime));
+            let deleteBtn = $("<button class='btn btn-outline-danger delete-employee'>删除</button>").attr("user-id", item.userId);
+            let btnTd = $("<td></td>").append(deleteBtn);
+
+            $("<tr></tr>").append(numTd)
+                .append(usernameTd)
+                .append(phoneTd)
+                .append(createTimeTd)
+                .append(btnTd)
+                .appendTo("#show-all-employees");
+        });
+    }
+}
+
+function build_page_info_user(result) {
+    // 有则清空
+    $("#page_info_area_user").empty();
+
+    var pageInfo = result.data;
+    $("#page_info_area_user").append(" 当前第 <strong>" + (pageInfo.number + 1) + "</strong> 页,总共" + pageInfo.totalPages +
+        "页,共" + pageInfo.totalElements + "条记录");
+    totalPages = pageInfo.totalPages;
+    currentArrangePage = pageInfo.number;
+}
+
+function build_page_li_user(result) {
+    $("#page-ul-user").empty();
+
+    var ul = $("<ul class='pagination pagination-sm justify-content-center'></ul>");
+    // 首页
+    var firstPageLi = $("<li class='page-item'></li>").append($("<a class='page-link' href='#'></a>").append("首页"));
+    // 前一页
+    var prePageLi = $("<li class='page-item'></li>")
+        .append($("<a class='page-link' href='#' aria-label='Previous'></a>")
+            .append($("<span aria-hidden='true'>&laquo;</span>")).append($("<span class='sr-only'>Previous</span>")));
+    // 判断是否还有上一页，没有则disable
+    if (result.data.first === true) {
+        firstPageLi.addClass("disabled");
+        prePageLi.addClass("disabled");
+    } else {
+        firstPageLi.click(function () {
+            getAllEmployee(0, 20);
+        });
+        prePageLi.click(function () {
+            getAllEmployee(currentArrangePage - 1, 20);
+        });
+    }
+
+    ul.append(firstPageLi).append(prePageLi);
+    // ------------------------------------------  //
+
+    if (totalPages >= 5) {
+        if (currentArrangePage >= 2) {
+            for (i = currentArrangePage - 2; i <= currentArrangePage + 2; i++) {
+                var numLi = $("<li class='page-item'></li>").append($("<a class='page-link page-jump-user'></a>").append(i + 1));
+                if (currentArrangePage === i) {
+                    numLi.addClass("active");
+                }
+                if (totalPages === i) {
+                    break;
+                }
+                ul.append(numLi);
+            }
+        } else {
+            for (i = 0; i < 5; i++) {
+                let numLi = $("<li class='page-item'></li>").append($("<a class='page-link page-jump-user'></a>").append(i + 1));
+                if (currentArrangePage === i) {
+                    numLi.addClass("active");
+                }
+                ul.append(numLi);
+            }
+        }
+    } else {
+        for (i = 0; i < totalPages; i++) {
+            let numLi = $("<li class='page-item'></li>").append($("<a class='page-link page-jump-user'></a>").append(i + 1));
+            if (currentArrangePage === i) {
+                numLi.addClass("active");
+            }
+            ul.append(numLi);
+        }
+    }
+
+    // ------------------------------------------ //
+
+    // 后一页
+    var nextPageLi = $("<li class='page-item'></li>")
+        .append($("<a class='page-link' href='#' aria-label='Next'></a>")
+            .append($("<span aria-hidden='true'>&raquo;</span>")).append($("<span class='sr-only'>Next</span>")));
+    // 尾页
+    var lastPageLi = $("<li class='page-item'></li>").append($("<a class='page-link' href='#'></a>").append("尾页"));
+    // 判断时候还有下一页，没有则disable
+    if (result.data.last === true) {
+        nextPageLi.addClass("disabled");
+        lastPageLi.addClass("disabled");
+    } else {
+        // 跳转下一页点击事件
+        nextPageLi.click(function () {
+            getAllEmployee(currentArrangePage + 1, 20);
+        });
+        // 跳转最后一页点击事件
+        lastPageLi.click(function () {
+            getAllEmployee(totalPages - 1, 20);
+        });
+    }
+
+    ul.append(nextPageLi).append(lastPageLi).appendTo("#page-ul-user");
 }
