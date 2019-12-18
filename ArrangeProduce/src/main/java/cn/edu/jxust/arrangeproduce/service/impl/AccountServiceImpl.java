@@ -5,6 +5,7 @@ import cn.edu.jxust.arrangeproduce.entity.po.Account;
 import cn.edu.jxust.arrangeproduce.repository.AccountRepository;
 import cn.edu.jxust.arrangeproduce.service.AccountService;
 import cn.edu.jxust.arrangeproduce.util.DateUtil;
+import cn.edu.jxust.arrangeproduce.util.EncryptionUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,5 +42,12 @@ public class AccountServiceImpl implements AccountService {
             log.info("{} tried to login but failed at : {}", username, DateUtil.getDateComplete());
             return ServerResponse.createByErrorMessage("登录失败, 用户名或密码错误");
         }
+    }
+
+    @Override
+    public Boolean updatePassword(String password, String accountId) {
+        Integer integer = accountRepository.updatePassword(EncryptionUtil.encrypt(password), accountId);
+        log.info("update account password : {}", integer);
+        return integer > 0;
     }
 }

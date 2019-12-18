@@ -117,21 +117,19 @@ public class UserController extends BaseController {
     @PutMapping("/info")
     @RequiredPermission
     @Transactional(rollbackFor = Exception.class)
-    public ServerResponse updateUserInfo(String phone, @RequestHeader("token") String token) {
+    public ServerResponse updateUserInfo(@RequestBody String phone, @RequestHeader("token") String token) {
         if (StringUtils.isEmpty(phone)) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.PARAMETER_ERROR.getCode(), ResponseCode.PARAMETER_ERROR.getDesc());
         } else {
-            String enterpriseId = tokenUtil.getClaim(token, "enterpriseId").asString();
             String tokenId = tokenUtil.getClaim(token, "tokenId").asString();
             String username = tokenUtil.getClaim(token, "username").asString();
             try {
-                return userService.createUser(User.builder()
-                        .userId(tokenId)
-                        .userName(username)
-                        .role(Const.Role.ROLE_MANAGER)
-                        .enterpriseId(enterpriseId)
-                        .phone(phone)
-                        .build());
+                Boolean update = userService.updateUserInfo(phone, tokenId);
+                if (update) {
+                    return ServerResponse.createBySuccessMessage("更新成功");
+                } else {
+                    return ServerResponse.createByErrorMessage("更新失败");
+                }
             } catch (Exception e) {
                 log.error("{} failed to modify personal information : {}", username, e.getMessage());
                 return ServerResponse.createByErrorMessage("修改个人信息发生未知异常");
@@ -149,18 +147,19 @@ public class UserController extends BaseController {
     @PutMapping("/pwd")
     @RequiredPermission
     @Transactional(rollbackFor = Exception.class)
-    public ServerResponse updatePassword(String password, @RequestHeader("token") String token) {
+    public ServerResponse updatePassword(@RequestBody String password, @RequestHeader("token") String token) {
         if (StringUtils.isEmpty(password)) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.PARAMETER_ERROR.getCode(), ResponseCode.PARAMETER_ERROR.getDesc());
         } else {
             String tokenId = tokenUtil.getClaim(token, "tokenId").asString();
             String username = tokenUtil.getClaim(token, "username").asString();
             try {
-                return accountService.createAccount(Account.builder()
-                        .accountId(tokenId)
-                        .accountName(username)
-                        .password(EncryptionUtil.encrypt(password))
-                        .build());
+                Boolean update = accountService.updatePassword(password, tokenId);
+                if (update) {
+                    return ServerResponse.createBySuccessMessage("修改密码成功");
+                } else {
+                    return ServerResponse.createByErrorMessage("修改密码失败");
+                }
             } catch (Exception e) {
                 log.error("{} failed to modify personal password : {}", username, e.getMessage());
                 return ServerResponse.createByErrorMessage("修改个人密码发生未知异常");

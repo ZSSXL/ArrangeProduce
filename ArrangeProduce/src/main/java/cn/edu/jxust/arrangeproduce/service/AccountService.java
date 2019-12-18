@@ -27,4 +27,13 @@ public interface AccountService {
      */
     ServerResponse<String> login(String username, String password);
 
+    /**
+     * 更新密码
+     *
+     * @param password  密码
+     * @param accountId 用户Id
+     * @return Boolean
+     */
+    Boolean updatePassword(String password, String accountId);
+
 }

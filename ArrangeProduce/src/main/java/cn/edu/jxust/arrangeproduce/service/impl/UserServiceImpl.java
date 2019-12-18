@@ -66,4 +66,12 @@ public class UserServiceImpl implements UserService {
             return ServerResponse.createBySuccess(userPage);
         }
     }
+
+    @Override
+    public Boolean updateUserInfo(String phone, String userId) {
+        Integer integer = userRepository.updateInfo(phone, userId);
+        log.info("update user info result : {}", integer);
+        return integer > 0;
+    }
+
 }

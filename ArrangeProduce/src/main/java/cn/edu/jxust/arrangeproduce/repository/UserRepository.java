@@ -58,4 +58,16 @@ public interface UserRepository extends JpaRepository<User, String> {
      * @return Page<User>
      */
     Page<User> findAllByEnterpriseIdAndRoleOrderByCreateTimeDesc(String enterpriseId, String role, Pageable pageable);
+
+    /**
+     * 更新用户信息
+     *
+     * @param phone  电话
+     * @param userId 用户Id
+     * @return Integer
+     */
+    @Modifying
+    @Transactional(rollbackFor = Exception.class)
+    @Query(value = "update ap_user au set au.phone = ?1 where au.user_id = ?2 ", nativeQuery = true)
+    Integer updateInfo(String phone, String userId);
 }

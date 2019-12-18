@@ -61,4 +61,14 @@ public interface UserService {
      * @return ServerResponse<Page < User>>
      */
     ServerResponse<Page<User>> getAllUserByRole(String enterpriseId, String role, Pageable pageable);
+
+    /**
+     * 更新用户信息
+     *
+     * @param phone  电话号码
+     * @param userId 用户Id
+     * @return Boolean
+     */
+    Boolean updateUserInfo(String phone, String userId);
+
 }
