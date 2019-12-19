@@ -7,6 +7,7 @@ import cn.edu.jxust.arrangeproduce.common.ServerResponse;
 import cn.edu.jxust.arrangeproduce.entity.po.AwArrange;
 import cn.edu.jxust.arrangeproduce.entity.vo.AwArrangeVo;
 import cn.edu.jxust.arrangeproduce.service.AwArrangeService;
+import cn.edu.jxust.arrangeproduce.service.MachineService;
 import cn.edu.jxust.arrangeproduce.util.DateUtil;
 import cn.edu.jxust.arrangeproduce.util.QrCodeUtil;
 import cn.edu.jxust.arrangeproduce.util.TokenUtil;
@@ -36,11 +37,13 @@ public class AwArrangeController extends BaseController {
 
     private final AwArrangeService awArrangeService;
     private final TokenUtil tokenUtil;
+    private final MachineService machineService;
 
     @Autowired
-    public AwArrangeController(AwArrangeService awArrangeService, TokenUtil tokenUtil) {
+    public AwArrangeController(AwArrangeService awArrangeService, TokenUtil tokenUtil, MachineService machineService) {
         this.awArrangeService = awArrangeService;
         this.tokenUtil = tokenUtil;
+        this.machineService = machineService;
     }
 
     /**
@@ -64,6 +67,8 @@ public class AwArrangeController extends BaseController {
             } else {
                 String awArrangeId = UUIDUtil.getId();
                 String username = tokenUtil.getClaim(token, "username").asString();
+                String machineName = machineService.getMachineNameByNumAndEnterpriseId(awArrangeVo.getMachine(), enterpriseId);
+                log.info("machineNumber : {} , machineName : {}", awArrangeVo.getMachine(), machineName);
                 try {
                     return awArrangeService.createAwArrange(AwArrange.builder()
                             .awArrangeId(awArrangeId)
@@ -71,6 +76,7 @@ public class AwArrangeController extends BaseController {
                             .enterpriseId(enterpriseId)
                             .gauge(awArrangeVo.getGauge())
                             .machine(awArrangeVo.getMachine())
+                            .machineName(machineName)
                             .shift(awArrangeVo.getShift())
                             .weight(awArrangeVo.getWeight())
                             .status(0)

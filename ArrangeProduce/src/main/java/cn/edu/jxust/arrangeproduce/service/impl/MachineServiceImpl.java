@@ -60,4 +60,14 @@ public class MachineServiceImpl implements MachineService {
         log.info("delete machine result : {}", integer);
         return integer > 0;
     }
+
+    @Override
+    public String getMachineNameByNumAndEnterpriseId(String number, String enterpriseId) {
+        Machine machine = machineRepository.findByMachineNumberAndEnterpriseId(number, enterpriseId).orElse(null);
+        if (machine != null) {
+            return machine.getMachineName();
+        } else {
+            return null;
+        }
+    }
 }

@@ -55,4 +55,13 @@ public interface MachineRepository extends JpaRepository<Machine, String> {
     @Transactional(rollbackFor = Exception.class)
     Integer deleteByMachineId(String machineId);
 
+    /**
+     * 获取设备名
+     *
+     * @param machineNumber 设备编码
+     * @param enterpriseId  企业Id
+     * @return Machine
+     */
+    Optional<Machine> findByMachineNumberAndEnterpriseId(String machineNumber, String enterpriseId);
+
 }
