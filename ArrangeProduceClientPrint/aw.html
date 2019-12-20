@@ -22,44 +22,12 @@
                             <img id="qr-code-aw" src="/img/photos/default.png">
                         </div>
                         <div class="col-lg-6 col-sm-6">
-                            <form class="form-horizontal">
-                                <div class="form-group row">
-                                    <label class="col-sm-3 form-control-label">机器:</label>
-                                    <div class="col-sm-9">
-                                        <small id="machine-name-aw" class="form-text">小拉机1号</small>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-sm-3 form-control-label">线规<strong>&nbsp;mm</strong>:</label>
-                                    <div class="col-sm-9">
-                                        <small id="gauge-value-aw" class="form-text">0.080</small>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-sm-3 form-control-label">公差<strong>&nbsp;mm</strong>:</label>
-                                    <div class="col-sm-9">
-                                        <small id="tolerance-value-aw" class="form-text">+ 0.005</small>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-sm-3 form-control-label">重量<strong>&nbsp;kg</strong>:</label>
-                                    <div class="col-sm-9">
-                                        <small id="weight-value-aw" class="form-text">3827</small>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-sm-3 form-control-label">生产时间:</label>
-                                    <div class="col-sm-9">
-                                        <small id="arrange-time-aw" class="form-text">2019-12-10</small>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-sm-3 form-control-label">班次:</label>
-                                    <div class="col-sm-9">
-                                        <small id="shift-value-aw" class="form-text">早班</small>
-                                    </div>
-                                </div>
-                            </form>
+                            <h3>机器&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id="machine-name-aw"></span></h3>
+                            <h3>线规&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id="gauge-value-aw"></span></h3>
+                            <h3>公差&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id="tolerance-value-aw"></span></h3>
+                            <h3>重量&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id="weight-value-aw"></span></h3>
+                            <h3>生产时间&nbsp;: <span id="arrange-time-aw"></span></h3>
+                            <h3>班次&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id="shift-value-aw"></span></h3>
                         </div>
                         <!--endprint-->
                     </div>
@@ -123,5 +91,19 @@
 <!-- javascript -->
 <script src="js/function/aw.js"></script>
 <script type="text/javascript">
+    $("#start-print").click(function () {
+        preview();
+    });
 
+    function preview() {
+        console.log("start print ...");
+        var bdhtml = window.document.body.innerHTML; //获取当前页的html代码
+        var startStr = "<!--startprint-->"; //设置打印开始区域
+        var endStr = "<!--endprint-->"; //设置打印结束区域
+        //从标记里获取需要打印的页面
+        window.document.body.innerHTML = bdhtml.substring(bdhtml.indexOf(startStr) + startStr.length, bdhtml.indexOf(endStr)); //需要打印的页面
+        window.print();
+        location.reload();
+        console.log("end print ...");
+    }
 </script>
