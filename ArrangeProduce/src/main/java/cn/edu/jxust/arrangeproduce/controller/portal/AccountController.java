@@ -65,7 +65,7 @@ public class AccountController extends BaseController {
                     if (StringUtils.isEmpty(token)) {
                         return ServerResponse.createByErrorMessage("登录失败，创建token失败");
                     } else {
-                        return ServerResponse.createBySuccess(token);
+                        return ServerResponse.createBySuccess(user.getUserId(), token);
                     }
                 } else {
                     log.error("登录失败");

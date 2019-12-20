@@ -77,8 +77,6 @@ public class Notice{
                 this.key = user.getEnterpriseId() + user.getUserId();
                 noticeMap.put(this.key, this);
                 addOnlineCount();
-                Thread thread = Thread.currentThread();
-                System.out.println("thread name on open: " + thread.getName());
                 log.info("New connection, currently online : {}", onlineCount);
             } else {
                 log.warn("query user failed, the userId is : " + userId);
@@ -108,8 +106,6 @@ public class Notice{
     @OnMessage
     public void onMessage(String message, Session session) {
         log.info("get message : {} by session : {}", message, session.getId());
-        Thread thread = Thread.currentThread();
-        System.out.println("thread name on message : " + thread.getName());
         sendAll();
     }
 
@@ -119,7 +115,6 @@ public class Notice{
     public void sendAll() {
         // 发送数据给所有用户
         // 模糊查询map的key
-        System.out.println("I'm here : " + this.enterpriseId);
         List<Notice> likeByMap = getLikeByMap(noticeMap, this.enterpriseId);
         if (likeByMap.size() <= 1) {
             // 说明就只有本人在线，没有员工在线，所以将消息提示放在redis中、
