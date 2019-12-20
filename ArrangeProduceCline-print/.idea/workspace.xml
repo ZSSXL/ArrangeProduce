@@ -1,0 +1,583 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="a28848ab-e22c-4a14-be7f-16f6f361549d" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/ArrangeProduceClient.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/ZSS.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/arrange.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aw.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/css/custom.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/css/font.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/css/notiflix-1.3.0.min.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/css/nprogress.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/css/style.blue.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/css/style.default.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/css/style.green.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/css/style.pink.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/css/style.red.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/css/style.sea.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/css/style.text.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/css/style.violet.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/addresses.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/countries.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fonts/dark-dashboard.eot" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fonts/dark-dashboard.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fonts/dark-dashboard.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fonts/dark-dashboard.woff" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/icons-reference/fonts/dark-dashboard.eot" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/icons-reference/fonts/dark-dashboard.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/icons-reference/fonts/dark-dashboard.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/icons-reference/fonts/dark-dashboard.woff" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/icons-reference/icons-reference.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/icons-reference/styles.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/AP.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/bg.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/brand/brand-1.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/brand/brand-2.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/brand/brand-3.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/brand/brand-4.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/brand/brand-5.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/brand/brand-6.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/favicon.ico" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/AD.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/AE.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/AF.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/AG.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/AI.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/AL.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/AM.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/AN.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/AO.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/AQ.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/AR.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/AS.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/AT.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/AU.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/AW.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/AX.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/AZ.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/BA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/BB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/BD.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/BE.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/BF.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/BG.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/BH.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/BI.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/BJ.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/BL.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/BM.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/BN.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/BO.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/BR.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/BS.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/BT.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/BW.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/BY.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/BZ.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/CA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/CC.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/CD.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/CF.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/CG.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/CH.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/CI.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/CK.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/CL.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/CM.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/CN.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/CO.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/CR.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/CT.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/CU.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/CV.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/CW.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/CX.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/CY.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/CZ.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/DE.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/DJ.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/DK.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/DM.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/DO.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/DZ.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/EC.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/EE.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/EG.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/EH.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/ER.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/ES.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/ET.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/EU.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/FI.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/FJ.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/FK.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/FM.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/FO.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/FR.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/GA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/GB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/GD.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/GE.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/GG.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/GH.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/GI.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/GL.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/GM.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/GN.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/GQ.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/GR.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/GS.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/GT.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/GU.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/GW.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/GY.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/HK.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/HN.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/HR.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/HT.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/HU.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/IC.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/ID.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/IE.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/IL.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/IM.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/IN.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/IQ.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/IR.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/IS.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/IT.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/JE.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/JM.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/JO.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/JP.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/KE.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/KG.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/KH.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/KI.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/KM.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/KN.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/KP.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/KR.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/KW.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/KY.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/KZ.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/LA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/LB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/LC.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/LI.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/LK.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/LR.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/LS.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/LT.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/LU.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/LV.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/LY.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/MA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/MC.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/MD.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/ME.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/MF.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/MG.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/MH.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/MK.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/ML.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/MM.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/MN.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/MO.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/MP.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/MQ.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/MR.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/MS.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/MT.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/MU.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/MV.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/MW.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/MX.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/MY.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/MZ.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/NA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/NC.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/NE.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/NF.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/NG.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/NI.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/NL.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/NO.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/NP.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/NR.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/NU.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/NZ.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/OM.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/PA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/PE.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/PF.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/PG.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/PH.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/PK.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/PL.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/PN.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/PR.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/PS.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/PT.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/PW.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/PY.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/QA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/RE.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/RO.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/RS.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/RU.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/RW.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/SA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/SB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/SC.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/SD.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/SE.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/SG.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/SH.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/SI.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/SK.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/SL.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/SM.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/SN.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/SO.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/SR.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/SS.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/ST.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/SV.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/SX.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/SY.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/SZ.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/TC.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/TD.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/TF.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/TG.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/TH.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/TJ.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/TK.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/TL.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/TM.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/TN.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/TO.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/TR.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/TT.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/TV.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/TW.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/TZ.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/UA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/UG.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/US.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/UY.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/UZ.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/VA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/VC.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/VE.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/VG.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/VI.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/VN.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/VU.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/WF.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/WS.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/YE.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/YT.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/ZA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/ZM.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/ZW.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/_abkhazia.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/_basque-country.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/_british-antarctic-territory.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/_commonwealth.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/_england.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/_gosquared.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/_kosovo.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/_mars.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/_nagorno-karabakh.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/_nato.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/_northern-cyprus.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/_olympics.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/_red-cross.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/_scotland.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/_somaliland.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/_south-ossetia.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/_united-nations.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/_unknown.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/flags/16/_wales.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/map-close.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/photos/default.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/app-url.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/charts-custom.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/dateUtil.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/front.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/function/arrange.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/function/aw.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/load-page.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/notiflix-1.3.0.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/notiflix-aio-1.3.0.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/nprogress.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/login.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sub/print.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/bootstrap/css/bootstrap-grid.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/bootstrap/css/bootstrap-grid.min.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/bootstrap/css/bootstrap-reboot.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/bootstrap/css/bootstrap-reboot.min.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/bootstrap/css/bootstrap.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/bootstrap/css/bootstrap.min.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/bootstrap/js/bootstrap.bundle.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/bootstrap/js/bootstrap.bundle.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/bootstrap/js/bootstrap.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/bootstrap/js/bootstrap.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/chart.js/Chart.bundle.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/chart.js/Chart.bundle.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/chart.js/Chart.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/chart.js/Chart.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/font-awesome/css/font-awesome.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/font-awesome/css/font-awesome.min.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/font-awesome/fonts/FontAwesome.otf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/font-awesome/fonts/fontawesome-webfont.eot" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/font-awesome/fonts/fontawesome-webfont.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/font-awesome/fonts/fontawesome-webfont.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/font-awesome/fonts/fontawesome-webfont.woff" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/font-awesome/fonts/fontawesome-webfont.woff2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/additional-methods.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/additional-methods.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/jquery.validate.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/jquery.validate.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_ar.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_ar.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_az.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_az.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_bg.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_bg.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_bn_BD.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_bn_BD.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_ca.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_ca.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_cs.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_cs.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_da.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_da.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_de.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_de.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_el.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_el.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_es.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_es.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_es_AR.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_es_AR.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_es_PE.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_es_PE.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_et.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_et.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_eu.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_eu.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_fa.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_fa.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_fi.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_fi.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_fr.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_fr.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_ge.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_ge.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_gl.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_gl.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_he.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_he.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_hr.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_hr.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_hu.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_hu.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_hy_AM.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_hy_AM.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_id.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_id.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_is.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_is.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_it.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_it.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_ja.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_ja.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_ka.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_ka.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_kk.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_kk.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_ko.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_ko.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_lt.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_lt.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_lv.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_lv.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_mk.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_mk.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_my.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_my.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_nl.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_nl.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_no.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_no.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_pl.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_pl.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_pt_BR.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_pt_BR.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_pt_PT.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_pt_PT.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_ro.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_ro.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_ru.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_ru.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_sd.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_sd.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_si.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_si.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_sk.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_sk.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_sl.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_sl.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_sr.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_sr.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_sr_lat.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_sr_lat.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_sv.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_sv.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_th.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_th.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_tj.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_tj.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_tr.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_tr.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_uk.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_uk.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_ur.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_ur.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_vi.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_vi.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_zh.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_zh.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_zh_TW.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/messages_zh_TW.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/methods_de.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/methods_de.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/methods_es_CL.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/methods_es_CL.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/methods_fi.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/methods_fi.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/methods_it.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/methods_it.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/methods_nl.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/methods_nl.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/methods_pt.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery-validation/localization/methods_pt.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery.cookie/component.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery.cookie/cookie.jquery.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery.cookie/jquery.cookie.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery/core.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery/jquery.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery/jquery.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery/jquery.slim.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/jquery/jquery.slim.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/popper.js/esm/popper-utils.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/popper.js/esm/popper-utils.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/popper.js/esm/popper.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/popper.js/esm/popper.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/popper.js/popper-utils.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/popper.js/popper-utils.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/popper.js/popper.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/popper.js/popper.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/popper.js/umd/popper-utils.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/popper.js/umd/popper-utils.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/popper.js/umd/popper.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/popper.js/umd/popper.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/popper.js/umd/poppper.js.flow" beforeDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="HTML File" />
+        <option value="JavaScript File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectId" id="1UPlAddnMwrHtaHlTE3sZsIdopz" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../ArrangeProduceClientPrint" />
+    <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\ZSS\Desktop\ArrangeProduce\ArrangeProduceClient\img\photos" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="a28848ab-e22c-4a14-be7f-16f6f361549d" name="Default Changelist" comment="" />
+      <created>1575265969066</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1575265969066</updated>
+      <workItem from="1575265971375" duration="11129000" />
+      <workItem from="1575895294512" duration="3534000" />
+      <workItem from="1575938042826" duration="12479000" />
+      <workItem from="1576026200981" duration="16109000" />
+      <workItem from="1576067076521" duration="2179000" />
+      <workItem from="1576153007351" duration="3789000" />
+      <workItem from="1576197251856" duration="24755000" />
+      <workItem from="1576458217290" duration="13126000" />
+      <workItem from="1576543390786" duration="10160000" />
+      <workItem from="1576630169363" duration="11268000" />
+      <workItem from="1576716571636" duration="318000" />
+      <workItem from="1576716995313" duration="1071000" />
+      <workItem from="1576719993331" duration="1239000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
