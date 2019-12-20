@@ -7,7 +7,11 @@ import cn.edu.jxust.arrangeproduce.common.ServerResponse;
 import cn.edu.jxust.arrangeproduce.entity.po.Arrange;
 import cn.edu.jxust.arrangeproduce.entity.vo.ArrangeVo;
 import cn.edu.jxust.arrangeproduce.service.ArrangeService;
-import cn.edu.jxust.arrangeproduce.util.*;
+import cn.edu.jxust.arrangeproduce.service.MachineService;
+import cn.edu.jxust.arrangeproduce.util.DateUtil;
+import cn.edu.jxust.arrangeproduce.util.QrCodeUtil;
+import cn.edu.jxust.arrangeproduce.util.TokenUtil;
+import cn.edu.jxust.arrangeproduce.util.UUIDUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,11 +37,13 @@ public class ArrangeController extends BaseController {
 
     private final ArrangeService arrangeService;
     private final TokenUtil tokenUtil;
+    private final MachineService machineService;
 
     @Autowired
-    public ArrangeController(ArrangeService arrangeService, TokenUtil tokenUtil) {
+    public ArrangeController(ArrangeService arrangeService, TokenUtil tokenUtil, MachineService machineService) {
         this.arrangeService = arrangeService;
         this.tokenUtil = tokenUtil;
+        this.machineService = machineService;
     }
 
     /**
@@ -60,12 +66,15 @@ public class ArrangeController extends BaseController {
             } else {
                 String username = tokenUtil.getClaim(token, "username").asString();
                 String arrangeId = UUIDUtil.getId();
+                String machineName = machineService.getMachineNameByNumAndEnterpriseId(arrangeVo.getMachine(), enterpriseId);
+                log.info("machineNumber : {}, machineName : {}", arrangeVo.getMachine(), machineName);
                 try {
                     return arrangeService.createArrange(Arrange.builder()
                             .arrangeId(arrangeId)
                             .arrangeDate(arrangeVo.getArrangeDate())
                             .gauge(arrangeVo.getGauge())
                             .machine(arrangeVo.getMachine())
+                            .machineName(machineName)
                             .shift(arrangeVo.getShift())
                             .enterpriseId(enterpriseId)
                             .weight(arrangeVo.getWeight())

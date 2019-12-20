@@ -48,9 +48,15 @@ public class Arrange implements Serializable {
     private String shift;
 
     /**
-     * 安排小拉机
+     * 小拉机名称
      */
-    @Column(nullable = false, columnDefinition = "varchar(20) comment '安排小拉机'")
+    @Column(columnDefinition = "varchar(50) comment '小拉机名称'")
+    private String machineName;
+
+    /**
+     * 小拉机编号
+     */
+    @Column(nullable = false, columnDefinition = "varchar(20) comment '小拉机编号'")
     private String machine;
 
     /**

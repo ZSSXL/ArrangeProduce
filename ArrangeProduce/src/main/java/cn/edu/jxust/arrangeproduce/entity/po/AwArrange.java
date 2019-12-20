@@ -60,6 +60,12 @@ public class AwArrange implements Serializable {
     private String machine;
 
     /**
+     * 机器名称
+     */
+    @Column(columnDefinition = "varchar(50) comment '机器名称'")
+    private String machineName;
+
+    /**
      * 设定线规
      */
     @Column(nullable = false, columnDefinition = "varchar(10) comment '设定线规'")

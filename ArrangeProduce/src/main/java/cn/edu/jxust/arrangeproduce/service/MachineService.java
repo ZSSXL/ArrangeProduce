@@ -54,4 +54,13 @@ public interface MachineService {
      */
     Boolean deleteMachineByMachineId(String machineId);
 
+    /**
+     * 通过设备Id和企业Id锁定设备
+     *
+     * @param number       设备id
+     * @param enterpriseId 企业Id
+     * @return String
+     */
+    String getMachineNameByNumAndEnterpriseId(String number, String enterpriseId);
+
 }
