@@ -109,6 +109,7 @@
         if (result.status === 0) {
             localStorage.setItem("arrangeCurrentPage", "arrange");
             localStorage.setItem("arrangeToken", result.data);
+            localStorage.setItem("arrangeUserId", result.msg);
             Notiflix.Notify.Success("登录成功");
             window.location.href = "/index.html";
         } else {

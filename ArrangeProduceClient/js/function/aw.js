@@ -198,6 +198,7 @@ $("#push-aw").click(function () {
                 if (result.status === 0) {
                     Notiflix.Notify.Success(result.msg);
                     getAllAwArrange(0, 20);
+                    socket.send("push a new aw arrange");
                 } else {
                     Notiflix.Notify.Failure(result.msg);
                 }

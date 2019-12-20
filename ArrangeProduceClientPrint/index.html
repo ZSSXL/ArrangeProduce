@@ -105,7 +105,6 @@
 <script type="text/javascript">
 
     let token; //用户token
-    var machineSort = "annealing"; // 分类,默认退火机
 
     Notiflix.Notify.Init();
     Notiflix.Confirm.Init({
@@ -122,8 +121,65 @@
             window.location.href = "/login.html";
         } else {
             currentPage();
+            getNotice();
         }
     };
+
+    function getNotice() {
+        $.ajax({
+            url: serverUrl + "/notice",
+            beforeSend: function (XMLHttpRequest) {
+                XMLHttpRequest.setRequestHeader("token", token);
+            },
+            type: "GET",
+            success: function (result) {
+                if (result.status === 0) {
+                    readNotice(result.data);
+                } else {
+                    Notiflix.Notify.Success("没有未读消息");
+                }
+            }
+        });
+    }
+
+    function readNotice(data) {
+        Notiflix.Confirm.Show("警告", "有未查看的新排产任务，请注意查看", "确定", "稍后提醒", function () {
+            $.ajax({
+                url: serverUrl + "/notice",
+                beforeSend: function (XMLHttpRequest) {
+                    XMLHttpRequest.setRequestHeader("token", token);
+                },
+                type: "DELETE",
+                success: function (result) {
+                    if (result.status !== 0) {
+                        Notiflix.Notify.Success(result.msg);
+                    }
+                }
+            });
+        });
+    }
+
+    // 连接websocket
+    var userId = localStorage.getItem("arrangeUserId");
+    var socket = new WebSocket(websocketUrl + "/notice/" + userId);   //建立连接
+    socket.onopen = function () {
+    };
+    socket.onerror = function () {
+        Notiflix.Notify.Warning("websocket 连接失败, 请刷新页面重新尝试");
+    };
+
+    //监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
+    window.onbeforeunload = function () {
+        socket.close();
+    };
+
+    socket.onmessage = function (result) {
+        if (result !== null) {
+            Notiflix.Notify.Warning("有新的排产信息，请注意查收");
+            getAllAwArrange(0, 20);
+            getAllArrange(0, 20);
+        }
+    }
 </script>
 </body>
 </html>

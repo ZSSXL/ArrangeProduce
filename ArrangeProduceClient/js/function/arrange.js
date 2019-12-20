@@ -176,6 +176,7 @@ $("#push").click(function () {
                 if (result.status === 0) {
                     Notiflix.Notify.Success(result.msg);
                     getAllArrange(0, 20);
+                    socket.send("push a new arrange");
                 } else {
                     Notiflix.Notify.Failure(result.msg);
                 }

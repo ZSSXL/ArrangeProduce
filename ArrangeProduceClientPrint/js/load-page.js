@@ -30,7 +30,6 @@ function currentPage() {
 }
 
 
-
 // ========================== 获取所有的小拉机排产数据 ============================ //
 
 function getAllArrange(page, size) {
@@ -63,7 +62,7 @@ function analyticalArrange(result) {
         $("#nav-message").css("display", "inline-block");
         $.each(data, function (index, item) {
             let numTd = $("<th scope='row'></th>").append(index + 1);
-            let machineTd = $("<td></td>").append(item.machine);
+            let machineTd = $("<td></td>").append(item.machineName).attr("machine-number", item.machine);
             let gaugeTd = $("<td></td>").append(item.gauge);
             let toleranceTd = $("<td></td>").append(item.tolerance);
             let weightTd = $("<td></td>").append(item.weight);
@@ -74,19 +73,14 @@ function analyticalArrange(result) {
             } else {
                 shiftTd.append("晚班");
             }
-            let detailBtn = $("<button>打印</button>").attr({
-                "print-status": item.status,
-                "creator": item.creator,
-                "create-time": item.createTime,
-                "arrange-id": item.arrangeId
-            });
+            let detailBtn = $("<button>打印</button>").attr("arrange-id", item.arrangeId);
             let printStatusTd = $("<td></td>");
             if (item.status === 1) {
                 printStatusTd.append("已打印");
-                detailBtn.attr("class", "btn btn-lg btn-outline-info aw-arrange-print");
+                detailBtn.attr("class", "btn btn-lg btn-outline-info arrange-print");
             } else if (item.status === 0) {
                 printStatusTd.append("未打印");
-                detailBtn.attr("class", "btn btn-lg btn-outline-warning aw-arrange-print");
+                detailBtn.attr("class", "btn btn-lg btn-outline-warning arrange-print");
             }
             let btnTd = $("<td></td>").append(detailBtn);
             $("<tr></tr>").append(numTd)
@@ -202,11 +196,10 @@ $(document).on("click", ".page-jump", function () {
 });
 
 
-
 // ========================== 获取所有退火/绕线机数据 ============================ //
 
 /**
- * 获取所有的小拉机排产数据
+ * 获取所有的退火/绕线机排产数据
  */
 function getAllAwArrange(page, size) {
     $.ajax({
@@ -238,7 +231,7 @@ function analyticalAwArrange(result) {
         $("#nav-message-aw").css("display", "inline-block");
         $.each(data, function (index, item) {
             let numTd = $("<th scope='row'></th>").append(index + 1);
-            let machineTd = $("<td></td>").append(item.machine);
+            let machineTd = $("<td></td>").append(item.machineName).attr("machine-number", item.machine);
             let gaugeTd = $("<td></td>").append(item.gauge);
             let toleranceTd = $("<td></td>").append(item.tolerance);
             let weightTd = $("<td></td>").append(item.weight);
@@ -249,12 +242,7 @@ function analyticalAwArrange(result) {
             } else {
                 shiftTd.append("晚班");
             }
-            let detailBtn = $("<button>打印</button>").attr({
-                "print-status": item.status,
-                "creator": item.creator,
-                "create-time": item.createTime,
-                "arrange-id": item.arrangeId
-            });
+            let detailBtn = $("<button>打印</button>").attr("aw-arrange-id", item.awArrangeId);
             let printStatusTd = $("<td></td>");
             if (item.status === 1) {
                 printStatusTd.append("已打印");

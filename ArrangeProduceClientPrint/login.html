@@ -108,6 +108,7 @@
     function analysisResult(result) {
         if (result.status === 0) {
             localStorage.setItem("arrangeCurrentPage", "arrange");
+            localStorage.setItem("arrangeUserId", result.msg);
             localStorage.setItem("arrangeToken", result.data);
             Notiflix.Notify.Success("登录成功");
             window.location.href = "/index.html";
