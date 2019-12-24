@@ -173,7 +173,7 @@ function analyticalArrange(result) {
         $("#nav-message").css("display", "inline-block");
         $.each(data, function (index, item) {
             let checkboxId = $("<td></td>").append($("<input type='checkbox' name='good'>").attr("value", item.arrangeId));
-            let numTd = $("<th scope='row'></th>").append(index + 1);
+            let numTd = $("<td scope='row'></td>").append(index + 1);
             let machineTd = $("<td></td>").append(item.machine);
             let gaugeTd = $("<td></td>").append(item.gauge);
             let toleranceTd = $("<td></td>").append(item.tolerance);
@@ -377,7 +377,7 @@ function analyticalAwArrange(result) {
         $("#nav-message-aw").css("display", "inline-block");
         $.each(data, function (index, item) {
             let checkboxId = $("<td></td>").append($("<input type='checkbox' name='good-aw'>").attr("value", item.awArrangeId));
-            let numTd = $("<th scope='row'></th>").append(index + 1);
+            let numTd = $("<td scope='row'></td>").append(index + 1);
             let machineTd = $("<td></td>").append(item.machine);
             let gaugeTd = $("<td></td>").append(item.gauge);
             let toleranceTd = $("<td></td>").append(item.tolerance);

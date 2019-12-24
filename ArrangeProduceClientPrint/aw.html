@@ -22,12 +22,17 @@
                             <img id="qr-code-aw" src="/img/photos/default.png">
                         </div>
                         <div class="col-lg-6 col-sm-6">
-                            <h3>机器&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id="machine-name-aw"></span></h3>
-                            <h3>线规&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id="gauge-value-aw"></span></h3>
-                            <h3>公差&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id="tolerance-value-aw"></span></h3>
-                            <h3>重量&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id="weight-value-aw"></span></h3>
+                            <h3>机器&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id="machine-name-aw"></span>
+                            </h3>
+                            <h3>线规&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id="gauge-value-aw"></span>
+                            </h3>
+                            <h3>公差&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span
+                                    id="tolerance-value-aw"></span></h3>
+                            <h3>重量&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id="weight-value-aw"></span>
+                            </h3>
                             <h3>生产时间&nbsp;: <span id="arrange-time-aw"></span></h3>
-                            <h3>班次&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id="shift-value-aw"></span></h3>
+                            <h3>班次&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id="shift-value-aw"></span>
+                            </h3>
                         </div>
                         <!--endprint-->
                     </div>
@@ -45,6 +50,14 @@
     <div class="container-fluid block" id="load-area">
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12">
+                <div class="row">
+                    <div class="col-lg-6 col-sm-6">
+                        <div class="input-group">
+                            <div class="input-group-prepend"><span class="input-group-text text-white">过滤条件</span></div>
+                            <input id="input-filter" type="text" placeholder="输入过滤条件" class="form-control">
+                        </div>
+                    </div>
+                </div>
                 <hr/>
                 <div class="row">
                     <table class="table table-striped table-sm">
@@ -106,4 +119,10 @@
         location.reload();
         console.log("end print ...");
     }
+
+    $(function () {
+        $("table").filterTable({
+            inputSelector: '#input-filter'
+        });
+    });
 </script>

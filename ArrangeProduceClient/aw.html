@@ -253,8 +253,14 @@
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12">
                 <div class="row">
-                    <div class="col-lg-2 col-sm-2 offset-lg-10 offset-sm-10">
-                        <button class="btn btn-warning btn-lg" id="push-aw">推送</button>
+                    <div class="col-lg-8 col-sm-8">
+                        <div class="input-group">
+                            <div class="input-group-prepend"><span class="input-group-text text-white">过滤条件</span></div>
+                            <input id="input-filter"  type="text" placeholder="输入过滤条件" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-4">
+                        <button class="btn btn-warning btn-lg" style="float: right;" id="push-aw">推送</button>
                     </div>
                 </div>
                 <hr/>
@@ -262,16 +268,16 @@
                     <table class="table table-striped table-sm">
                         <thead class="text-center text-white">
                         <tr>
-                            <th>全选<input type="checkbox" id="ck-aw"></th>
-                            <th>#</th>
-                            <th>设备</th>
+                            <th class="sorter-false">全选<input type="checkbox" id="ck-aw"></th>
+                            <th class="sorter-false">#</th>
+                            <th class="sorter-false">设备</th>
                             <th>线规(mm)</th>
                             <th>公差(mm)</th>
-                            <th>重量(kg)</th>
+                            <th class="sorter-false">重量(kg)</th>
                             <th>安排时间</th>
-                            <th>班次</th>
-                            <th>推送状态</th>
-                            <th>操作</th>
+                            <th class="sorter-false">班次</th>
+                            <th class="sorter-false">推送状态</th>
+                            <th class="sorter-false">操作</th>
                         </tr>
                         </thead>
                         <tbody id="aw-arrange-history-area" class="text-center">
@@ -303,6 +309,7 @@
 </section>
 <!-- javascript -->
 <script src="js/function/aw.js"></script>
+<script src="js/jquery.tablesorter.min.js"></script>
 <script type="text/javascript">
 
     $("#sort-annealing").change(function () {
@@ -377,4 +384,13 @@
         });
     }
 
+    $(function () {
+        $("table").tablesorter({
+            sortReset: true
+        });
+
+        $("table").filterTable({ // apply filterTable to all tables on this page
+            inputSelector: '#input-filter' // use the existing input instead of creating a new one
+        });
+    })
 </script>
