@@ -48,7 +48,7 @@ public interface AwArrangeRepository extends JpaRepository<AwArrange, String> {
      * @param pageable     分页信息
      * @return Page<AwArrange>
      */
-    Page<AwArrange> findAllByEnterpriseIdAndPushOrderByCreateTimeDesc(String enterpriseId, String push, Pageable pageable);
+    Page<AwArrange> findAllByEnterpriseIdAndPushOrderByArrangeDateDesc(String enterpriseId, String push, Pageable pageable);
 
     /**
      * 删除一条排产信息

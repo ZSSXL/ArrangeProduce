@@ -76,7 +76,7 @@ public class ArrangeServiceImpl implements ArrangeService {
 
     @Override
     public ServerResponse<Page<Arrange>> getAllArrangeByEnterpriseIdAndPush(String enterpriseId, String push, Pageable pageable) {
-        Page<Arrange> arrangeList = arrangeRepository.findAllByEnterpriseIdAndPushOrderByCreateTimeDesc(enterpriseId, push, pageable);
+        Page<Arrange> arrangeList = arrangeRepository.findAllByEnterpriseIdAndPushOrderByArrangeDateDesc(enterpriseId, push, pageable);
         if (arrangeList == null) {
             return ServerResponse.createByErrorMessage("查询信息失败");
         } else {

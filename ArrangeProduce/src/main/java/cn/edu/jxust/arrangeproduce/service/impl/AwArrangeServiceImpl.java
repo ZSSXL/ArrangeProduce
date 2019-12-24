@@ -57,7 +57,7 @@ public class AwArrangeServiceImpl implements AwArrangeService {
 
     @Override
     public ServerResponse<Page<AwArrange>> getAllAwArrangeByEnterpriseIdAndPush(String enterpriseId, String push, Pageable pageable) {
-        Page<AwArrange> awArrangePage = awArrangeRepository.findAllByEnterpriseIdAndPushOrderByCreateTimeDesc(enterpriseId, push, pageable);
+        Page<AwArrange> awArrangePage = awArrangeRepository.findAllByEnterpriseIdAndPushOrderByArrangeDateDesc(enterpriseId, push, pageable);
         if (awArrangePage == null) {
             return ServerResponse.createByErrorMessage("查询失败");
         } else {
