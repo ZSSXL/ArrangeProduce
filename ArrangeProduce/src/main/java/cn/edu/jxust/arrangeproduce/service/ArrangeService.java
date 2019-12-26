@@ -2,9 +2,7 @@ package cn.edu.jxust.arrangeproduce.service;
 
 import cn.edu.jxust.arrangeproduce.common.ServerResponse;
 import cn.edu.jxust.arrangeproduce.entity.po.Arrange;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
