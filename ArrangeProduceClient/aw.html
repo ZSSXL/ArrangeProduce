@@ -144,8 +144,8 @@
             <div class="col-lg-12">
                 <div class="block-body">
                     <div class="form-group row">
-                        <label class="col-lg-3 col-sm-3 form-control-label">
-                            <h3 class="text-white">退火/绕线</h3>
+                        <label class="col-lg-2 col-sm-2 form-control-label">
+                            <h4 class="text-white">退火/绕线</h4>
                         </label>
                         <div class="col-lg-2 col-sm-3">
                             <div class="i-checks">
@@ -154,7 +154,7 @@
                                 <label for="radioCustom2">退火机</label>
                             </div>
                         </div>
-                        <div class="col-lg-7 col-sm-3">
+                        <div class="col-lg-2 col-sm-3">
                             <div class="i-checks">
                                 <input id="sort-winding" type="radio" value="winding" name="sort"
                                        class="radio-template">
@@ -163,8 +163,8 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-lg-3 col-sm-3 form-control-label">
-                            <h3 class="text-white">机器</h3>
+                        <label class="col-lg-2 col-sm-2 form-control-label">
+                            <h4 class="text-white">机器</h4>
                         </label>
                         <div class="col-lg-7 col-sm-7">
                             <select id="machine-aw" name="machine" class="form-control mb-3 mb-3">
@@ -176,8 +176,8 @@
                     </div>
                     <div class="line"></div>
                     <div class="form-group row">
-                        <label class="col-lg-3 col-sm-3 form-control-label">
-                            <h3 class="text-white">线规(mm)</h3>
+                        <label class="col-lg-2 col-sm-3 form-control-label">
+                            <h4 class="text-white">线规(mm)</h4>
                         </label>
                         <div class="col-lg-7 col-sm-7">
                             <select id="gauge-aw" name="gauge" class="form-control mb-3 mb-3">
@@ -189,36 +189,36 @@
                     </div>
                     <div class="line"></div>
                     <div class="form-group row">
-                        <label class="col-sm-3 form-control-label">
-                            <h3 class="text-white">公差(mm)</h3>
+                        <label class="col-sm-2 form-control-label">
+                            <h4 class="text-white">公差(mm)</h4>
                         </label>
-                        <div class="col-sm-9">
+                        <div class="col-sm-10">
                             <input id="tolerance-aw" type="text" class="form-control" placeholder="例: +0.005">
                             <small class="text-primary">请注意正负符号不要遗漏</small>
                         </div>
                     </div>
                     <div class="line"></div>
                     <div class="form-group row">
-                        <label class="col-sm-3 form-control-label">
-                            <h3 class="text-white">重量(kg)</h3>
+                        <label class="col-sm-2 form-control-label">
+                            <h4 class="text-white">重量(kg)</h4>
                         </label>
-                        <div class="col-sm-9">
+                        <div class="col-sm-10">
                             <input id="weight-aw" type="text" class="form-control" value="">
                         </div>
                     </div>
                     <div class="line"></div>
                     <div class="form-group row">
-                        <label class="col-sm-3 form-control-label">
-                            <h3 class="text-white">生产时间</h3>
+                        <label class="col-sm-2 form-control-label">
+                            <h4 class="text-white">生产时间</h4>
                         </label>
-                        <div class="col-sm-9">
+                        <div class="col-sm-10">
                             <input id="arrange-date-aw" type="date" class="form-control">
                         </div>
                     </div>
                     <div class="line"></div>
                     <div class="form-group row">
-                        <label class="col-lg-3 col-sm-3 form-control-label">
-                            <h3 class="text-white">班次</h3>
+                        <label class="col-lg-2 col-sm-2 form-control-label">
+                            <h4 class="text-white">班次</h4>
                         </label>
                         <div class="col-lg-2 col-sm-3">
                             <div class="i-checks">
@@ -227,7 +227,7 @@
                                 <label for="radioCustom2">早班</label>
                             </div>
                         </div>
-                        <div class="col-lg-7 col-sm-3">
+                        <div class="col-lg-3 col-sm-3">
                             <div class="i-checks">
                                 <input id="radioCustom1" type="radio" value="0" name="shift-aw"
                                        class="radio-template">
@@ -237,7 +237,7 @@
                     </div>
                     <div class="line"></div>
                     <div class="form-group row">
-                        <div class="col-lg-9 col-sm-9 ml-auto">
+                        <div class="col-lg-10 col-sm-10 ml-auto">
                             <button id="save-btn-aw" type="submit" class="btn btn-outline-info">保存</button>
                             <button id="reset-btn-aw" class="btn btn-outline-secondary">重置</button>
                             <button id="print-btn-aw" type="submit" class="btn btn-outline-warning">打印预览</button>
@@ -253,13 +253,13 @@
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12">
                 <div class="row">
-                    <div class="col-lg-8 col-sm-8">
+                    <div class="col-lg-4 col-sm-4">
                         <div class="input-group">
                             <div class="input-group-prepend"><span class="input-group-text text-white">过滤条件</span></div>
-                            <input id="input-filter"  type="text" placeholder="输入过滤条件" class="form-control">
+                            <input id="input-filter-aw"  type="text" placeholder="输入过滤条件" class="form-control">
                         </div>
                     </div>
-                    <div class="col-lg-4 col-sm-4">
+                    <div class="col-lg-8 col-sm-8">
                         <button class="btn btn-warning btn-lg" style="float: right;" id="push-aw">推送</button>
                     </div>
                 </div>
@@ -390,7 +390,7 @@
         });
 
         $("table").filterTable({ // apply filterTable to all tables on this page
-            inputSelector: '#input-filter' // use the existing input instead of creating a new one
+            inputSelector: '#input-filter-aw' // use the existing input instead of creating a new one
         });
     })
 </script>

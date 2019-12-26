@@ -42,6 +42,7 @@
             data: gauge,
             success: function (result) {
                 if (result.status === 0) {
+                    Notiflix.Notify.Success("添加成功");
                     getAllGauge();
                 } else {
                     Notiflix.Notify.Failure(result.msg);

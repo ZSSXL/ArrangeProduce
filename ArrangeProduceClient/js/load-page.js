@@ -22,6 +22,7 @@ $("#load-aw").click(function () {
     $("#load-arrange").removeAttr("class");
     $("#load-setting").removeAttr("class");
     $("#load-employee").removeAttr("class");
+    machineSort = "annealing";
     getAllAwArrange(0, 20);
     getAllMachineAnnealing();
     getAllGaugeSelected("aw");

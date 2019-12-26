@@ -196,7 +196,7 @@ $("#push-aw").click(function () {
             data: JSON.stringify(awArrangeIdList),
             success: function (result) {
                 if (result.status === 0) {
-                    Notiflix.Notify.Success(result.msg);
+                    Notiflix.Notify.Success("推送成功");
                     getAllAwArrange(0, 20);
                     socket.send("push a new aw arrange");
                 } else {
