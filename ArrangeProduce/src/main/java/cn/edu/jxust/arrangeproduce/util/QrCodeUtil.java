@@ -6,8 +6,8 @@ import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
-import com.sun.org.apache.xml.internal.security.utils.Base64;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
@@ -62,7 +62,7 @@ public class QrCodeUtil {
                 /*
                  * 原生转码面前没有 data:image/png;base64 这些字段的，返回给前端无法被解析，可以让前端加，也可以在这里家
                  */
-                resultImage = "data:image/png;base64," + Base64.encode(os.toByteArray());
+                resultImage = "data:image/png;base64," + Base64.encodeBase64String(os.toByteArray());
                 return resultImage;
             } catch (Exception e) {
                 log.error("Create QrCode Error :{}", e.toString());
