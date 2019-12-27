@@ -64,4 +64,12 @@ public interface MachineRepository extends JpaRepository<Machine, String> {
      */
     Optional<Machine> findByMachineNumberAndEnterpriseId(String machineNumber, String enterpriseId);
 
+    /**
+     * 通过名称查询机器
+     *
+     * @param machineName  机器名称
+     * @param enterpriseId 企业Id
+     * @return Optional<Machine>
+     */
+    Optional<Machine> findByMachineNameAndEnterpriseId(String machineName, String enterpriseId);
 }

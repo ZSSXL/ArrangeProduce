@@ -6,6 +6,7 @@ import cn.edu.jxust.arrangeproduce.common.ResponseCode;
 import cn.edu.jxust.arrangeproduce.common.ServerResponse;
 import cn.edu.jxust.arrangeproduce.entity.po.AwArrange;
 import cn.edu.jxust.arrangeproduce.entity.vo.AwArrangeVo;
+import cn.edu.jxust.arrangeproduce.entity.vo.UpdateVo;
 import cn.edu.jxust.arrangeproduce.service.AwArrangeService;
 import cn.edu.jxust.arrangeproduce.service.MachineService;
 import cn.edu.jxust.arrangeproduce.util.DateUtil;
@@ -218,6 +219,48 @@ public class AwArrangeController extends BaseController {
                         } else {
                             return ServerResponse.createBySuccess("打印成功，但是更新排产信息打印状态失败", qrCode);
                         }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * 修改排场信息
+     *
+     * @param token    用户token
+     * @param updateVo 更新实体Vo
+     * @param result   错误结果
+     * @return ServerResponse
+     */
+    @PutMapping("/update")
+    @RequiredPermission
+    public ServerResponse updateArrange(@RequestHeader("token") String token, @RequestBody @Valid UpdateVo updateVo, BindingResult result) {
+        if (result.hasErrors()) {
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.PARAMETER_ERROR.getCode(), ResponseCode.PARAMETER_ERROR.getDesc());
+        } else {
+            String enterpriseId = tokenUtil.getClaim(token, "enterpriseId").asString();
+            AwArrange awArrange = awArrangeService.getAwArrangeById(updateVo.getArrangeId());
+            if (awArrange == null) {
+                return ServerResponse.createByErrorMessage("更新失败，没有查询到相关的排产信息");
+            } else {
+                String machineNumber = machineService.getMachineByName(enterpriseId, updateVo.getMachineName());
+                if (machineNumber == null) {
+                    return ServerResponse.createByErrorMessage("更新失败，没有符合该设备名称的设备号");
+                } else {
+                    awArrange.setArrangeDate(updateVo.getArrangeDate());
+                    awArrange.setGauge(updateVo.getGauge());
+                    awArrange.setMachine(machineNumber);
+                    awArrange.setMachineName(updateVo.getMachineName());
+                    awArrange.setTolerance(updateVo.getTolerance());
+                    awArrange.setShift(updateVo.getShift());
+                    awArrange.setWeight(updateVo.getWeight());
+                    try {
+                        log.info("update aw arrange : {} success", updateVo.getArrangeId());
+                        return awArrangeService.createAwArrange(awArrange);
+                    } catch (Exception e) {
+                        log.error("modify aw arrange : {} has error : {}", updateVo.getArrangeId(), e.getMessage());
+                        return ServerResponse.createByErrorMessage("修改排产信息异常");
                     }
                 }
             }

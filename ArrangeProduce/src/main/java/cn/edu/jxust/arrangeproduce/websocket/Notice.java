@@ -24,7 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 @Component
 @ServerEndpoint("/notice/{userId}")
-public class Notice{
+public class Notice {
 
     public static UserService userService;
 

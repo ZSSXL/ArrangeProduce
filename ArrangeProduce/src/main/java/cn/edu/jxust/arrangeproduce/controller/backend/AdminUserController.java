@@ -15,6 +15,8 @@ import cn.edu.jxust.arrangeproduce.util.UUIDUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -90,6 +92,20 @@ public class AdminUserController {
                 }
             }
         }
+    }
+
+    /**
+     * 分页获取所有的用户信息
+     *
+     * @param page 当前页
+     * @param size 每页大小
+     * @return ServerResponse<Page < User>>
+     */
+    @GetMapping
+    @RequiredPermission("admin")
+    public ServerResponse<Page<User>> getAllUserByPage(@RequestParam(value = "page", defaultValue = Const.DEFAULT_PAGE_NUMBER) Integer page
+            , @RequestParam(value = "size", defaultValue = Const.DEFAULT_PAGE_SIZE) Integer size) {
+        return userService.getAllUserByPage(PageRequest.of(page, size));
     }
 
     /**

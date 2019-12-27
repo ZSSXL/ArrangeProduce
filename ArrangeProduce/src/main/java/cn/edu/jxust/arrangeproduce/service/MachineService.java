@@ -39,6 +39,15 @@ public interface MachineService {
     Boolean existInDb(String enterpriseId, String machineNumber);
 
     /**
+     * 查看该企业机器是否存在重名
+     *
+     * @param enterpriseId 企业Id
+     * @param machineName  机器名称
+     * @return Boolean
+     */
+    Boolean existInDbByName(String enterpriseId, String machineName);
+
+    /**
      * 删除该企业所有的小拉机
      *
      * @param enterpriseId 企业Id
@@ -63,4 +72,12 @@ public interface MachineService {
      */
     String getMachineNameByNumAndEnterpriseId(String number, String enterpriseId);
 
+    /**
+     * 通过机器名称获取该机器的编号
+     *
+     * @param enterpriseId 企业Id
+     * @param machineName  机器名称
+     * @return String
+     */
+    String getMachineByName(String enterpriseId, String machineName);
 }

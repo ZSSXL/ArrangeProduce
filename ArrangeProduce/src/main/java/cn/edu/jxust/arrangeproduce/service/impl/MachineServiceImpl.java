@@ -48,6 +48,11 @@ public class MachineServiceImpl implements MachineService {
     }
 
     @Override
+    public Boolean existInDbByName(String enterpriseId, String machineName) {
+        return machineRepository.findByMachineNameAndEnterpriseId(enterpriseId, machineName).isPresent();
+    }
+
+    @Override
     public Boolean deleteAllMachineByEnterpriseId(String enterpriseId) {
         Integer integer = machineRepository.deleteAllByEnterpriseId(enterpriseId);
         log.info("delete all machine result : {}", integer);
@@ -66,6 +71,16 @@ public class MachineServiceImpl implements MachineService {
         Machine machine = machineRepository.findByMachineNumberAndEnterpriseId(number, enterpriseId).orElse(null);
         if (machine != null) {
             return machine.getMachineName();
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public String getMachineByName(String enterpriseId, String machineName) {
+        Machine machine = machineRepository.findByMachineNameAndEnterpriseId(machineName, enterpriseId).orElse(null);
+        if (machine != null) {
+            return machine.getMachineNumber();
         } else {
             return null;
         }

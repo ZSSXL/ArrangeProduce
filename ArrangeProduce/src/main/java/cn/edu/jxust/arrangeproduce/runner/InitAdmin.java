@@ -2,10 +2,8 @@ package cn.edu.jxust.arrangeproduce.runner;
 
 import cn.edu.jxust.arrangeproduce.entity.po.Account;
 import cn.edu.jxust.arrangeproduce.entity.po.Admin;
-import cn.edu.jxust.arrangeproduce.entity.po.User;
 import cn.edu.jxust.arrangeproduce.service.AccountService;
 import cn.edu.jxust.arrangeproduce.service.AdminService;
-import cn.edu.jxust.arrangeproduce.service.UserService;
 import cn.edu.jxust.arrangeproduce.util.EncryptionUtil;
 import cn.edu.jxust.arrangeproduce.util.UUIDUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -39,7 +37,7 @@ public class InitAdmin implements CommandLineRunner {
     public void run(String... args) throws Exception {
         Boolean exist = adminService.existInDb(ADMIN);
         if (exist) {
-            log.info("初始管理员已经存在");
+            log.info("The initial administrator already exists");
         } else {
             String adminId = UUIDUtil.getId();
             try {

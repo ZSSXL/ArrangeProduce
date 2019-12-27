@@ -52,7 +52,7 @@ public class AwArrangeVo {
      * 安排班次 A为早班，B为晚班
      */
     @NotEmpty
-   private String shift;
+    private String shift;
 
     /**
      * 公差

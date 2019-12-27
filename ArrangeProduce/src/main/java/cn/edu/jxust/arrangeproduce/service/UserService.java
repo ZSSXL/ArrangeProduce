@@ -71,4 +71,12 @@ public interface UserService {
      */
     Boolean updateUserInfo(String phone, String userId);
 
+    /**
+     * 管理员分页获取所有的用户信息
+     *
+     * @param pageable 分页信息
+     * @return ServerResponse<Page < User>>
+     */
+    ServerResponse<Page<User>> getAllUserByPage(Pageable pageable);
+
 }

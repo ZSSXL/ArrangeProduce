@@ -74,4 +74,10 @@ public class UserServiceImpl implements UserService {
         return integer > 0;
     }
 
+    @Override
+    public ServerResponse<Page<User>> getAllUserByPage(Pageable pageable) {
+        Page<User> userPage = userRepository.findAllByRole(Const.Role.ROLE_MANAGER, pageable);
+        return ServerResponse.createBySuccess(userPage);
+    }
+
 }

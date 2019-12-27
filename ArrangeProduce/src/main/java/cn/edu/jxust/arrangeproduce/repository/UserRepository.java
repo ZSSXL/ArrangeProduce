@@ -70,4 +70,13 @@ public interface UserRepository extends JpaRepository<User, String> {
     @Transactional(rollbackFor = Exception.class)
     @Query(value = "update ap_user au set au.phone = ?1 where au.user_id = ?2 ", nativeQuery = true)
     Integer updateInfo(String phone, String userId);
+
+    /**
+     * 管理员分页获取所有主管
+     *
+     * @param role     主管权限
+     * @param pageable 分页信息
+     * @return Page<User>
+     */
+    Page<User> findAllByRole(String role, Pageable pageable);
 }

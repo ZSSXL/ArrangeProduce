@@ -54,8 +54,11 @@ public class MachineController extends BaseController {
         } else {
             String enterpriseId = tokenUtil.getClaim(token, "enterpriseId").asString();
             Boolean exist = machineService.existInDb(enterpriseId, machineVo.getMachineNumber());
+            Boolean existByName = machineService.existInDbByName(enterpriseId, machineVo.getMachineName());
             if (exist) {
                 return ServerResponse.createBySuccessMessage("该机器已存在");
+            } else if (existByName) {
+                return ServerResponse.createByErrorMessage("已存在该机器名称");
             } else {
                 String machineId = UUIDUtil.getId();
                 try {

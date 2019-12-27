@@ -6,6 +6,7 @@ import cn.edu.jxust.arrangeproduce.common.ResponseCode;
 import cn.edu.jxust.arrangeproduce.common.ServerResponse;
 import cn.edu.jxust.arrangeproduce.entity.po.Arrange;
 import cn.edu.jxust.arrangeproduce.entity.vo.ArrangeVo;
+import cn.edu.jxust.arrangeproduce.entity.vo.UpdateVo;
 import cn.edu.jxust.arrangeproduce.service.ArrangeService;
 import cn.edu.jxust.arrangeproduce.service.MachineService;
 import cn.edu.jxust.arrangeproduce.util.DateUtil;
@@ -67,7 +68,6 @@ public class ArrangeController extends BaseController {
                 String username = tokenUtil.getClaim(token, "username").asString();
                 String arrangeId = UUIDUtil.getId();
                 String machineName = machineService.getMachineNameByNumAndEnterpriseId(arrangeVo.getMachine(), enterpriseId);
-                log.info("machineNumber : {}, machineName : {}", arrangeVo.getMachine(), machineName);
                 try {
                     return arrangeService.createArrange(Arrange.builder()
                             .arrangeId(arrangeId)
@@ -221,6 +221,7 @@ public class ArrangeController extends BaseController {
                 } else {
                     String username = tokenUtil.getClaim(token, "username").asString();
                     String arrangeId = UUIDUtil.getId();
+                    String machineName = machineService.getMachineNameByNumAndEnterpriseId(arrangeVo.getMachine(), enterpriseId);
                     try {
                         arrangeService.createArrange(Arrange.builder()
                                 .arrangeId(arrangeId)
@@ -230,6 +231,8 @@ public class ArrangeController extends BaseController {
                                 .shift(arrangeVo.getShift())
                                 .enterpriseId(enterpriseId)
                                 .weight(arrangeVo.getWeight())
+                                .machineName(machineName)
+                                .push(Const.DEFAULT_NO_PUSH)
                                 .tolerance(arrangeVo.getTolerance())
                                 // 更新打印状态为已打印(1)
                                 .status(1)
@@ -283,6 +286,48 @@ public class ArrangeController extends BaseController {
                             return ServerResponse.createBySuccess("打印成功，但是更新排产信息打印状态失败", qrCode);
                         }
 
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * 修改排场信息
+     *
+     * @param token    用户token
+     * @param updateVo 更新实体Vo
+     * @param result   错误结果
+     * @return ServerResponse
+     */
+    @PutMapping("/update")
+    @RequiredPermission
+    public ServerResponse updateArrange(@RequestHeader("token") String token, @RequestBody @Valid UpdateVo updateVo, BindingResult result) {
+        if (result.hasErrors()) {
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.PARAMETER_ERROR.getCode(), ResponseCode.PARAMETER_ERROR.getDesc());
+        } else {
+            String enterpriseId = tokenUtil.getClaim(token, "enterpriseId").asString();
+            Arrange arrange = arrangeService.getArrangeById(updateVo.getArrangeId());
+            if (arrange == null) {
+                return ServerResponse.createByErrorMessage("更新失败，没有查询到相关的排产信息");
+            } else {
+                String machineNumber = machineService.getMachineByName(enterpriseId, updateVo.getMachineName());
+                if (machineNumber == null) {
+                    return ServerResponse.createByErrorMessage("更新失败，没有符合该设备名称的设备号");
+                } else {
+                    arrange.setArrangeDate(updateVo.getArrangeDate());
+                    arrange.setGauge(updateVo.getGauge());
+                    arrange.setMachine(machineNumber);
+                    arrange.setMachineName(updateVo.getMachineName());
+                    arrange.setTolerance(updateVo.getTolerance());
+                    arrange.setShift(updateVo.getShift());
+                    arrange.setWeight(updateVo.getWeight());
+                    try {
+                        log.info("update arrange : {} success", updateVo.getArrangeId());
+                        return arrangeService.createArrange(arrange);
+                    } catch (Exception e) {
+                        log.error("modify arrange : {} has error : {}", updateVo.getArrangeId(), e.getMessage());
+                        return ServerResponse.createByErrorMessage("修改排产信息异常");
                     }
                 }
             }

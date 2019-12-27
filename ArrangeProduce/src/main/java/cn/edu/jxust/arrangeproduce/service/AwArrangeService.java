@@ -81,7 +81,7 @@ public interface AwArrangeService {
     /**
      * 更新打印状态
      *
-     * @param awArrangeId    排产Id
+     * @param awArrangeId  排产Id
      * @param enterpriseId 企业Id
      * @return Boolean
      */
