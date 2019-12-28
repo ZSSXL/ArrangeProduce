@@ -54,7 +54,7 @@
                     <div class="col-lg-4 col-sm-6">
                         <div class="input-group">
                             <div class="input-group-prepend"><span class="input-group-text text-white">过滤条件</span></div>
-                            <input id="input-filter" type="text" placeholder="输入过滤条件" class="form-control">
+                            <input id="input-filter-aw" type="search" placeholder="输入过滤条件" class="form-control">
                         </div>
                     </div>
                 </div>
@@ -109,7 +109,6 @@
     });
 
     function preview() {
-        console.log("start print ...");
         var bdhtml = window.document.body.innerHTML; //获取当前页的html代码
         var startStr = "<!--startprint-->"; //设置打印开始区域
         var endStr = "<!--endprint-->"; //设置打印结束区域
@@ -117,12 +116,11 @@
         window.document.body.innerHTML = bdhtml.substring(bdhtml.indexOf(startStr) + startStr.length, bdhtml.indexOf(endStr)); //需要打印的页面
         window.print();
         location.reload();
-        console.log("end print ...");
     }
 
     $(function () {
         $("table").filterTable({
-            inputSelector: '#input-filter'
+            inputSelector: "#input-filter-aw"
         });
     });
 </script>

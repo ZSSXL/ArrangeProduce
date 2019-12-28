@@ -106,7 +106,6 @@
     });
 
     function preview() {
-        console.log("start print ...");
         var bdhtml = window.document.body.innerHTML; //获取当前页的html代码
         var startStr = "<!--startprint-->"; //设置打印开始区域
         var endStr = "<!--endprint-->"; //设置打印结束区域
@@ -114,12 +113,13 @@
         window.document.body.innerHTML = bdhtml.substring(bdhtml.indexOf(startStr) + startStr.length, bdhtml.indexOf(endStr)); //需要打印的页面
         window.print();
         location.reload();
-        console.log("end print ...");
     }
+
+    $(document).
 
     $(function () {
         $("table").filterTable({
-            inputSelector: '#input-filter'
+            inputSelector: "#input-filter"
         });
     })
 </script>

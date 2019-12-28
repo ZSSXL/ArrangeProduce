@@ -118,17 +118,17 @@ function getAllMachineDraw() {
 function showGaugeToArrange(data) {
     $("#gauge").empty();
     $.each(data, function (index, item) {
-        const option = $("<option></option>").append(item.gauge);
-        option.attr("value", item.gauge);
+        const option = $("<option></option>").append(item.gauge.toFixed(3));
+        option.attr("value", item.gauge.toFixed(3));
         $("#gauge").append(option);
     })
 }
 
 function showGaugeToAw(data) {
-    $("#gauge").empty();
+    $("#gauge-aw").empty();
     $.each(data, function (index, item) {
-        const option = $("<option></option>").append(item.gauge);
-        option.attr("value", item.gauge);
+        const option = $("<option></option>").append(item.gauge.toFixed(3));
+        option.attr("value", item.gauge.toFixed(3));
         $("#gauge-aw").append(option);
     })
 }
@@ -175,8 +175,8 @@ function analyticalArrange(result) {
         $.each(data, function (index, item) {
             let checkboxId = $("<td></td>").append($("<input type='checkbox' name='good'>").attr("value", item.arrangeId));
             let numTd = $("<td scope='row'></td>").append(index + 1);
-            let machineTd = $("<td></td>").append(item.machine);
-            let gaugeTd = $("<td></td>").append(item.gauge);
+            let machineTd = $("<td></td>").append(item.machine).attr("machine-name", item.machineName);
+            let gaugeTd = $("<td></td>").append(parseFloat(item.gauge).toFixed(3));
             let toleranceTd = $("<td></td>").append(item.tolerance);
             let weightTd = $("<td></td>").append(item.weight);
             let arrangeDateTd = $("<td></td>").append(printTimeFormat(item.arrangeDate));
@@ -190,7 +190,7 @@ function analyticalArrange(result) {
             if (item.push === "yes") {
                 pushTd.append("已推送");
             } else {
-                pushTd.append("未推送");
+                pushTd.append("未推送").attr("class", "text-warning");
             }
             let detailBtn = $("<button class='btn btn-outline-info arrange-detail'>详情</button>").attr({
                 "print-status": item.status,
@@ -379,8 +379,8 @@ function analyticalAwArrange(result) {
         $.each(data, function (index, item) {
             let checkboxId = $("<td></td>").append($("<input type='checkbox' name='good-aw'>").attr("value", item.awArrangeId));
             let numTd = $("<td scope='row'></td>").append(index + 1);
-            let machineTd = $("<td></td>").append(item.machine);
-            let gaugeTd = $("<td></td>").append(item.gauge);
+            let machineTd = $("<td></td>").append(item.machine).attr("machine-name", item.machineName);
+            let gaugeTd = $("<td></td>").append(parseFloat(item.gauge).toFixed(3));
             let toleranceTd = $("<td></td>").append(item.tolerance);
             let weightTd = $("<td></td>").append(item.weight);
             let arrangeDateTd = $("<td></td>").append(printTimeFormat(item.arrangeDate));
@@ -394,15 +394,15 @@ function analyticalAwArrange(result) {
             if (item.push === "yes") {
                 pushTd.append("已推送");
             } else {
-                pushTd.append("未推送");
+                pushTd.append("未推送").attr("class", "text-warning");
             }
             let detailBtn = $("<button class='btn btn-outline-info aw-arrange-detail'>详情</button>").attr({
                 "print-status": item.status,
                 "creator": item.creator,
                 "create-time": item.createTime,
-                "arrange-id": item.arrangeId
+                "arrange-id": item.awArrangeId
             });
-            let deleteBtn = $("<button class='btn btn-outline-danger delete-arrange-aw'>删除</button>").attr("aw-arrange-id", item.awArrangeId);
+            let deleteBtn = $("<button class='btn btn-outline-danger delete-arrange-aw'>删除</button>").attr("arrange-id", item.awArrangeId);
             let btnTd = $("<td></td>").append(detailBtn).append(deleteBtn);
             $("<tr></tr>").append(checkboxId)
                 .append(numTd)

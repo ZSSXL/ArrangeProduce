@@ -42,8 +42,14 @@
             data: gauge,
             success: function (result) {
                 if (result.status === 0) {
+                    let arrangeCurrentPage = localStorage.getItem("arrangeCurrentPage");
                     Notiflix.Notify.Success("添加成功");
                     getAllGauge();
+                    if (arrangeCurrentPage === "arrange") {
+                        getAllGaugeSelected("arrange");
+                    } else if (arrangeCurrentPage === "aw") {
+                        getAllGaugeSelected("aw");
+                    }
                 } else {
                     Notiflix.Notify.Failure(result.msg);
                 }
@@ -52,7 +58,6 @@
     });
 
     $(document).on("click", ".delete-gauge", function () {
-        const innerText = $(this).text();
         const gaugeId = $(this).attr("gauge-id");
         $.ajax({
             url: serverUrl + "/gauge/" + gaugeId,
@@ -63,6 +68,7 @@
             },
             success: function (result) {
                 if (result.status === 0) {
+                    Notiflix.Notify.Success("删除成功");
                     getAllGauge();
                 } else {
                     Notiflix.Notify.Failure(result.msg);
