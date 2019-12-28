@@ -28,11 +28,6 @@ function showMachineWinding(data) {
 
 $("#machine-setting-aw").click(function () {
     $("#modal-area-aw").load("/sub/machine.html");
-    if (machineSort === "annealing") {
-        console.log(machineSort);
-    } else if (machineSort === "winding") {
-        console.log(machineSort);
-    }
     getAllMachine(machineSort);
     $("#load-modal-aw").modal("show");
 });
@@ -223,13 +218,13 @@ function getAwArrangeDetail(dom) {
 
     const tr = $(dom).parents("tr");
 
-    let gauge = tr.find("td:eq(2)").text();
-    let tolerance = tr.find("td:eq(3)").text();
-    let shift = tr.find("td:eq(6)").text();
-    let weight = tr.find("td:eq(4)").text();
-    let machine = tr.find("td:eq(1)").text();
-    let arrangeDate = tr.find("td:eq(5)").text();
-    let push = tr.find("td:eq(7)").text();
+    let gauge = tr.find("td:eq(3)").text();
+    let tolerance = tr.find("td:eq(4)").text();
+    let shift = tr.find("td:eq(7)").text();
+    let weight = tr.find("td:eq(5)").text();
+    let machine = tr.find("td:eq(2)").attr("machine-name");
+    let arrangeDate = tr.find("td:eq(6)").text();
+    let push = tr.find("td:eq(8)").text();
 
     let data = {printStatus, creator, createTime, gauge, tolerance, shift, weight, machine, arrangeDate, push};
 
@@ -241,7 +236,8 @@ function getAwArrangeDetail(dom) {
     $("#detail-arrange-time-aw").val(arrangeDate);
     $("#detail-push-aw").val(push);
     $("#detail-creator-aw").val(creator);
-    $("#print-history-aw").attr("aw-arrange-id", arrangeId);
+    $("#print-history").attr("aw-arrange-id", arrangeId);
+    $("#modify-aw").attr("aw-arrange-id", arrangeId);
 
     $("#detail-create-time-aw").val(printTimeFormatComplete(parseInt(createTime)));
     if (printStatus === "0") {
@@ -250,3 +246,89 @@ function getAwArrangeDetail(dom) {
         $("#detail-print-aw").val("已打印");
     }
 }
+
+/**
+ * 从详情中打印
+ */
+$("#print-history").click(function () {
+    let awArrangeId = $(this).attr("aw-arrange-id");
+    let gauge = $("#detail-gauge-aw").val();
+    let tolerance = $("#detail-tolerance-aw").val();
+    let shift = $("#detail-shift-aw").val();
+    let weight = $("#detail-weight-aw").val();
+    let machine = $("#detail-machine-aw").val();
+    let arrangeDate = $("#detail-arrange-time-aw").val();
+    let data = {gauge, tolerance, shift, weight, machine, arrangeDate};
+
+    $.ajax({
+        url: serverUrl + "/aw/" + awArrangeId,
+        contentType: "application/json; charset=utf-8",
+        type: "GET",
+        beforeSend: function (XMLHttpRequest) {
+            XMLHttpRequest.setRequestHeader("token", token);
+        },
+        success: function (result) {
+            console.log(result);
+            if (result.status === 0) {
+                $("#aw-arrange-detail-modal").modal("hide");
+                generateQrCodeByHistory(data, result.data);
+                $("#detail-print-modal").modal("show");
+            } else {
+                Notiflix.Notify.Failure(result.msg);
+            }
+        }
+    });
+});
+
+/**
+ * 生成二维码
+ * @param data 数据
+ * @param qrCode
+ */
+function generateQrCodeByHistory(data, qrCode) {
+    $("#qr-code").attr("src", qrCode);
+    $("#machine-name").text(data.machine);
+    $("#gauge-value").text(data.gauge);
+    $("#tolerance-value").text(data.tolerance);
+    $("#arrange-time").text(data.arrangeDate);
+    $("#weight-value").text(data.weight);
+    $("#shift-value").text(data.shift);
+}
+
+
+// ======================== 修改排产 ======================= //
+
+$("#modify-aw").click(function () {
+    let arrangeId = $(this).attr("aw-arrange-id");
+    let gauge = $("#detail-gauge-aw").val();
+    let tolerance = $("#detail-tolerance-aw").val();
+    let weight = $("#detail-weight-aw").val();
+    let arrangeDate = new Date($("#detail-arrange-time-aw").val()).getTime();
+    let detailShift = $("#detail-shift-aw").val();
+    let shift = "";
+    if (detailShift === "早班") {
+        shift = "1";
+    } else {
+        shift = "0";
+    }
+    let machineName = $("#detail-machine-aw").val();
+    let data = {arrangeId, gauge, tolerance, weight, arrangeDate, shift, machineName};
+    $.ajax({
+        url: serverUrl + "/aw/update",
+        contentType: "application/json; charset=utf-8",
+        type: "PUT",
+        beforeSend: function (XMLHttpRequest) {
+            XMLHttpRequest.setRequestHeader("token", token);
+        },
+        data: JSON.stringify(data),
+        success: function (result) {
+            if (result.status === 0) {
+                Notiflix.Notify.Success("修改成功");
+                getAllAwArrange(0, 20);
+                $("#arrange-detail-modal").modal("hide");
+            } else {
+                Notiflix.Notify.Failure(result.msg);
+            }
+        }
+    });
+});
