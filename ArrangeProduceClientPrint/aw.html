@@ -51,11 +51,19 @@
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12">
                 <div class="row">
-                    <div class="col-lg-4 col-sm-6">
+                    <div class="col-lg-3 col-sm-5">
                         <div class="input-group">
-                            <div class="input-group-prepend"><span class="input-group-text text-white">过滤条件</span></div>
+                            <div class="input-group-prepend"><span class="input-group-text text-white"><i
+                                    class="icon-magnifying-glass-browser"></i></span></div>
                             <input id="input-filter-aw" type="search" placeholder="输入过滤条件" class="form-control">
                         </div>
+                    </div>
+                    <div class="col-lg-9 col-sm-7">
+                        <button class="btn quick-click" style="background:#90c5f0;color:#fff;" tag-id="早班">早班</button>
+                        <button class="btn quick-click" style="background:#8E388E;color:#fff;" tag-id="晚班">晚班</button>
+                        <button class="btn quick-click" style="background:#A2CD5A;color:#fff;" tag-id="已打印">已打印</button>
+                        <button class="btn quick-click" style="background:#FFA500;color:#fff;" tag-id="未打印">未打印</button>
+                        <button class="btn quick-click" style="background:#00C5CD;color:#fff;" tag-id="">重置</button>
                     </div>
                 </div>
                 <hr/>
@@ -119,8 +127,18 @@
     }
 
     $(function () {
-        $("table").filterTable({
-            inputSelector: "#input-filter-aw"
-        });
+        $("#input-filter-aw").keyup(function () {
+            filterTable($(this).val());
+        }).keyup();
     });
+
+    $(".quick-click").click(function () {
+        let tag = $(this).attr("tag-id");
+        filterTable(tag);
+    });
+
+    function filterTable(val) {
+        $("table tbody tr").hide()
+            .filter(":contains('" + (val) + "')").show();//filter和contains共同来实现了这个功能。
+    }
 </script>
