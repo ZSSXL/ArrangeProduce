@@ -198,8 +198,9 @@ function analyticalArrange(result) {
                 "create-time": item.createTime,
                 "arrange-id": item.arrangeId
             });
+            let printBtn = $("<button class='btn btn-outline-light print-arrange-btn'>打印</button>").attr("arrange-id", item.arrangeId);
             let deleteBtn = $("<button class='btn btn-outline-danger delete-arrange'>删除</button>").attr("arrange-id", item.arrangeId);
-            let btnTd = $("<td></td>").append(detailBtn).append(deleteBtn);
+            let btnTd = $("<td></td>").append(printBtn).append(detailBtn).append(deleteBtn);
             $("<tr></tr>").append(checkboxId)
                 .append(numTd)
                 .append(machineTd)
@@ -402,8 +403,9 @@ function analyticalAwArrange(result) {
                 "create-time": item.createTime,
                 "arrange-id": item.awArrangeId
             });
+            let printBtn = $("<button class='btn btn-outline-light print-arrange-aw-btn'>打印</button>").attr("arrange-id", item.awArrangeId);
             let deleteBtn = $("<button class='btn btn-outline-danger delete-arrange-aw'>删除</button>").attr("arrange-id", item.awArrangeId);
-            let btnTd = $("<td></td>").append(detailBtn).append(deleteBtn);
+            let btnTd = $("<td></td>").append(printBtn).append(detailBtn).append(deleteBtn);
             $("<tr></tr>").append(checkboxId)
                 .append(numTd)
                 .append(machineTd)

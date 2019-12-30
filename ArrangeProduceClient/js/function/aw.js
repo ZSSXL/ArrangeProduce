@@ -47,7 +47,6 @@ $(document).on("click", ".delete-machine", function () {
                     if (machineSort === "draw") {
                         getAllDraw();
                     } else {
-                        console.log(machineSort);
                         getAllMachine(machineSort);
                     }
                     Notiflix.Notify.Success(result.msg);
@@ -271,6 +270,35 @@ $("#print-history").click(function () {
             console.log(result);
             if (result.status === 0) {
                 $("#aw-arrange-detail-modal").modal("hide");
+                generateQrCodeByHistory(data, result.data);
+                $("#detail-print-modal").modal("show");
+            } else {
+                Notiflix.Notify.Failure(result.msg);
+            }
+        }
+    });
+});
+
+$(document).on("click", ".print-arrange-aw-btn", function () {
+    let awArrangeId = $(this).attr("arrange-id");
+    console.log(awArrangeId);
+    const tr = $(this).parents("tr");
+    let gauge = tr.find("td:eq(3)").text();
+    let tolerance = tr.find("td:eq(4)").text();
+    let shift = tr.find("td:eq(7)").text();
+    let weight = tr.find("td:eq(5)").text();
+    let machine = tr.find("td:eq(2)").attr("machine-name");
+    let arrangeDate = tr.find("td:eq(6)").text();
+    let data = {gauge, tolerance, shift, weight, machine, arrangeDate};
+    $.ajax({
+        url: serverUrl + "/aw/" + awArrangeId,
+        contentType: "application/json; charset=utf-8",
+        type: "GET",
+        beforeSend: function (XMLHttpRequest) {
+            XMLHttpRequest.setRequestHeader("token", token);
+        },
+        success: function (result) {
+            if (result.status === 0) {
                 generateQrCodeByHistory(data, result.data);
                 $("#detail-print-modal").modal("show");
             } else {

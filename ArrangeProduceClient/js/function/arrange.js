@@ -153,6 +153,32 @@ $(document).on("click", ".delete-arrange", function () {
     });
 });
 
+$(document).on("click", ".delete-machine", function () {
+    const machineId = $(this).attr("machine-id");
+    Notiflix.Confirm.Show("警告", "是否确认删除", "确定", "取消", function () {
+        $.ajax({
+            url: serverUrl + "/machine/" + machineId,
+            contentType: "application/json; charset=utf-8",
+            type: "DELETE",
+            beforeSend: function (XMLHttpRequest) {
+                XMLHttpRequest.setRequestHeader("token", token);
+            },
+            success: function (result) {
+                if (result.status === 0) {
+                    if (machineSort === "draw") {
+                        getAllDraw();
+                    } else {
+                        getAllMachine(machineSort);
+                    }
+                    Notiflix.Notify.Success(result.msg);
+                } else {
+                    Notiflix.Notify.Failure(result.msg);
+                }
+            }
+        });
+    });
+});
+
 /**
  * 推送
  */
@@ -276,9 +302,41 @@ $("#print-history").click(function () {
             XMLHttpRequest.setRequestHeader("token", token);
         },
         success: function (result) {
-            console.log(result);
             if (result.status === 0) {
                 $("#arrange-detail-modal").modal("hide");
+                generateQrCodeByHistory(data, result.data);
+                $("#detail-print-modal").modal("show");
+            } else {
+                Notiflix.Notify.Failure(result.msg);
+            }
+        }
+    });
+});
+
+/**
+ * 从列表中打印
+ */
+$(document).on("click", ".print-arrange-btn", function () {
+
+    const tr = $(this).parents("tr");
+
+    let arrangeId = $(this).attr("arrange-id");
+    let gauge = tr.find("td:eq(3)").text();
+    let tolerance = tr.find("td:eq(4)").text();
+    let shift = tr.find("td:eq(7)").text();
+    let weight = tr.find("td:eq(5)").text();
+    let machine = tr.find("td:eq(2)").attr("machine-name");
+    let arrangeDate = tr.find("td:eq(6)").text();
+    let data = {gauge, tolerance, shift, weight, machine, arrangeDate};
+    $.ajax({
+        url: serverUrl + "/arrange/" + arrangeId,
+        contentType: "application/json; charset=utf-8",
+        type: "GET",
+        beforeSend: function (XMLHttpRequest) {
+            XMLHttpRequest.setRequestHeader("token", token);
+        },
+        success: function (result) {
+            if (result.status === 0) {
                 generateQrCodeByHistory(data, result.data);
                 $("#detail-print-modal").modal("show");
             } else {
