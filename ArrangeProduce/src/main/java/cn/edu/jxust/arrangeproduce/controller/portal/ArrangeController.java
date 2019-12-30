@@ -82,6 +82,10 @@ public class ArrangeController extends BaseController {
                             .status(0)
                             .push(Const.DEFAULT_NO_PUSH)
                             .creator(username)
+                            .negativeTolerance(arrangeVo.getNegativeTolerance())
+                            .positiveTolerance(arrangeVo.getPositiveTolerance())
+                            .inletDiameter(arrangeVo.getInletDiameter())
+                            .rawMaterials(arrangeVo.getRawMaterials())
                             .build());
                 } catch (Exception e) {
                     log.error("create arrange error {}", e.getMessage());
@@ -237,6 +241,10 @@ public class ArrangeController extends BaseController {
                                 // 更新打印状态为已打印(1)
                                 .status(1)
                                 .creator(username)
+                                .rawMaterials(arrangeVo.getRawMaterials())
+                                .inletDiameter(arrangeVo.getInletDiameter())
+                                .positiveTolerance(arrangeVo.getPositiveTolerance())
+                                .negativeTolerance(arrangeVo.getNegativeTolerance())
                                 .build());
                     } catch (Exception e) {
                         log.error("create arrange error {}", e.getClass());

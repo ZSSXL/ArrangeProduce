@@ -72,16 +72,40 @@ public class Arrange implements Serializable {
     private String weight;
 
     /**
-     * 公差
+     * 公差 todo 后期删掉这个字段，目前保留
      */
-    @Column(columnDefinition = "varchar(10) default '0' comment '公差'")
+    @Column(columnDefinition = "varchar(10) default '0.000' comment '公差'")
     private String tolerance;
+
+    /**
+     * 负公差
+     */
+    @Column(columnDefinition = "varchar(10) default '0.000' comment '负公差'")
+    private String negativeTolerance;
+
+    /**
+     * 正公差
+     */
+    @Column(columnDefinition = "varchar(10) default '0.000' comment '正公差'")
+    private String positiveTolerance;
+
+    /**
+     * 进口线径
+     */
+    @Column(columnDefinition = "varchar(10) default '0.000' comment '进口线径'")
+    private String inletDiameter;
 
     /**
      * 所属企业
      */
     @Column(nullable = false, columnDefinition = "varchar(255) comment '所属企业'")
     private String enterpriseId;
+
+    /**
+     * 原材料
+     */
+    @Column(columnDefinition = "varchar(100) comment '原材料'")
+    private String rawMaterials;
 
     /**
      * 二维码打印状态

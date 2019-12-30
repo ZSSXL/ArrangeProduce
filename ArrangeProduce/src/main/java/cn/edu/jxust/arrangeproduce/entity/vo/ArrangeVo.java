@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -54,5 +55,29 @@ public class ArrangeVo {
      */
     @NotEmpty
     private String tolerance;
+
+    /**
+     * 负公差
+     */
+    @NotEmpty
+    private String negativeTolerance;
+
+    /**
+     * 正公差
+     */
+    @NotEmpty
+    private String positiveTolerance;
+
+    /**
+     * 进口线径
+     */
+    @NotEmpty
+    private String inletDiameter;
+
+    /**
+     * 原材料
+     */
+    @NotEmpty
+    private String rawMaterials;
 
 }
