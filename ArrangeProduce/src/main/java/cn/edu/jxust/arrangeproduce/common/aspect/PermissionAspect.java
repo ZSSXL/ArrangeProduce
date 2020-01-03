@@ -54,7 +54,7 @@ public class PermissionAspect {
                     return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(), "权限错误");
                 }
             } else {
-                return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "请先登录");
+                return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "Token已过期，请重新登录");
             }
         } else {
             log.error("权限校验拦截失败");

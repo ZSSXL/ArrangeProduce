@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -49,12 +48,6 @@ public class ArrangeVo {
      */
     @NotEmpty
     private String shift;
-
-    /**
-     * 公差
-     */
-    @NotEmpty
-    private String tolerance;
 
     /**
      * 负公差

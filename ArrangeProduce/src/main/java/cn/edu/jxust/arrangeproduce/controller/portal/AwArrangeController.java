@@ -69,7 +69,12 @@ public class AwArrangeController extends BaseController {
                 String awArrangeId = UUIDUtil.getId();
                 String username = tokenUtil.getClaim(token, "username").asString();
                 String machineName = machineService.getMachineNameByNumAndEnterpriseId(awArrangeVo.getMachine(), enterpriseId);
-                log.info("machineNumber : {} , machineName : {}", awArrangeVo.getMachine(), machineName);
+                if (StringUtils.isEmpty(awArrangeVo.getNegativeTolerance())) {
+                    awArrangeVo.setNegativeTolerance("0.000");
+                }
+                if (StringUtils.isEmpty(awArrangeVo.getPositiveTolerance())) {
+                    awArrangeVo.setPositiveTolerance("0.000");
+                }
                 try {
                     return awArrangeService.createAwArrange(AwArrange.builder()
                             .awArrangeId(awArrangeId)
@@ -83,8 +88,12 @@ public class AwArrangeController extends BaseController {
                             .status(0)
                             .sort(awArrangeVo.getSort())
                             .push(Const.DEFAULT_NO_PUSH)
-                            .tolerance(awArrangeVo.getTolerance())
                             .creator(username)
+                            .negativeTolerance(awArrangeVo.getNegativeTolerance())
+                            .positiveTolerance(awArrangeVo.getPositiveTolerance())
+                            .inletDiameter(awArrangeVo.getInletDiameter())
+                            .rawMaterials(awArrangeVo.getRawMaterials())
+                            .groupNumber(awArrangeVo.getGroup())
                             .build());
                 } catch (Exception e) {
                     log.error("create awArrange error {}", e.getMessage());
@@ -238,6 +247,8 @@ public class AwArrangeController extends BaseController {
     public ServerResponse updateArrange(@RequestHeader("token") String token, @RequestBody @Valid UpdateVo updateVo, BindingResult result) {
         if (result.hasErrors()) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.PARAMETER_ERROR.getCode(), ResponseCode.PARAMETER_ERROR.getDesc());
+        } else if (StringUtils.isEmpty(updateVo.getGroupNumber())) {
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.PARAMETER_ERROR.getCode(), ResponseCode.PARAMETER_ERROR.getDesc());
         } else {
             String enterpriseId = tokenUtil.getClaim(token, "enterpriseId").asString();
             AwArrange awArrange = awArrangeService.getAwArrangeById(updateVo.getArrangeId());
@@ -248,18 +259,22 @@ public class AwArrangeController extends BaseController {
                 if (machineNumber == null) {
                     return ServerResponse.createByErrorMessage("更新失败，没有符合该设备名称的设备号");
                 } else {
-                    awArrange.setArrangeDate(updateVo.getArrangeDate());
                     awArrange.setGauge(updateVo.getGauge());
                     awArrange.setMachine(machineNumber);
                     awArrange.setMachineName(updateVo.getMachineName());
-                    awArrange.setTolerance(updateVo.getTolerance());
+                    awArrange.setPositiveTolerance(updateVo.getPositiveTolerance());
+                    awArrange.setNegativeTolerance(updateVo.getNegativeTolerance());
+                    awArrange.setInletDiameter(updateVo.getInletDiameter());
+                    awArrange.setArrangeDate(updateVo.getArrangeDate());
                     awArrange.setShift(updateVo.getShift());
                     awArrange.setWeight(updateVo.getWeight());
+                    awArrange.setRawMaterials(updateVo.getRawMaterials());
+                    awArrange.setGroupNumber(updateVo.getGroupNumber());
                     try {
-                        log.info("update aw arrange : {} success", updateVo.getArrangeId());
+                        log.info("update aw arrange : [{}] success", updateVo.getArrangeId());
                         return awArrangeService.createAwArrange(awArrange);
                     } catch (Exception e) {
-                        log.error("modify aw arrange : {} has error : {}", updateVo.getArrangeId(), e.getMessage());
+                        log.error("update aw arrange : [{}] has error : {}", updateVo.getArrangeId(), e.getMessage());
                         return ServerResponse.createByErrorMessage("修改排产信息异常");
                     }
                 }
@@ -281,8 +296,10 @@ public class AwArrangeController extends BaseController {
         qrMessage.append(awArrange.getMachine()).append("*");
         // 线规
         qrMessage.append(awArrange.getGauge()).append("*");
-        // 公差
-        qrMessage.append(awArrange.getTolerance()).append("*");
+        // 正公差
+        qrMessage.append(awArrange.getPositiveTolerance()).append("*");
+        // 负公差
+        qrMessage.append(awArrange.getNegativeTolerance()).append("*");
         // 任务生产时间
         qrMessage.append(DateUtil.timestampToDate(awArrange.getArrangeDate())).append("*");
         // 早晚班： 1是早班， 0是晚班
