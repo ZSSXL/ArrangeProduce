@@ -45,6 +45,8 @@ function getAllArrange(page, size) {
                 analyticalArrange(result);
                 build_page_info(result);
                 build_page_li(result);
+            } else if (result.status === 10) {
+                window.location.href = "/login.html";
             } else {
                 Notiflix.Notify.Failure(result.msg);
             }
@@ -61,19 +63,25 @@ function analyticalArrange(result) {
         $("#no-message").css("display", "none");
         $("#nav-message").css("display", "inline-block");
         $.each(data, function (index, item) {
-            let numTd = $("<th scope='row'></th>").append(index + 1);
+            let numTd = $("<td scope='row'></td>").append(index + 1);
             let machineTd = $("<td></td>").append(item.machineName).attr("machine-number", item.machine);
             let gaugeTd = $("<td></td>").append(item.gauge);
-            let toleranceTd = $("<td></td>").append(item.tolerance);
+            let inletDiameter = $("<td></td>").append(item.inletDiameter);
+            let positiveTolerance = $("<td></td>").append(item.positiveTolerance);
+            let negativeTolerance = $("<td></td>").append(item.negativeTolerance);
             let weightTd = $("<td></td>").append(item.weight);
             let arrangeDateTd = $("<td></td>").append(printTimeFormat(item.arrangeDate));
             let shiftTd = $("<td></td>");
             if (item.shift === "1") {
-                shiftTd.append("早班");
+                shiftTd.append("A班");
             } else {
-                shiftTd.append("晚班");
+                shiftTd.append("B班");
             }
-            let detailBtn = $("<button>打印</button>").attr("arrange-id", item.arrangeId);
+            let detailBtn = $("<button>打印</button>").attr({
+                "arrange-id": item.arrangeId,
+                "creator": item.creator,
+                "raw-materials": item.rawMaterials
+            });
             let printStatusTd = $("<td></td>");
             if (item.status === 1) {
                 printStatusTd.append("已打印");
@@ -86,7 +94,9 @@ function analyticalArrange(result) {
             $("<tr></tr>").append(numTd)
                 .append(machineTd)
                 .append(gaugeTd)
-                .append(toleranceTd)
+                .append(inletDiameter)
+                .append(positiveTolerance)
+                .append(negativeTolerance)
                 .append(weightTd)
                 .append(arrangeDateTd)
                 .append(printStatusTd)
@@ -214,6 +224,8 @@ function getAllAwArrange(page, size) {
                 analyticalAwArrange(result);
                 build_page_info_aw(result);
                 build_page_li_aw(result);
+            } else if (result.status === 10) {
+                window.location.href = "/login.html";
             } else {
                 Notiflix.Notify.Failure(result.msg);
             }
@@ -230,32 +242,41 @@ function analyticalAwArrange(result) {
         $("#no-message-aw").css("display", "none");
         $("#nav-message-aw").css("display", "inline-block");
         $.each(data, function (index, item) {
-            let numTd = $("<th scope='row'></th>").append(index + 1);
+            let numTd = $("<td scope='row'></td>").append(index + 1);
             let machineTd = $("<td></td>").append(item.machineName).attr("machine-number", item.machine);
             let gaugeTd = $("<td></td>").append(item.gauge);
-            let toleranceTd = $("<td></td>").append(item.tolerance);
+            let inletDiameter = $("<td></td>").append(item.inletDiameter);
+            let positiveTolerance = $("<td></td>").append(item.positiveTolerance);
+            let negativeTolerance = $("<td></td>").append(item.positiveTolerance);
             let weightTd = $("<td></td>").append(item.weight);
             let arrangeDateTd = $("<td></td>").append(printTimeFormat(item.arrangeDate));
             let shiftTd = $("<td></td>");
             if (item.shift === "1") {
-                shiftTd.append("早班");
+                shiftTd.append("A班");
             } else {
-                shiftTd.append("晚班");
+                shiftTd.append("B班");
             }
-            let detailBtn = $("<button>打印</button>").attr("aw-arrange-id", item.awArrangeId);
+            let printBtn = $("<button>打印</button>").attr({
+                "aw-arrange-id": item.awArrangeId,
+                "creator": item.creator,
+                "group-number": item.groupNumber,
+                "raw-materials": item.rawMaterials
+            });
             let printStatusTd = $("<td></td>");
             if (item.status === 1) {
                 printStatusTd.append("已打印");
-                detailBtn.attr("class", "btn btn-lg btn-outline-info aw-arrange-print");
+                printBtn.attr("class", "btn btn-lg btn-outline-info aw-arrange-print");
             } else if (item.status === 0) {
                 printStatusTd.append("未打印");
-                detailBtn.attr("class", "btn btn-lg btn-outline-warning aw-arrange-print");
+                printBtn.attr("class", "btn btn-lg btn-outline-warning aw-arrange-print");
             }
-            let btnTd = $("<td></td>").append(detailBtn);
+            let btnTd = $("<td></td>").append(printBtn);
             $("<tr></tr>").append(numTd)
                 .append(machineTd)
                 .append(gaugeTd)
-                .append(toleranceTd)
+                .append(inletDiameter)
+                .append(positiveTolerance)
+                .append(negativeTolerance)
                 .append(weightTd)
                 .append(arrangeDateTd)
                 .append(printStatusTd)

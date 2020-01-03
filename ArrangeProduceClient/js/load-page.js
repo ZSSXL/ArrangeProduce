@@ -26,6 +26,7 @@ $("#load-aw").click(function () {
     getAllAwArrange(0, 20);
     getAllMachineAnnealing();
     getAllGaugeSelected("aw");
+    getAllGroup();
 });
 
 $("#load-setting").click(function () {
@@ -68,6 +69,7 @@ function currentPage() {
             getAllAwArrange(0, 20);
             getAllMachineAnnealing();
             getAllGaugeSelected("aw");
+            getAllGroup();
         } else if (arrangeCurrentPage === "employee") {
             getAllEmployee(0, 20);
         }
@@ -90,6 +92,8 @@ function getAllGaugeSelected(choice) {
                 } else if (choice === "aw") {
                     showGaugeToAw(result.data);
                 }
+            } else if (result.status === 10) {
+                window.location.href = "/login.html";
             } else {
                 Notiflix.Notify.Failure(result.msg);
             }
@@ -108,6 +112,8 @@ function getAllMachineDraw() {
         success: function (result) {
             if (result.status === 0) {
                 showDraw(result.data);
+            } else if (result.status === 10) {
+                window.location.href = "/login.html";
             } else {
                 Notiflix.Notify.Failure(result.msg);
             }
@@ -157,6 +163,8 @@ function getAllArrange(page, size) {
                 analyticalArrange(result);
                 build_page_info(result);
                 build_page_li(result);
+            } else if (result.status === 10) {
+                window.location.href = "/login.html";
             } else {
                 Notiflix.Notify.Failure(result.msg);
             }
@@ -177,14 +185,15 @@ function analyticalArrange(result) {
             let numTd = $("<td scope='row'></td>").append(index + 1);
             let machineTd = $("<td></td>").append(item.machine).attr("machine-name", item.machineName);
             let gaugeTd = $("<td></td>").append(parseFloat(item.gauge).toFixed(3));
-            let toleranceTd = $("<td></td>").append(item.tolerance);
-            let weightTd = $("<td></td>").append(item.weight);
+            let inletDiameter = $("<td></td>").append(parseFloat(item.inletDiameter).toFixed(3));
+            let positiveToleranceTd = $("<td></td>").append(parseFloat(item.positiveTolerance).toFixed(3));
+            let negativeToleranceTd = $("<td></td>").append(parseFloat(item.negativeTolerance).toFixed(3));
             let arrangeDateTd = $("<td></td>").append(printTimeFormat(item.arrangeDate));
             let shiftTd = $("<td></td>");
             if (item.shift === "1") {
-                shiftTd.append("早班");
+                shiftTd.append("A班");
             } else {
-                shiftTd.append("晚班");
+                shiftTd.append("B班");
             }
             let pushTd = $("<td></td>");
             if (item.push === "yes") {
@@ -196,7 +205,9 @@ function analyticalArrange(result) {
                 "print-status": item.status,
                 "creator": item.creator,
                 "create-time": item.createTime,
-                "arrange-id": item.arrangeId
+                "arrange-id": item.arrangeId,
+                "weight": item.weight,
+                "raw-materials": item.rawMaterials
             });
             let printBtn = $("<button class='btn btn-outline-light print-arrange-btn'>打印</button>").attr("arrange-id", item.arrangeId);
             let deleteBtn = $("<button class='btn btn-outline-danger delete-arrange'>删除</button>").attr("arrange-id", item.arrangeId);
@@ -205,8 +216,9 @@ function analyticalArrange(result) {
                 .append(numTd)
                 .append(machineTd)
                 .append(gaugeTd)
-                .append(toleranceTd)
-                .append(weightTd)
+                .append(inletDiameter)
+                .append(positiveToleranceTd)
+                .append(negativeToleranceTd)
                 .append(arrangeDateTd)
                 .append(shiftTd)
                 .append(pushTd)
@@ -314,7 +326,6 @@ $(document).on("click", ".page-jump", function () {
     getAllArrange(page - 1, 20);
 });
 
-
 // ---------------------- aw ------------------------ //
 
 function getAllMachineAnnealing() {
@@ -328,6 +339,8 @@ function getAllMachineAnnealing() {
         success: function (result) {
             if (result.status === 0) {
                 showMachineToAw(result.data);
+            } else if (result.status === 10) {
+                window.location.href = "/login.html";
             } else {
                 Notiflix.Notify.Failure(result.msg);
             }
@@ -342,7 +355,6 @@ function showMachineToAw(data) {
         $("#machine-aw").append(option);
     })
 }
-
 
 // ========================== 获取所有退火/绕线机数据 ============================ //
 
@@ -362,6 +374,8 @@ function getAllAwArrange(page, size) {
                 analyticalAwArrange(result);
                 build_page_info_aw(result);
                 build_page_li_aw(result);
+            } else if (result.status === 10) {
+                window.location.href = "/login.html";
             } else {
                 Notiflix.Notify.Failure(result.msg);
             }
@@ -382,14 +396,15 @@ function analyticalAwArrange(result) {
             let numTd = $("<td scope='row'></td>").append(index + 1);
             let machineTd = $("<td></td>").append(item.machine).attr("machine-name", item.machineName);
             let gaugeTd = $("<td></td>").append(parseFloat(item.gauge).toFixed(3));
-            let toleranceTd = $("<td></td>").append(item.tolerance);
-            let weightTd = $("<td></td>").append(item.weight);
+            let inletDiameter = $("<td></td>").append(parseFloat(item.inletDiameter).toFixed(3));
+            let positiveToleranceTd = $("<td></td>").append(parseFloat(item.positiveTolerance).toFixed(3));
+            let negativeToleranceTd = $("<td></td>").append(parseFloat(item.negativeTolerance).toFixed(3));
             let arrangeDateTd = $("<td></td>").append(printTimeFormat(item.arrangeDate));
             let shiftTd = $("<td></td>");
             if (item.shift === "1") {
-                shiftTd.append("早班");
+                shiftTd.append("A班");
             } else {
-                shiftTd.append("晚班");
+                shiftTd.append("B班");
             }
             let pushTd = $("<td></td>");
             if (item.push === "yes") {
@@ -401,17 +416,21 @@ function analyticalAwArrange(result) {
                 "print-status": item.status,
                 "creator": item.creator,
                 "create-time": item.createTime,
-                "arrange-id": item.awArrangeId
+                "arrange-id": item.awArrangeId,
+                "weight": item.weight,
+                "raw-materials": item.rawMaterials,
+                "group-number": item.groupNumber
             });
             let printBtn = $("<button class='btn btn-outline-light print-arrange-aw-btn'>打印</button>").attr("arrange-id", item.awArrangeId);
-            let deleteBtn = $("<button class='btn btn-outline-danger delete-arrange-aw'>删除</button>").attr("arrange-id", item.awArrangeId);
+            let deleteBtn = $("<button class='btn btn-outline-danger delete-arrange-aw'>删除</button>").attr("aw-arrange-id", item.awArrangeId);
             let btnTd = $("<td></td>").append(printBtn).append(detailBtn).append(deleteBtn);
             $("<tr></tr>").append(checkboxId)
                 .append(numTd)
                 .append(machineTd)
                 .append(gaugeTd)
-                .append(toleranceTd)
-                .append(weightTd)
+                .append(inletDiameter)
+                .append(positiveToleranceTd)
+                .append(negativeToleranceTd)
                 .append(arrangeDateTd)
                 .append(shiftTd)
                 .append(pushTd)
@@ -534,6 +553,8 @@ function getAllEmployee(page, size) {
                 analyticalUser(result);
                 build_page_info_user(result);
                 build_page_li_user(result);
+            } else if (result.status === 10) {
+                window.location.href = "/login.html";
             } else {
                 Notiflix.Notify.Failure(result.msg);
             }
@@ -659,4 +680,36 @@ function build_page_li_user(result) {
     }
 
     ul.append(nextPageLi).append(lastPageLi).appendTo("#page-ul-user");
+}
+
+// ========================= 非组 ========================== //
+
+function getAllGroup() {
+    $.ajax({
+        url: serverUrl + "/group",
+        beforeSend: function (XMLHttpRequest) {
+            XMLHttpRequest.setRequestHeader("token", token);
+        },
+        type: "GET",
+        success: function (result) {
+            if (result.status === 0) {
+                showAllGroup(result.data);
+            } else if (result.status === 10) {
+                window.location.href = "/login.html";
+            } else {
+                Notiflix.Notify.Failure(result.msg);
+            }
+        }
+    });
+}
+
+function showAllGroup(data) {
+    $("#group").empty();
+    $.each(data, function (index, item) {
+        if (index === 0) {
+            $("#group-detail").text(item.groupNumber);
+        }
+        const option = $("<option></option>").append(item.groupName + " [ " + item.groupNumber + " ]").attr("value", item.groupNumber);
+        $("#group").append(option);
+    })
 }

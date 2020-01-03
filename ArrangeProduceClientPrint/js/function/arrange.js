@@ -25,17 +25,26 @@ function getArrangeQrCode(arrangeId) {
 
 function getData(dom) {
     const tr = $(dom).parents("tr");
-    let machine = tr.find("td:eq(0)").text();
-    let gauge = tr.find("td:eq(1)").text();
-    let tolerance = tr.find("td:eq(2)").text();
-    let weight = tr.find("td:eq(3)").text();
-    let arrangeTime = tr.find("td:eq(4)").text();
-    let shift = tr.find("td:eq(6)").text();
+    let rawMaterials = $(dom).attr("raw-materials");
+    let creator = $(dom).attr("creator");
+
+    let machine = tr.find("td:eq(1)").text();
+    let gauge = tr.find("td:eq(2)").text();
+    let inletDiameter = tr.find("td:eq(3)").text();
+    let positiveTolerance = tr.find("td:eq(4)").text();
+    let negativeTolerance = tr.find("td:eq(5)").text();
+    let weight = tr.find("td:eq(6)").text();
+    let arrangeTime = tr.find("td:eq(7)").text();
+    let shift = tr.find("td:eq(9)").text();
 
     $("#machine-name").text(machine);
     $("#gauge-value").text(gauge);
-    $("#tolerance-value").text(tolerance);
-    $("#weight-value").text(weight);
+    $("#inlet-diameters-value").text(inletDiameter);
+    $("#positive-tolerance-value").text(positiveTolerance);
+    $("#negative-tolerance-value").text(negativeTolerance);
     $("#arrange-time").text(arrangeTime);
     $("#shift-value").text(shift);
+    $("#raw-materials-value").text(rawMaterials);
+    $("#creator-value").text(creator);
+
 }

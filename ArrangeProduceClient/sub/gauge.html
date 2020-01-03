@@ -70,6 +70,7 @@
                 if (result.status === 0) {
                     Notiflix.Notify.Success("删除成功");
                     getAllGauge();
+                    getAllGaugeSelected();
                 } else {
                     Notiflix.Notify.Failure(result.msg);
                 }

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>任务接收端</title>
+    <title>工单打印系统</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="all,follow">
@@ -73,7 +73,7 @@
         <span class="heading">Main</span>
         <ul class="list-unstyled">
             <li id="load-arrange"><a href="#"> <i class="icon-contract"></i>小拉机排产</a></li>
-            <li id="load-aw"><a href="#"> <i class="icon-windows"></i>退火机/绕线机排产</a></li>
+            <li id="load-aw"><a href="#"> <i class="icon-windows"></i>退火机排产</a></li>
         </ul>
     </nav>
     <!-- Sidebar Navigation end-->
@@ -84,7 +84,7 @@
         <div class="footer__block block no-margin-bottom">
             <div class="container-fluid text-center">
                 <p class="no-margin-bottom">Copyright &copy; 2019
-                    <a href="http://www.asc.jx.cn/" target="_blank" title="江西理工大学应用科学学院">江西理工大学应用科学学院</a>
+                    <a href="#" target="_blank" title="江西先进铜产业研究院">江西先进铜产业研究院</a>
                 </p>
             </div>
         </div>
@@ -137,8 +137,6 @@
             success: function (result) {
                 if (result.status === 0) {
                     readNotice(result.data);
-                } else {
-                    Notiflix.Notify.Success("没有未读消息");
                 }
             }
         });

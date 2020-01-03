@@ -39,12 +39,26 @@ function getDate() {
     }
     let gauge = $("#gauge option:selected").val();
     let machine = $("#machine option:selected").val();
-    let tolerance = $("#tolerance").val();
     let weight = $('#weight').val();
     let arrangeDate = new Date($('#arrange-date').val()).getTime();
     let shift = $("input[name='shift']:checked").val();
 
-    return {gauge, machine, tolerance, weight, arrangeDate, shift};
+    let negativeTolerance = $("#negative-tolerance").val();
+    let positiveTolerance = $("#positive-tolerance").val();
+    let rawMaterials = $("#raw-materials").val();
+    let inletDiameter = $('#inlet-diameter').val();
+
+    return {
+        gauge,
+        machine,
+        weight,
+        arrangeDate,
+        shift,
+        negativeTolerance,
+        positiveTolerance,
+        rawMaterials,
+        inletDiameter
+    };
 }
 
 /**
@@ -61,6 +75,7 @@ function saveArrange(data) {
         },
         data: JSON.stringify(data),
         success: function (result) {
+            console.log(result);
             if (result.status === 0) {
                 getAllArrange(0, 20);
                 Notiflix.Notify.Success("新建排产任务成功");
@@ -223,36 +238,56 @@ function getArrangeDetail(dom) {
     let creator = $(dom).attr("creator");
     let createTime = $(dom).attr("create-time");
     let arrangeId = $(dom).attr("arrange-id");
+    let weight = $(dom).attr("weight");
+    let rawMaterials = $(dom).attr("raw-materials");
 
     const tr = $(dom).parents("tr");
 
     let gauge = tr.find("td:eq(3)").text();
-    let tolerance = tr.find("td:eq(4)").text();
-    let shift = tr.find("td:eq(7)").text();
-    let weight = tr.find("td:eq(5)").text();
+    let inletDiameter = tr.find("td:eq(4)").text();
+    let positiveTolerance = tr.find("td:eq(5)").text();
+    let negativeTolerance = tr.find("td:eq(6)").text();
+    let arrangeDate = tr.find("td:eq(7)").text();
+    let shift = tr.find("td:eq(8)").text();
     let machine = tr.find("td:eq(2)").attr("machine-name");
-    let arrangeDate = tr.find("td:eq(6)").text();
-    let push = tr.find("td:eq(8)").text();
+    let push = tr.find("td:eq(9)").text();
 
-    let data = {printStatus, creator, createTime, gauge, tolerance, shift, weight, machine, arrangeDate, push};
+    let data = {
+        printStatus,
+        creator,
+        createTime,
+        gauge,
+        inletDiameter,
+        positiveTolerance,
+        negativeTolerance,
+        shift,
+        weight,
+        machine,
+        arrangeDate,
+        push
+    };
 
     $("#detail-gauge").val(gauge);
-    $("#detail-tolerance").val(tolerance);
+    $("#detail-inlet-diameter").val(inletDiameter);
+    $("#detail-positive-tolerance").val(positiveTolerance);
+    $("#detail-negative-tolerance").val(negativeTolerance);
+    $("#detail-arrange-time").val(arrangeDate);
     $("#detail-shift").val(shift);
     $("#detail-weight").val(weight);
-    $("#detail-machine").val(machine);
-    $("#detail-arrange-time").val(arrangeDate);
-    $("#detail-push").val(push);
+    $("#detail-raw-materials").val(rawMaterials);
     $("#detail-creator").val(creator);
-    $("#print-history").attr("arrange-id", arrangeId);
-    $("#modify-arrange").attr("arrange-id", arrangeId);
-
+    $("#detail-machine").val(machine);
     $("#detail-create-time").val(printTimeFormatComplete(parseInt(createTime)));
+    $("#detail-push").val(push);
     if (printStatus === "0") {
         $("#detail-print").val("未打印");
     } else {
         $("#detail-print").val("已打印");
     }
+
+    $("#print-history").attr("arrange-id", arrangeId);
+    $("#modify-arrange").attr("arrange-id", arrangeId);
+
 }
 
 $(document).on("click", ".delete-arrange", function () {
@@ -288,12 +323,26 @@ $(document).on("click", ".delete-arrange", function () {
 $("#print-history").click(function () {
     let arrangeId = $(this).attr("arrange-id");
     let gauge = $("#detail-gauge").val();
-    let tolerance = $("#detail-tolerance").val();
     let shift = $("#detail-shift").val();
-    let weight = $("#detail-weight").val();
     let machine = $("#detail-machine").val();
     let arrangeDate = $("#detail-arrange-time").val();
-    let data = {gauge, tolerance, shift, weight, machine, arrangeDate};
+    let positiveTolerance = $("#detail-positive-tolerance").val();
+    let negativeTolerance = $("#detail-negative-tolerance").val();
+    let inletDiameter = $("#detail-inlet-diameter").val();
+    let rawMaterials = $("#detail-raw-materials").val();
+    let creator = $("#detail-creator").val();
+
+    let data = {
+        gauge,
+        positiveTolerance,
+        negativeTolerance,
+        inletDiameter,
+        shift,
+        machine,
+        arrangeDate,
+        rawMaterials,
+        creator
+    };
     $.ajax({
         url: serverUrl + "/arrange/" + arrangeId,
         contentType: "application/json; charset=utf-8",
@@ -322,12 +371,26 @@ $(document).on("click", ".print-arrange-btn", function () {
 
     let arrangeId = $(this).attr("arrange-id");
     let gauge = tr.find("td:eq(3)").text();
-    let tolerance = tr.find("td:eq(4)").text();
-    let shift = tr.find("td:eq(7)").text();
-    let weight = tr.find("td:eq(5)").text();
+    let inletDiameter = tr.find("td:eq(4)").text();
+    let positiveTolerance = tr.find("td:eq(5)").text();
+    let negativeTolerance = tr.find("td:eq(6)").text();
+    let arrangeDate = tr.find("td:eq(7)").text();
+    let shift = tr.find("td:eq(8)").text();
     let machine = tr.find("td:eq(2)").attr("machine-name");
-    let arrangeDate = tr.find("td:eq(6)").text();
-    let data = {gauge, tolerance, shift, weight, machine, arrangeDate};
+    let rawMaterials = tr.find("td:eq(10)").find("button:eq(1)").attr("raw-materials");
+    let creator = tr.find("td:eq(10)").find("button:eq(1)").attr("creator");
+
+    let data = {
+        gauge,
+        positiveTolerance,
+        negativeTolerance,
+        inletDiameter,
+        shift,
+        machine,
+        arrangeDate,
+        rawMaterials,
+        creator
+    };
     $.ajax({
         url: serverUrl + "/arrange/" + arrangeId,
         contentType: "application/json; charset=utf-8",
@@ -355,28 +418,46 @@ function generateQrCodeByHistory(data, qrCode) {
     $("#qr-code").attr("src", qrCode);
     $("#machine-name").text(data.machine);
     $("#gauge-value").text(data.gauge);
-    $("#tolerance-value").text(data.tolerance);
+    $("#inlet-diameters-value").text(data.inletDiameter);
+    $("#positive-tolerance-value").text(data.positiveTolerance);
+    $("#negative-tolerance-value").text(data.negativeTolerance);
     $("#arrange-time").text(data.arrangeDate);
-    $("#weight-value").text(data.weight);
     $("#shift-value").text(data.shift);
+    $("#raw-materials-value").text(data.rawMaterials);
+    $("#creator-value").text(data.creator);
 }
 
 // ======================== 修改排产 ======================= //
 $("#modify-arrange").click(function () {
     let arrangeId = $(this).attr("arrange-id");
     let gauge = $("#detail-gauge").val();
-    let tolerance = $("#detail-tolerance").val();
-    let weight = $("#detail-weight").val();
+    let machineName = $("#detail-machine").val();
+    let positiveTolerance = $("#detail-positive-tolerance").val();
+    let negativeTolerance = $("#detail-negative-tolerance").val();
+    let inletDiameter = $("#detail-inlet-diameter").val();
     let arrangeDate = new Date($("#detail-arrange-time").val()).getTime();
+    let weight = $("#detail-weight").val();
     let detailShift = $("#detail-shift").val();
     let shift = "";
-    if (detailShift === "早班") {
+    if (detailShift === "A班") {
         shift = "1";
     } else {
         shift = "0";
     }
-    let machineName = $("#detail-machine").val();
-    let data = {arrangeId, gauge, tolerance, weight, arrangeDate, shift, machineName};
+    let rawMaterials = $("#detail-raw-materials").val();
+    let data = {
+        arrangeId,
+        gauge,
+        positiveTolerance,
+        negativeTolerance,
+        rawMaterials,
+        inletDiameter,
+        weight,
+        arrangeDate,
+        shift,
+        machineName
+    };
+
     $.ajax({
         url: serverUrl + "/arrange/update",
         contentType: "application/json; charset=utf-8",
