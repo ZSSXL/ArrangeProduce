@@ -72,10 +72,28 @@ public class Arrange implements Serializable {
     private String weight;
 
     /**
-     * 公差
+     * 负公差
      */
-    @Column(columnDefinition = "varchar(10) default '0' comment '公差'")
-    private String tolerance;
+    @Column(columnDefinition = "varchar(10) default '0.000' comment '负公差'")
+    private String negativeTolerance;
+
+    /**
+     * 正公差
+     */
+    @Column(columnDefinition = "varchar(10) default '0.000' comment '正公差'")
+    private String positiveTolerance;
+
+    /**
+     * 进口线径
+     */
+    @Column(columnDefinition = "varchar(10) default '0.000' comment '进口线径'")
+    private String inletDiameter;
+
+    /**
+     * 原材料
+     */
+    @Column(columnDefinition = "varchar(100) default 'null' comment '原材料'")
+    private String rawMaterials;
 
     /**
      * 所属企业

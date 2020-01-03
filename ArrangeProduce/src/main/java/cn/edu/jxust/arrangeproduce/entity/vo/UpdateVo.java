@@ -26,10 +26,16 @@ public class UpdateVo {
     private String gauge;
 
     @NotEmpty
-    private String tolerance;
+    private String machineName;
 
     @NotEmpty
-    private String weight;
+    private String positiveTolerance;
+
+    @NotEmpty
+    private String negativeTolerance;
+
+    @NotEmpty
+    private String inletDiameter;
 
     @NotNull
     private Long arrangeDate;
@@ -38,5 +44,10 @@ public class UpdateVo {
     private String shift;
 
     @NotEmpty
-    private String machineName;
+    private String weight;
+
+    @NotEmpty
+    private String rawMaterials;
+    
+    private String groupNumber;
 }

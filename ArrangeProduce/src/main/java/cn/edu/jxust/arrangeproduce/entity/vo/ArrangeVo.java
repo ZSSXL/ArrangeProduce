@@ -50,9 +50,27 @@ public class ArrangeVo {
     private String shift;
 
     /**
-     * 公差
+     * 负公差
      */
     @NotEmpty
-    private String tolerance;
+    private String negativeTolerance;
+
+    /**
+     * 正公差
+     */
+    @NotEmpty
+    private String positiveTolerance;
+
+    /**
+     * 进口线径
+     */
+    @NotEmpty
+    private String inletDiameter;
+
+    /**
+     * 原材料
+     */
+    @NotEmpty
+    private String rawMaterials;
 
 }

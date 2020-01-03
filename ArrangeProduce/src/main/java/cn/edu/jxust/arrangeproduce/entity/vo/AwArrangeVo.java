@@ -55,8 +55,33 @@ public class AwArrangeVo {
     private String shift;
 
     /**
-     * 公差
+     * 负公差
+     */
+    private String negativeTolerance;
+
+    /**
+     * 正公差
+     */
+    private String positiveTolerance;
+
+    /**
+     * 进口线径
+     */
+    private String inletDiameter;
+
+    /**
+     * 所属企业
+     */
+    private String enterpriseId;
+
+    /**
+     * 原材料
+     */
+    private String rawMaterials;
+
+    /**
+     * 分组信息
      */
     @NotEmpty
-    private String tolerance;
+    private String group;
 }

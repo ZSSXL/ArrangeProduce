@@ -68,6 +68,12 @@ public class ArrangeController extends BaseController {
                 String username = tokenUtil.getClaim(token, "username").asString();
                 String arrangeId = UUIDUtil.getId();
                 String machineName = machineService.getMachineNameByNumAndEnterpriseId(arrangeVo.getMachine(), enterpriseId);
+                if (StringUtils.isEmpty(arrangeVo.getNegativeTolerance())) {
+                    arrangeVo.setNegativeTolerance("0.000");
+                }
+                if (StringUtils.isEmpty(arrangeVo.getPositiveTolerance())) {
+                    arrangeVo.setPositiveTolerance("0.000");
+                }
                 try {
                     return arrangeService.createArrange(Arrange.builder()
                             .arrangeId(arrangeId)
@@ -78,10 +84,13 @@ public class ArrangeController extends BaseController {
                             .shift(arrangeVo.getShift())
                             .enterpriseId(enterpriseId)
                             .weight(arrangeVo.getWeight())
-                            .tolerance(arrangeVo.getTolerance())
                             .status(0)
                             .push(Const.DEFAULT_NO_PUSH)
                             .creator(username)
+                            .negativeTolerance(arrangeVo.getNegativeTolerance())
+                            .positiveTolerance(arrangeVo.getPositiveTolerance())
+                            .inletDiameter(arrangeVo.getInletDiameter())
+                            .rawMaterials(arrangeVo.getRawMaterials())
                             .build());
                 } catch (Exception e) {
                     log.error("create arrange error {}", e.getMessage());
@@ -222,6 +231,12 @@ public class ArrangeController extends BaseController {
                     String username = tokenUtil.getClaim(token, "username").asString();
                     String arrangeId = UUIDUtil.getId();
                     String machineName = machineService.getMachineNameByNumAndEnterpriseId(arrangeVo.getMachine(), enterpriseId);
+                    if (StringUtils.isEmpty(arrangeVo.getNegativeTolerance())) {
+                        arrangeVo.setNegativeTolerance("0.000");
+                    }
+                    if (StringUtils.isEmpty(arrangeVo.getPositiveTolerance())) {
+                        arrangeVo.setPositiveTolerance("0.000");
+                    }
                     try {
                         arrangeService.createArrange(Arrange.builder()
                                 .arrangeId(arrangeId)
@@ -233,10 +248,13 @@ public class ArrangeController extends BaseController {
                                 .weight(arrangeVo.getWeight())
                                 .machineName(machineName)
                                 .push(Const.DEFAULT_NO_PUSH)
-                                .tolerance(arrangeVo.getTolerance())
                                 // 更新打印状态为已打印(1)
                                 .status(1)
                                 .creator(username)
+                                .rawMaterials(arrangeVo.getRawMaterials())
+                                .inletDiameter(arrangeVo.getInletDiameter())
+                                .positiveTolerance(arrangeVo.getPositiveTolerance())
+                                .negativeTolerance(arrangeVo.getNegativeTolerance())
                                 .build());
                     } catch (Exception e) {
                         log.error("create arrange error {}", e.getClass());
@@ -270,7 +288,8 @@ public class ArrangeController extends BaseController {
                     String qrCode = generateQrCode(ArrangeVo.builder()
                             .machine(arrange.getMachine())
                             .gauge(arrange.getGauge())
-                            .tolerance(arrange.getTolerance())
+                            .positiveTolerance(arrange.getPositiveTolerance())
+                            .negativeTolerance(arrange.getNegativeTolerance())
                             .arrangeDate(arrange.getArrangeDate())
                             .shift(arrange.getShift())
                             .build());
@@ -315,13 +334,16 @@ public class ArrangeController extends BaseController {
                 if (machineNumber == null) {
                     return ServerResponse.createByErrorMessage("更新失败，没有符合该设备名称的设备号");
                 } else {
-                    arrange.setArrangeDate(updateVo.getArrangeDate());
                     arrange.setGauge(updateVo.getGauge());
                     arrange.setMachine(machineNumber);
                     arrange.setMachineName(updateVo.getMachineName());
-                    arrange.setTolerance(updateVo.getTolerance());
+                    arrange.setPositiveTolerance(updateVo.getPositiveTolerance());
+                    arrange.setNegativeTolerance(updateVo.getNegativeTolerance());
+                    arrange.setInletDiameter(updateVo.getInletDiameter());
+                    arrange.setArrangeDate(updateVo.getArrangeDate());
                     arrange.setShift(updateVo.getShift());
                     arrange.setWeight(updateVo.getWeight());
+                    arrange.setRawMaterials(updateVo.getRawMaterials());
                     try {
                         log.info("update arrange : {} success", updateVo.getArrangeId());
                         return arrangeService.createArrange(arrange);
@@ -347,8 +369,10 @@ public class ArrangeController extends BaseController {
         qrMessage.append(arrangeVo.getMachine()).append("*");
         // 线规
         qrMessage.append(arrangeVo.getGauge()).append("*");
-        // 公差
-        qrMessage.append(arrangeVo.getTolerance()).append("*");
+        // 正公差
+        qrMessage.append(arrangeVo.getPositiveTolerance()).append("*");
+        //负公差
+        qrMessage.append(arrangeVo.getNegativeTolerance()).append("*");
         // 任务生产时间
         qrMessage.append(DateUtil.timestampToDate(arrangeVo.getArrangeDate())).append("*");
         // 早晚班： 1是早班， 0是晚班
