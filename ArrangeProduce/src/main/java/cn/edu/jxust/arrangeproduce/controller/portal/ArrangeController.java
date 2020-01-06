@@ -9,10 +9,7 @@ import cn.edu.jxust.arrangeproduce.entity.vo.ArrangeVo;
 import cn.edu.jxust.arrangeproduce.entity.vo.UpdateVo;
 import cn.edu.jxust.arrangeproduce.service.ArrangeService;
 import cn.edu.jxust.arrangeproduce.service.MachineService;
-import cn.edu.jxust.arrangeproduce.util.DateUtil;
-import cn.edu.jxust.arrangeproduce.util.QrCodeUtil;
-import cn.edu.jxust.arrangeproduce.util.TokenUtil;
-import cn.edu.jxust.arrangeproduce.util.UUIDUtil;
+import cn.edu.jxust.arrangeproduce.util.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -368,18 +365,18 @@ public class ArrangeController extends BaseController {
         // 小拉机编号
         qrMessage.append(arrangeVo.getMachine()).append("*");
         // 线规
-        qrMessage.append(arrangeVo.getGauge()).append("*");
+        qrMessage.append(DigitUtil.formatDigit(arrangeVo.getGauge(), 3)).append("*");
         // 正公差
-        qrMessage.append(arrangeVo.getPositiveTolerance()).append("*");
+        qrMessage.append(DigitUtil.formatDigit(arrangeVo.getPositiveTolerance(), 3)).append("*");
         //负公差
-        qrMessage.append(arrangeVo.getNegativeTolerance()).append("*");
+        qrMessage.append(DigitUtil.formatDigit(arrangeVo.getNegativeTolerance(), 3)).append("*");
         // 任务生产时间
         qrMessage.append(DateUtil.timestampToDate(arrangeVo.getArrangeDate())).append("*");
         // 早晚班： 1是早班， 0是晚班
         qrMessage.append(arrangeVo.getShift()).append("*");
         // 流水号 随机四位数
         qrMessage.append((int) (Math.random() * 9000 + 1000));
-        log.info("generate QrCode message : {}", qrMessage);
+        log.info("generate QrCode message : [{}]", qrMessage);
         String qrCode = QrCodeUtil.createQrCode(qrMessage.toString());
         if (qrCode != null) {
             return qrCode.replaceAll("\\n", "").replaceAll("\\r", "").replaceAll("\\r\\n", "");
@@ -387,6 +384,5 @@ public class ArrangeController extends BaseController {
             return null;
         }
     }
-
 
 }
