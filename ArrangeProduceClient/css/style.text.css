@@ -5,3 +5,7 @@
 .text-warning {
     color: 	#FFD700;
 }
+
+.display-none {
+    display: none;
+}

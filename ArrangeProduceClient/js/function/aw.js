@@ -223,8 +223,9 @@ $("#push-aw").click(function () {
 });
 
 
-// 线规详情
-
+/**
+ * 查看线规详情
+ */
 $(document).on("click", ".aw-arrange-detail", function () {
     getAwArrangeDetail(this);
     $("#aw-arrange-detail-modal").modal("show");
@@ -304,6 +305,8 @@ $("#print-history").click(function () {
     let arrangeDate = $("#detail-arrange-time-aw").val();
     let creator = $("#detail-creator-aw").val();
     let rawMaterial = $("#detail-raw-materials-aw").val();
+    let groupNumber = $("#detail-group-number-aw").val();
+
     let data = {
         gauge,
         positiveTolerance,
@@ -314,7 +317,8 @@ $("#print-history").click(function () {
         weight,
         machine,
         arrangeDate,
-        inletDiameter
+        inletDiameter,
+        groupNumber
     };
 
     $.ajax({
@@ -336,6 +340,9 @@ $("#print-history").click(function () {
     });
 });
 
+/**
+ * 在列表中打印
+ */
 $(document).on("click", ".print-arrange-aw-btn", function () {
     let awArrangeId = $(this).attr("arrange-id");
 
@@ -364,7 +371,6 @@ $(document).on("click", ".print-arrange-aw-btn", function () {
         groupNumber
     };
 
-    console.log(data);
     $.ajax({
         url: serverUrl + "/aw/" + awArrangeId,
         contentType: "application/json; charset=utf-8",

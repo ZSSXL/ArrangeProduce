@@ -22,6 +22,11 @@
 	border-bottom: #888 2px solid;
 }
 
+/* 消除小图标 */
+.tablesorter-default thead .sorter-false {
+	background-image: url("#");
+}
+
 ul.checkbox-tags {
 	list-style: none;
 	padding: 20px;

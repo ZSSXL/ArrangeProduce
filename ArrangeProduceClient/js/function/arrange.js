@@ -75,7 +75,6 @@ function saveArrange(data) {
         },
         data: JSON.stringify(data),
         success: function (result) {
-            console.log(result);
             if (result.status === 0) {
                 getAllArrange(0, 20);
                 Notiflix.Notify.Success("新建排产任务成功");
@@ -226,8 +225,9 @@ $("#push").click(function () {
     }
 });
 
-// 线规详情
-
+/**
+ * 查看线规详情
+ */
 $(document).on("click", ".arrange-detail", function () {
     getArrangeDetail(this);
     $("#arrange-detail-modal").modal("show");
@@ -305,7 +305,6 @@ $(document).on("click", ".delete-arrange", function () {
                     if (machineSort === "draw") {
                         getAllDraw();
                     } else {
-                        console.log(machineSort);
                         getAllMachine(machineSort);
                     }
                     Notiflix.Notify.Success(result.msg);

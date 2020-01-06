@@ -124,7 +124,6 @@
         $("input[name='group-tag']:checked").each(function (index, item) {
             groupNumberList.push($(this).val());
         });
-        console.log(groupNumberList.toString());
         if (groupNumberList.length === 0) {
             Notiflix.Notify.Warning("请选择至少一个编号");
             return false;
@@ -144,7 +143,6 @@
             },
             data: JSON.stringify(data),
             success: function (result) {
-                console.log(result);
                 if (result.status === 0) {
                     Notiflix.Notify.Success("新建成功");
                     getAllGroupSetting();

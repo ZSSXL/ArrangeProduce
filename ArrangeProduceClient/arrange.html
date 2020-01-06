@@ -287,7 +287,8 @@
                             <div class="input-group">
                                 <div class="input-group-prepend"><span class="input-group-text text-white">+</span>
                                 </div>
-                                <input id="positive-tolerance" type="text" placeholder="请输入正公差" class="form-control">
+                                <input id="positive-tolerance" type="text" placeholder="请输入正公差号"
+                                       class="form-control">
                             </div>
                         </div>
                         <div class="col-sm-5">
@@ -374,7 +375,7 @@
                 </div>
                 <hr/>
                 <div class="row">
-                    <table id="sampleTable" class="table table-striped table-sm">
+                    <table id="sampleTable" class="table table-striped table-sm tablesort-defalut">
                         <thead class="text-center text-white">
                         <tr>
                             <th class="sorter-false">全选<input type="checkbox" id="ck"></th>
@@ -496,13 +497,14 @@
     }
 
     $(function () {
-        $("table").tablesorter({
+        $("#sampleTable").tablesorter({
             sortReset: true
         });
 
         $("#input-filter-arrange").keyup(function () {
             filterTable($(this).val());
         }).keyup();
+
         $("#arrange-date").val(printTimeFormat(new Date()));
     });
 
