@@ -31,7 +31,7 @@ public class UpdateVo {
     @NotEmpty
     private String positiveTolerance;
 
-    @NotEmpty
+    // @NotEmpty
     private String negativeTolerance;
 
     @NotEmpty

@@ -77,7 +77,7 @@ public class Notice {
                 this.key = user.getEnterpriseId() + user.getUserId();
                 noticeMap.put(this.key, this);
                 addOnlineCount();
-                log.info("New connection, currently online : {}", onlineCount);
+                log.info("New connection, currently online : [{}] when [{}]", onlineCount, System.currentTimeMillis());
             } else {
                 log.warn("query user failed, the userId is : " + userId);
             }
@@ -93,7 +93,6 @@ public class Notice {
         if (!StringUtils.isEmpty(this.enterpriseId)) {
             noticeMap.remove(this.key);
             subOnlineCount();
-            log.info("someone offline, currently online : {}", onlineCount);
         }
     }
 
