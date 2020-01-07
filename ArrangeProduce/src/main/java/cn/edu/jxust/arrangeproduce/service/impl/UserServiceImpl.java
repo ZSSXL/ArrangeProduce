@@ -46,14 +46,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public Boolean deleteAllUserByEnterpriseId(String enterpriseId) {
         Integer integer = userRepository.deleteAllByEnterpriseId(enterpriseId);
-        log.info("delete all user result : {}", integer);
+        log.info("delete all user result : [{}]", integer > 0);
         return integer > 0;
     }
 
     @Override
     public Boolean deleteUserById(String userId) {
         Integer integer = userRepository.deleteByUserId(userId);
-        log.info("delete user result : {}", integer);
+        log.info("delete user result : [{}]", integer > 0);
         return integer > 0;
     }
 
@@ -70,7 +70,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Boolean updateUserInfo(String phone, String userId) {
         Integer integer = userRepository.updateInfo(phone, userId);
-        log.info("update user info result : {}", integer);
+        log.info("update user info result : [{}]", integer > 0);
         return integer > 0;
     }
 

@@ -5,11 +5,14 @@ import cn.edu.jxust.arrangeproduce.common.Const;
 import cn.edu.jxust.arrangeproduce.common.ResponseCode;
 import cn.edu.jxust.arrangeproduce.common.ServerResponse;
 import cn.edu.jxust.arrangeproduce.entity.po.Account;
+import cn.edu.jxust.arrangeproduce.entity.po.Employee;
 import cn.edu.jxust.arrangeproduce.entity.po.User;
-import cn.edu.jxust.arrangeproduce.entity.vo.RegisterVo;
+import cn.edu.jxust.arrangeproduce.entity.vo.EmployeeVo;
 import cn.edu.jxust.arrangeproduce.service.AccountService;
+import cn.edu.jxust.arrangeproduce.service.EmployeeService;
 import cn.edu.jxust.arrangeproduce.service.UserService;
 import cn.edu.jxust.arrangeproduce.util.EncryptionUtil;
+import cn.edu.jxust.arrangeproduce.util.QrCodeUtil;
 import cn.edu.jxust.arrangeproduce.util.TokenUtil;
 import cn.edu.jxust.arrangeproduce.util.UUIDUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -35,20 +38,22 @@ public class UserController extends BaseController {
 
     private final UserService userService;
     private final AccountService accountService;
+    private final EmployeeService employeeService;
     private final TokenUtil tokenUtil;
 
 
     @Autowired
-    public UserController(UserService userService, AccountService accountService, TokenUtil tokenUtil) {
+    public UserController(UserService userService, AccountService accountService, EmployeeService employeeService, TokenUtil tokenUtil) {
         this.userService = userService;
         this.accountService = accountService;
+        this.employeeService = employeeService;
         this.tokenUtil = tokenUtil;
     }
 
     /**
      * 主任添加员工
      *
-     * @param registerVo 注册实体
+     * @param employeeVo 注册实体
      * @param token      token
      * @param result     错误结果
      * @return ServerResponse
@@ -56,33 +61,46 @@ public class UserController extends BaseController {
     @PostMapping
     @RequiredPermission
     @Transactional(rollbackFor = Exception.class)
-    public ServerResponse registerUser(@Valid @RequestBody RegisterVo registerVo, @RequestHeader("token") String token, BindingResult result) {
+    public ServerResponse registerUser(@Valid @RequestBody EmployeeVo employeeVo, @RequestHeader("token") String token, BindingResult result) {
         if (result.hasErrors()) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.PARAMETER_ERROR.getCode(), ResponseCode.PARAMETER_ERROR.getDesc());
         } else {
             // 判断是否存在该用户，不存在则添加
-            Boolean user = userService.existInDb(registerVo.getUsername());
+            Boolean user = userService.existInDb(employeeVo.getUsername());
             if (!user) {
                 String enterpriseId = tokenUtil.getClaim(token, "enterpriseId").asString();
                 String userId = UUIDUtil.getId();
-                try {
-                    userService.createUser(User.builder()
-                            .userId(userId)
-                            .userName(registerVo.getUsername())
-                            .phone(registerVo.getPhone())
-                            .enterpriseId(enterpriseId)
-                            .role(Const.Role.ROLE_EMPLOYEE)
-                            .build());
-                    accountService.createAccount(Account.builder()
-                            .accountId(userId)
-                            .accountName(registerVo.getUsername())
-                            .password(EncryptionUtil.encrypt(registerVo.getPassword()))
-                            .build());
-                    log.info("create employee : {} success", registerVo.getUsername());
-                    return ServerResponse.createBySuccessMessage("添加员工成功");
-                } catch (Exception e) {
-                    log.error("create employee error []", e);
-                    return ServerResponse.createByErrorMessage("添加员工失败");
+                Boolean existInDn = employeeService.isExistInDn(enterpriseId, employeeVo.getEmployeeNumber());
+                if (existInDn) {
+                    return ServerResponse.createByErrorMessage("[" + employeeVo.getEmployeeNumber() + "] 已经存在, 请更换");
+                } else {
+                    try {
+                        userService.createUser(User.builder()
+                                .userId(userId)
+                                .userName(employeeVo.getUsername())
+                                .phone(employeeVo.getPhone())
+                                .enterpriseId(enterpriseId)
+                                .role(Const.Role.ROLE_EMPLOYEE)
+                                .build());
+                        employeeService.createEmployee(Employee.builder()
+                                .employeeId(userId)
+                                .employeeNumber(employeeVo.getEmployeeNumber())
+                                .department(employeeVo.getDepartment())
+                                .post(employeeVo.getPost())
+                                .sex(employeeVo.getSex())
+                                .enterpriseId(enterpriseId)
+                                .build());
+                        accountService.createAccount(Account.builder()
+                                .accountId(userId)
+                                .accountName(employeeVo.getUsername())
+                                .password(EncryptionUtil.encrypt(employeeVo.getPassword()))
+                                .build());
+                        log.info("create employee : [{}] success", employeeVo.getUsername());
+                        return ServerResponse.createBySuccessMessage("添加员工成功");
+                    } catch (Exception e) {
+                        log.error("create employee error [{}]", e.getMessage());
+                        return ServerResponse.createByErrorMessage("添加员工失败");
+                    }
                 }
             } else {
                 return ServerResponse.createByErrorMessage("该用员工已存在,请修改后再注册");
@@ -108,31 +126,71 @@ public class UserController extends BaseController {
     }
 
     /**
+     * 获取员工信息通过Id
+     *
+     * @param userId 用户Id
+     * @return ServerResponse<Employee>
+     */
+    @GetMapping("/{userId}")
+    @RequiredPermission
+    public ServerResponse<EmployeeVo> getEmployeeById(@PathVariable("userId") String userId) {
+        User user = userService.getUserById(userId);
+        Employee emp = employeeService.getEmployeeById(userId);
+        EmployeeVo employee = EmployeeVo.builder()
+                .employeeId(userId)
+                .username(user.getUserName())
+                .phone(user.getPhone())
+                .department(emp.getDepartment())
+                .employeeNumber(emp.getEmployeeNumber())
+                .enterpriseId(user.getEnterpriseId())
+                .post(emp.getPost())
+                .sex(emp.getSex())
+                .build();
+        return ServerResponse.createBySuccess(employee);
+    }
+
+    /**
      * 修改个人信息
      *
-     * @param phone 电话
-     * @param token token
+     * @param employeeVo 更新实体
+     * @param token      token
      * @return ServerResponse
      */
     @PutMapping("/info")
     @RequiredPermission
     @Transactional(rollbackFor = Exception.class)
-    public ServerResponse updateUserInfo(@RequestBody String phone, @RequestHeader("token") String token) {
-        if (StringUtils.isEmpty(phone)) {
+    public ServerResponse updateUserInfo(@RequestBody @Valid EmployeeVo employeeVo, @RequestHeader("token") String token, BindingResult result) {
+        if (result.hasErrors()) {
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.PARAMETER_ERROR.getCode(), ResponseCode.PARAMETER_ERROR.getDesc());
+        } else if (StringUtils.isEmpty(employeeVo.getEmployeeId())) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.PARAMETER_ERROR.getCode(), ResponseCode.PARAMETER_ERROR.getDesc());
         } else {
-            String tokenId = tokenUtil.getClaim(token, "tokenId").asString();
-            String username = tokenUtil.getClaim(token, "username").asString();
-            try {
-                Boolean update = userService.updateUserInfo(phone, tokenId);
-                if (update) {
-                    return ServerResponse.createBySuccessMessage("更新成功");
-                } else {
-                    return ServerResponse.createByErrorMessage("更新失败");
+            String enterpriseId = tokenUtil.getClaim(token, "enterpriseId").asString();
+            Boolean existInDn = employeeService.isExistInDn(enterpriseId, employeeVo.getEmployeeNumber());
+            if (existInDn) {
+                return ServerResponse.createByErrorMessage("[" + employeeVo.getEmployeeNumber() + "] 已经存在, 请更换");
+            } else {
+                try {
+                    userService.createUser(User.builder()
+                            .userId(employeeVo.getEmployeeId())
+                            .phone(employeeVo.getPhone())
+                            .enterpriseId(enterpriseId)
+                            .role(Const.Role.ROLE_EMPLOYEE)
+                            .userName(employeeVo.getUsername())
+                            .build());
+                    employeeService.createEmployee(Employee.builder()
+                            .sex(employeeVo.getSex())
+                            .post(employeeVo.getPost())
+                            .department(employeeVo.getDepartment())
+                            .employeeNumber(employeeVo.getEmployeeNumber())
+                            .employeeId(employeeVo.getEmployeeId())
+                            .enterpriseId(enterpriseId)
+                            .build());
+                    return ServerResponse.createBySuccessMessage("更新员工成功");
+                } catch (Exception e) {
+                    log.error("[{}] failed to modify personal information : {}", employeeVo.getUsername(), e.getMessage());
+                    return ServerResponse.createByErrorMessage("修改个人信息发生未知异常");
                 }
-            } catch (Exception e) {
-                log.error("{} failed to modify personal information : {}", username, e.getMessage());
-                return ServerResponse.createByErrorMessage("修改个人信息发生未知异常");
             }
         }
     }
@@ -161,7 +219,7 @@ public class UserController extends BaseController {
                     return ServerResponse.createByErrorMessage("修改密码失败");
                 }
             } catch (Exception e) {
-                log.error("{} failed to modify personal password : {}", username, e.getMessage());
+                log.error("[{}] failed to modify personal password : {}", username, e.getMessage());
                 return ServerResponse.createByErrorMessage("修改个人密码发生未知异常");
             }
         }
@@ -175,13 +233,68 @@ public class UserController extends BaseController {
      */
     @DeleteMapping("/{userId}")
     @RequiredPermission
+    @Transactional(rollbackFor = Exception.class)
     public ServerResponse deleteEmployee(@PathVariable("userId") String userId) {
         Boolean delete = userService.deleteUserById(userId);
-        if (delete) {
+        Boolean emp = employeeService.deleteEmpById(userId);
+        if (delete && emp) {
             return ServerResponse.createBySuccess();
         } else {
             return ServerResponse.createByError();
         }
     }
 
+    /**
+     * 打印员工信息
+     *
+     * @param userId 员工Id
+     * @return ServerResponse<String>
+     */
+    @GetMapping("/print/{userId}")
+    @RequiredPermission
+    public ServerResponse<String> printEmp(@PathVariable("userId") String userId) {
+        Employee emp = employeeService.getEmployeeById(userId);
+        if (emp == null) {
+            return ServerResponse.createByErrorMessage("获取二维码失败");
+        } else {
+            String qrCode = generateQrCode(emp.getEmployeeNumber());
+            if (qrCode == null) {
+                return ServerResponse.createByErrorMessage("生成二维码失败");
+            } else {
+                return ServerResponse.createBySuccess(qrCode);
+            }
+        }
+    }
+
+    /**
+     * 生成二维码
+     *
+     * @return String
+     */
+    private String generateQrCode(String employeeNumber) {
+        StringBuilder qrMessage = new StringBuilder();
+        // 打码时间
+        qrMessage.append("800000000").append("*");
+        // 小拉机编号
+        qrMessage.append(employeeNumber).append("*");
+        // 线规
+        qrMessage.append("00000").append("*");
+        // 正公差
+        qrMessage.append("00000").append("*");
+        //负公差
+        qrMessage.append("00000").append("*");
+        // 任务生产时间
+        qrMessage.append("00000000").append("*");
+        // 早晚班： 1是早班， 0是晚班
+        qrMessage.append("0").append("*");
+        // 流水号 随机四位数
+        qrMessage.append("0000");
+        log.info("generate QrCode message : [{}] and the length is [{}]", qrMessage, qrMessage.length());
+        String qrCode = QrCodeUtil.createQrCode(qrMessage.toString());
+        if (qrCode != null) {
+            return qrCode.replaceAll("\\n", "").replaceAll("\\r", "").replaceAll("\\r\\n", "");
+        } else {
+            return null;
+        }
+    }
 }
