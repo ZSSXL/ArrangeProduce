@@ -16,41 +16,53 @@ import java.io.Serializable;
 
 /**
  * @author ZSS
- * @date 2020/1/2 20:15
- * @description 退火机收线头分组表
+ * @date 2020/1/7 9:38
+ * @description 员工相关信息实体
  */
-@Entity(name = "ap_group")
-@org.hibernate.annotations.Table(appliesTo = "ap_group", comment = "退火机收线头分组表")
+@Entity(name = "ap_employee")
+@org.hibernate.annotations.Table(appliesTo = "ap_employee", comment = "员工信息表")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @EntityListeners(AuditingEntityListener.class)
-public class Group implements Serializable {
+public class Employee implements Serializable {
 
     /**
-     * 分组Id
+     * 员工Id
      */
     @Id
-    @Column(columnDefinition = "varchar(255) comment '分组Id'")
-    private String groupId;
+    @Column(columnDefinition = "varchar(255) comment '员工Id'")
+    private String employeeId;
 
     /**
-     * 分组组名
+     * 员工编号
      */
-    @Column(columnDefinition = "varchar(50) comment '分组组名'")
-    private String groupName;
+    @Column(columnDefinition = "varchar(255) comment '员工编号'")
+    private String employeeNumber;
 
     /**
-     * 编号
+     * 部门
      */
-    @Column(columnDefinition = "varchar(255) comment '编号'")
-    private String groupNumber;
+    @Column(columnDefinition = "varchar(100) comment '部门'")
+    private String department;
 
     /**
-     * 企业Id
+     * 岗位
      */
-    @Column(columnDefinition = "varchar(255) comment '企业Id'")
+    @Column(columnDefinition = "varchar(100) comment '岗位'")
+    private String post;
+
+    /**
+     * 性别
+     */
+    @Column(columnDefinition = "varchar(4) comment '1 是男性，0 是女性 ，性别'")
+    private String sex;
+
+    /**
+     * 所属企业
+     */
+    @Column(nullable = false, columnDefinition = "varchar(255) comment '所属企业'")
     private String enterpriseId;
 
     /**
@@ -59,7 +71,6 @@ public class Group implements Serializable {
     @Column(updatable = false, columnDefinition = "bigint(20) comment'创建时间'")
     @CreatedDate
     private Long createTime;
-
     /**
      * 修改日期
      */
