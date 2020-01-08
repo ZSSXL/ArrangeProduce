@@ -13,14 +13,5 @@ spring:
     password: 20171109
     driver-class-name: com.mysql.cj.jdbc.Driver
 
-  thymeleaf:
-    prefix: classpath:/templates/
-    cache: false
-    suffix: .html
-    encoding: utf-8
-    servlet:
-      content-type: text/html
-    mode: HTML
-
 server:
   port: 8080

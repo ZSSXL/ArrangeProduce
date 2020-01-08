@@ -59,7 +59,7 @@ public class Group implements Serializable {
     @Column(updatable = false, columnDefinition = "bigint(20) comment'创建时间'")
     @CreatedDate
     private Long createTime;
-    
+
     /**
      * 修改日期
      */

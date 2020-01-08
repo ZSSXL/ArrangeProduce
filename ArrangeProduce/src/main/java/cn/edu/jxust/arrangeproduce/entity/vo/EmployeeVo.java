@@ -23,7 +23,6 @@ public class EmployeeVo {
     @NotEmpty
     private String username;
 
-    @NotEmpty
     private String password;
 
     private String phone;

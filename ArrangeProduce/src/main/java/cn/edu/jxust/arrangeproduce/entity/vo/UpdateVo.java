@@ -48,6 +48,6 @@ public class UpdateVo {
 
     @NotEmpty
     private String rawMaterials;
-    
+
     private String groupNumber;
 }

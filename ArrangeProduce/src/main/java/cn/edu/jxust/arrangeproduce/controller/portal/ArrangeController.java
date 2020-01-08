@@ -367,16 +367,16 @@ public class ArrangeController extends BaseController {
         // 线规
         qrMessage.append(DigitUtil.formatDigit(arrangeVo.getGauge(), 3)).append("*");
         // 正公差
-        qrMessage.append(DigitUtil.formatDigit(arrangeVo.getPositiveTolerance(), 3)).append("*");
+        qrMessage.append("+").append(DigitUtil.formatDigit(arrangeVo.getPositiveTolerance(), 3)).append("*");
         //负公差
-        qrMessage.append(DigitUtil.formatDigit(arrangeVo.getNegativeTolerance(), 3)).append("*");
+        qrMessage.append("-").append(DigitUtil.formatDigit(arrangeVo.getNegativeTolerance(), 3)).append("*");
         // 任务生产时间
         qrMessage.append(DateUtil.timestampToDate(arrangeVo.getArrangeDate())).append("*");
         // 早晚班： 1是早班， 0是晚班
         qrMessage.append(arrangeVo.getShift()).append("*");
         // 流水号 随机四位数
         qrMessage.append((int) (Math.random() * 9000 + 1000));
-        log.info("generate QrCode message : [{}]", qrMessage);
+        log.info("generate arrange QrCode message : [{}] and the length is : [{}]", qrMessage, qrMessage.length());
         String qrCode = QrCodeUtil.createQrCode(qrMessage.toString());
         if (qrCode != null) {
             return qrCode.replaceAll("\\n", "").replaceAll("\\r", "").replaceAll("\\r\\n", "");

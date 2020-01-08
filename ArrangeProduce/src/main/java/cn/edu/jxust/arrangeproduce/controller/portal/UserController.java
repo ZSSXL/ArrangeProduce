@@ -93,7 +93,7 @@ public class UserController extends BaseController {
                         accountService.createAccount(Account.builder()
                                 .accountId(userId)
                                 .accountName(employeeVo.getUsername())
-                                .password(EncryptionUtil.encrypt(employeeVo.getPassword()))
+                                .password(EncryptionUtil.encrypt(employeeVo.getPassword() == null ? "123456" : employeeVo.getPassword()))
                                 .build());
                         log.info("create employee : [{}] success", employeeVo.getUsername());
                         return ServerResponse.createBySuccessMessage("添加员工成功");
@@ -166,31 +166,26 @@ public class UserController extends BaseController {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.PARAMETER_ERROR.getCode(), ResponseCode.PARAMETER_ERROR.getDesc());
         } else {
             String enterpriseId = tokenUtil.getClaim(token, "enterpriseId").asString();
-            Boolean existInDn = employeeService.isExistInDn(enterpriseId, employeeVo.getEmployeeNumber());
-            if (existInDn) {
-                return ServerResponse.createByErrorMessage("[" + employeeVo.getEmployeeNumber() + "] 已经存在, 请更换");
-            } else {
-                try {
-                    userService.createUser(User.builder()
-                            .userId(employeeVo.getEmployeeId())
-                            .phone(employeeVo.getPhone())
-                            .enterpriseId(enterpriseId)
-                            .role(Const.Role.ROLE_EMPLOYEE)
-                            .userName(employeeVo.getUsername())
-                            .build());
-                    employeeService.createEmployee(Employee.builder()
-                            .sex(employeeVo.getSex())
-                            .post(employeeVo.getPost())
-                            .department(employeeVo.getDepartment())
-                            .employeeNumber(employeeVo.getEmployeeNumber())
-                            .employeeId(employeeVo.getEmployeeId())
-                            .enterpriseId(enterpriseId)
-                            .build());
-                    return ServerResponse.createBySuccessMessage("更新员工成功");
-                } catch (Exception e) {
-                    log.error("[{}] failed to modify personal information : {}", employeeVo.getUsername(), e.getMessage());
-                    return ServerResponse.createByErrorMessage("修改个人信息发生未知异常");
-                }
+            try {
+                userService.createUser(User.builder()
+                        .userId(employeeVo.getEmployeeId())
+                        .phone(employeeVo.getPhone())
+                        .enterpriseId(enterpriseId)
+                        .role(Const.Role.ROLE_EMPLOYEE)
+                        .userName(employeeVo.getUsername())
+                        .build());
+                employeeService.createEmployee(Employee.builder()
+                        .sex(employeeVo.getSex())
+                        .post(employeeVo.getPost())
+                        .department(employeeVo.getDepartment())
+                        .employeeNumber(employeeVo.getEmployeeNumber())
+                        .employeeId(employeeVo.getEmployeeId())
+                        .enterpriseId(enterpriseId)
+                        .build());
+                return ServerResponse.createBySuccessMessage("更新员工成功");
+            } catch (Exception e) {
+                log.error("[{}] failed to modify personal information : {}", employeeVo.getUsername(), e.getMessage());
+                return ServerResponse.createByErrorMessage("修改个人信息发生未知异常");
             }
         }
     }
@@ -261,7 +256,7 @@ public class UserController extends BaseController {
             if (qrCode == null) {
                 return ServerResponse.createByErrorMessage("生成二维码失败");
             } else {
-                return ServerResponse.createBySuccess(qrCode);
+                return ServerResponse.createBySuccess(emp.getEmployeeNumber(), qrCode);
             }
         }
     }
@@ -280,16 +275,16 @@ public class UserController extends BaseController {
         // 线规
         qrMessage.append("00000").append("*");
         // 正公差
-        qrMessage.append("00000").append("*");
+        qrMessage.append("000000").append("*");
         //负公差
-        qrMessage.append("00000").append("*");
+        qrMessage.append("000000").append("*");
         // 任务生产时间
         qrMessage.append("00000000").append("*");
         // 早晚班： 1是早班， 0是晚班
         qrMessage.append("0").append("*");
         // 流水号 随机四位数
         qrMessage.append("0000");
-        log.info("generate QrCode message : [{}] and the length is [{}]", qrMessage, qrMessage.length());
+        log.info("generate employee QrCode message : [{}] and the length is : [{}]", qrMessage, qrMessage.length());
         String qrCode = QrCodeUtil.createQrCode(qrMessage.toString());
         if (qrCode != null) {
             return qrCode.replaceAll("\\n", "").replaceAll("\\r", "").replaceAll("\\r\\n", "");
