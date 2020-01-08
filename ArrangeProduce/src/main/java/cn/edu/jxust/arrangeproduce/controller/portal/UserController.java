@@ -11,10 +11,7 @@ import cn.edu.jxust.arrangeproduce.entity.vo.EmployeeVo;
 import cn.edu.jxust.arrangeproduce.service.AccountService;
 import cn.edu.jxust.arrangeproduce.service.EmployeeService;
 import cn.edu.jxust.arrangeproduce.service.UserService;
-import cn.edu.jxust.arrangeproduce.util.EncryptionUtil;
-import cn.edu.jxust.arrangeproduce.util.QrCodeUtil;
-import cn.edu.jxust.arrangeproduce.util.TokenUtil;
-import cn.edu.jxust.arrangeproduce.util.UUIDUtil;
+import cn.edu.jxust.arrangeproduce.util.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -269,7 +266,7 @@ public class UserController extends BaseController {
     private String generateQrCode(String employeeNumber) {
         StringBuilder qrMessage = new StringBuilder();
         // 打码时间
-        qrMessage.append("800000000").append("*");
+        qrMessage.append("8").append(DateUtil.getDateSimple()).append("*");
         // 小拉机编号
         qrMessage.append(employeeNumber).append("*");
         // 线规
