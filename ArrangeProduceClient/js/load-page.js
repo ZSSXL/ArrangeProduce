@@ -550,6 +550,7 @@ function getAllEmployee(page, size) {
         type: "GET",
         success: function (result) {
             if (result.status === 0) {
+                console.log(result.data);
                 analyticalUser(result);
                 build_page_info_user(result);
                 build_page_li_user(result);
@@ -575,8 +576,11 @@ function analyticalUser(result) {
             let usernameTd = $("<td></td>").append(item.userName);
             let phoneTd = $("<td></td>").append(item.phone);
             let createTimeTd = $("<td></td>").append(printTimeFormatComplete(item.createTime));
+
+            let printBtn = $("<button class='btn btn-outline-light print-employee'>打印</button>").attr("user-id", item.userId);
+            let detailBtn = $("<button class='btn btn-outline-info detail-employee'>详情</button>").attr("user-id", item.userId);
             let deleteBtn = $("<button class='btn btn-outline-danger delete-employee'>删除</button>").attr("user-id", item.userId);
-            let btnTd = $("<td></td>").append(deleteBtn);
+            let btnTd = $("<td></td>").append(printBtn).append(detailBtn).append(deleteBtn);
 
             $("<tr></tr>").append(numTd)
                 .append(usernameTd)

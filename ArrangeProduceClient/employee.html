@@ -1,4 +1,140 @@
-<!-- 模态框 -->
+<!-- 打印modal -->
+<div class="modal fade" tabindex="-1" role="dialog" id="employee-print-modal">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">PRINT 打印操作</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <!--startprint-->
+                    <div class="col-lg-6 col-sm-6">
+                        <img id="qr-code" src="/img/photos/default.png">
+                    </div>
+                    <div class="col-lg-6 col-sm-6">
+                        <h2>&nbsp;&nbsp;&nbsp;编号&nbsp;&nbsp;: <span id="employee-number">number</span>
+                        </h2>
+                        <h2>&nbsp;&nbsp;&nbsp;姓名&nbsp;&nbsp;: <span id="employee-name">name</span>
+                        </h2>
+                    </div>
+                    <!--endprint-->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-light" data-dismiss="modal">取消</button>
+                <button id="start-print" type="button" class="btn btn-primary">打印</button>
+            </div>
+
+            <script type="text/javascript">
+                $("#start-print").click(function () {
+                    preview();
+                });
+
+                function preview() {
+                    console.log("start print ...");
+                    const bdhtml = window.document.body.innerHTML; //获取当前页的html代码
+                    const startStr = "<!--startprint-->"; //设置打印开始区域
+                    const endStr = "<!--endprint-->"; //设置打印结束区域
+                    //从标记里获取需要打印的页面
+                    window.document.body.innerHTML = bdhtml.substring(bdhtml.indexOf(startStr) + startStr.length, bdhtml.indexOf(endStr)); //需要打印的页面
+                    window.print();
+                    window.document.body.innerHTML = bdhtml; //还原界面
+                    location.reload();
+                    console.log("end print ...");
+                }
+            </script>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- 员工详情 -->
+<div class="modal fade" tabindex="-1" role="dialog" id="employee-detail-modal">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <!-- 模态框内容动态加载 -->
+            <div class="modal-header">
+                <h4 class="modal-title">EMPLOYEE 员工详情</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="block-body">
+                    <div class="form-group row">
+                        <div class="col-lg-6 col-sm-6">
+                            <div class="row">
+                                <h4 class="col-sm-4">员工名称</small></h4>
+                                <div class="col-sm-8">
+                                    <input type="text" placeholder="employee name"
+                                           class="form-control form-control-success" id="detail-employee-name">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-sm-6">
+                            <div class="row">
+                                <h4 class="col-sm-3">电话</h4>
+                                <div class="col-sm-9">
+                                    <input type="text" placeholder="phone"
+                                           class="form-control form-control-success" id="detail-phone">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-lg-6 col-sm-6">
+                            <div class="row">
+                                <h4 class="col-sm-4">员工编号</h4>
+                                <div class="col-sm-8">
+                                    <input type="text" placeholder="employee number" disabled=""
+                                           class="form-control form-control-success" id="detail-employee-number">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-sm-6">
+                            <div class="row">
+                                <h4 class="col-sm-3">部门</h4>
+                                <div class="col-sm-9">
+                                    <input type="text" placeholder="department"
+                                           class="form-control form-control-success" id="detail-department">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-lg-6 col-sm-6">
+                            <div class="row">
+                                <h4 class="col-sm-4">岗位</h4>
+                                <div class="col-sm-8">
+                                    <input type="text" placeholder="post"
+                                           class="form-control form-control-success" id="detail-post">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-sm-6">
+                            <div class="row">
+                                <h4 class="col-sm-3">性别</h4>
+                                <div class="col-sm-9">
+                                    <input type="text" placeholder="sex"
+                                           class="form-control form-control-success" id="detail-sex">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-info" id="modify-employee">修改</button>
+                <button type="button" class="btn btn-outline-warning" id="print-detail">打印</button>
+                <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- 添加用户 -->
 <div class="modal fade" tabindex="-1" role="dialog" id="load-employee-modal">
     <div class="modal-dialog" role="document">
         <div class="modal-content" id="modal-area-employee">
@@ -13,22 +149,62 @@
                         <div class="content">
                             <form class="text-left form-validate" onsubmit="return false">
                                 <div class="form-group-material">
-                                    <label class="label-material">Username</label><br>
+                                    <label class="label-material text-white">员工名称</label><br>
                                     <input id="username" type="text" name="registerUsername" required
-                                           data-msg="Please enter employee username" class="input-material">
+                                           data-msg="Please enter employee username" placeholder="请输入员工名称"
+                                           class="input-material">
                                 </div>
                                 <div class="form-group-material">
-                                    <label class="label-material">Phone</label><br>
-                                    <input id="phone" type="text" name="registerPhone" required
-                                           data-msg="Please enter employee phone" class="input-material">
-                                </div>
-                                <div class="form-group-material">
-                                    <label class="label-material">Password </label><br>
+                                    <label class="label-material text-white">密码</label><br>
                                     <input id="password" type="password" name="registerPassword" required
-                                           data-msg="Please enter employee password" class="input-material">
+                                           data-msg="Please enter employee password" placeholder="请输入密码"
+                                           class="input-material">
+                                </div>
+                                <div class="form-group-material">
+                                    <label class="label-material text-white">电话</label><br>
+                                    <input id="phone" type="text" name="registerPhone" required
+                                           data-msg="Please enter employee phone" placeholder="请输入电话"
+                                           class="input-material">
+                                </div>
+                                <div class="form-group-material">
+                                    <label class="label-material text-white">员工编号</label><br>
+                                    <input id="number" type="text" name="registerPassword" required
+                                           data-msg="Please enter employee number" placeholder="请输入员工编号, 如:1001"
+                                           class="input-material">
+                                </div>
+                                <div class="form-group-material">
+                                    <label class="label-material text-white">部门</label><br>
+                                    <input id="department" type="text" name="registerPassword" required
+                                           data-msg="Please enter employee department" placeholder="请输入员工部门"
+                                           class="input-material">
+                                </div>
+                                <div class="form-group-material">
+                                    <label class="label-material text-white">岗位</label><br>
+                                    <input id="post" type="text" name="registerPassword" required
+                                           data-msg="Please enter employee post" placeholder="请输入员工岗位"
+                                           class="input-material">
+                                </div>
+                                <div class="form-group-material row">
+                                    <label class="col-lg-2 col-sm-2 form-control-label">
+                                        <h4 class="text-white">性别</h4>
+                                    </label>
+                                    <div class="col-lg-2 col-sm-3">
+                                        <div class="i-checks">
+                                            <input id="radioSex1" type="radio" checked="" value="1" name="sex"
+                                                   class="radio-template">
+                                            <strong for="radioCustom2">男</strong>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-7 col-sm-3">
+                                        <div class="i-checks">
+                                            <input id="radioSex2" type="radio" value="0" name="sex"
+                                                   class="radio-template">
+                                            <strong for="radioCustom1">女</strong>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="form-group text-center">
-                                    <button class="btn btn-primary" id="add-employee-btn">添加</button>
+                                    <button class="btn btn-primary btn-lg" id="add-employee-btn">添加</button>
                                 </div>
                             </form>
                         </div>
