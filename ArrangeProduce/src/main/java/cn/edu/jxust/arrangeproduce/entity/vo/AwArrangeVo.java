@@ -43,12 +43,6 @@ public class AwArrangeVo {
     private String gauge;
 
     /**
-     * 安排重量
-     */
-    @NotEmpty
-    private String weight;
-
-    /**
      * 安排班次 A为早班，B为晚班
      */
     @NotEmpty
@@ -65,19 +59,9 @@ public class AwArrangeVo {
     private String positiveTolerance;
 
     /**
-     * 进口线径
-     */
-    private String inletDiameter;
-
-    /**
      * 所属企业
      */
     private String enterpriseId;
-
-    /**
-     * 原材料
-     */
-    private String rawMaterials;
 
     /**
      * 分组信息

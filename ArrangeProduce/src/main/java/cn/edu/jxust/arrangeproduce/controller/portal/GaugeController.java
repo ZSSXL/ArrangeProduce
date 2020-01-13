@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -47,7 +47,7 @@ public class GaugeController extends BaseController {
      */
     @PostMapping
     @RequiredPermission
-    public ServerResponse createGauge(@RequestBody @NotEmpty String gauge, @RequestHeader("token") String token, BindingResult result) {
+    public ServerResponse createGauge(@RequestBody @NotNull String gauge, @RequestHeader("token") String token, BindingResult result) {
         if (result.hasErrors()) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.PARAMETER_ERROR.getCode(), ResponseCode.PARAMETER_ERROR.getDesc());
         } else {

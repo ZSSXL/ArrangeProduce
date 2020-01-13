@@ -80,14 +80,14 @@ public class ArrangeController extends BaseController {
                             .machineName(machineName)
                             .shift(arrangeVo.getShift())
                             .enterpriseId(enterpriseId)
-                            .weight(arrangeVo.getWeight())
+                            .weight(ParameterUtil.isEmpty(arrangeVo.getWeight(), "0"))
                             .status(0)
                             .push(Const.DEFAULT_NO_PUSH)
                             .creator(username)
                             .negativeTolerance(arrangeVo.getNegativeTolerance())
                             .positiveTolerance(arrangeVo.getPositiveTolerance())
-                            .inletDiameter(arrangeVo.getInletDiameter())
-                            .rawMaterials(arrangeVo.getRawMaterials())
+                            .inletDiameter(ParameterUtil.isEmpty(arrangeVo.getInletDiameter(), "0"))
+                            .rawMaterials(ParameterUtil.isEmpty(arrangeVo.getRawMaterials(), "null"))
                             .build());
                 } catch (Exception e) {
                     log.error("create arrange error {}", e.getMessage());
@@ -242,14 +242,14 @@ public class ArrangeController extends BaseController {
                                 .machine(arrangeVo.getMachine())
                                 .shift(arrangeVo.getShift())
                                 .enterpriseId(enterpriseId)
-                                .weight(arrangeVo.getWeight())
+                                .weight(ParameterUtil.isEmpty(arrangeVo.getWeight(), "0"))
                                 .machineName(machineName)
                                 .push(Const.DEFAULT_NO_PUSH)
                                 // 更新打印状态为已打印(1)
                                 .status(1)
                                 .creator(username)
-                                .rawMaterials(arrangeVo.getRawMaterials())
-                                .inletDiameter(arrangeVo.getInletDiameter())
+                                .inletDiameter(ParameterUtil.isEmpty(arrangeVo.getInletDiameter(), "null"))
+                                .rawMaterials(ParameterUtil.isEmpty(arrangeVo.getRawMaterials(), "null"))
                                 .positiveTolerance(arrangeVo.getPositiveTolerance())
                                 .negativeTolerance(arrangeVo.getNegativeTolerance())
                                 .build());
@@ -336,10 +336,10 @@ public class ArrangeController extends BaseController {
                     arrange.setMachineName(updateVo.getMachineName());
                     arrange.setPositiveTolerance(updateVo.getPositiveTolerance());
                     arrange.setNegativeTolerance(updateVo.getNegativeTolerance());
-                    arrange.setInletDiameter(updateVo.getInletDiameter());
-                    arrange.setArrangeDate(updateVo.getArrangeDate());
+                    arrange.setInletDiameter(ParameterUtil.isEmpty(updateVo.getInletDiameter(), "null"));
+                    arrange.setRawMaterials(ParameterUtil.isEmpty(updateVo.getRawMaterials(), "null"));
                     arrange.setShift(updateVo.getShift());
-                    arrange.setWeight(updateVo.getWeight());
+                    arrange.setWeight(ParameterUtil.isEmpty(updateVo.getWeight(), "0"));
                     arrange.setRawMaterials(updateVo.getRawMaterials());
                     try {
                         log.info("update arrange : {} success", updateVo.getArrangeId());

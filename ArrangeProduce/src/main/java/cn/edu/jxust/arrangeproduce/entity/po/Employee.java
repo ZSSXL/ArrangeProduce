@@ -42,18 +42,6 @@ public class Employee implements Serializable {
     private String employeeNumber;
 
     /**
-     * 部门
-     */
-    @Column(columnDefinition = "varchar(100) comment '部门'")
-    private String department;
-
-    /**
-     * 岗位
-     */
-    @Column(columnDefinition = "varchar(100) comment '岗位'")
-    private String post;
-
-    /**
      * 性别
      */
     @Column(columnDefinition = "varchar(4) comment '1 是男性，0 是女性 ，性别'")

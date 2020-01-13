@@ -36,12 +36,6 @@ public class Group implements Serializable {
     private String groupId;
 
     /**
-     * 分组组名
-     */
-    @Column(columnDefinition = "varchar(50) comment '分组组名'")
-    private String groupName;
-
-    /**
      * 编号
      */
     @Column(columnDefinition = "varchar(255) comment '编号'")

@@ -33,11 +33,5 @@ public class EmployeeVo {
     private String employeeNumber;
 
     @NotEmpty
-    private String department;
-
-    @NotEmpty
-    private String post;
-
-    @NotEmpty
     private String sex;
 }

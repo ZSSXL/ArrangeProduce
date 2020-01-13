@@ -20,8 +20,5 @@ import java.io.Serializable;
 public class GroupVo implements Serializable {
 
     @NotEmpty
-    private String groupName;
-
-    @NotEmpty
     private String groupNumber;
 }

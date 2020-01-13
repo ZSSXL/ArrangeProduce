@@ -23,7 +23,7 @@ public interface GroupRepository extends JpaRepository<Group, String> {
      * @param enterpriseId 企业Id
      * @return List<Group>
      */
-    List<Group> findAllByEnterpriseIdOrderByGroupNameDesc(String enterpriseId);
+    List<Group> findAllByEnterpriseIdOrderByGroupNumberAsc(String enterpriseId);
 
     /**
      * 通过Id删除分组信息
@@ -35,14 +35,6 @@ public interface GroupRepository extends JpaRepository<Group, String> {
     @Transactional(rollbackFor = Exception.class)
     Integer deleteByGroupId(String groupId);
 
-    /**
-     * 通过企业Id和分组名称查询
-     *
-     * @param groupName    分组名称
-     * @param enterpriseId 企业Id
-     * @return Optional<Group>
-     */
-    Optional<Group> findByGroupNameAndEnterpriseId(String groupName, String enterpriseId);
 
     /**
      * 通过企业Id和分组信息查询

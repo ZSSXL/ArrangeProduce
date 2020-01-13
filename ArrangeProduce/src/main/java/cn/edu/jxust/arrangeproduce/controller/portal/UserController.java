@@ -75,15 +75,13 @@ public class UserController extends BaseController {
                         userService.createUser(User.builder()
                                 .userId(userId)
                                 .userName(employeeVo.getUsername())
-                                .phone(employeeVo.getPhone())
+                                .phone(ParameterUtil.isEmpty(employeeVo.getPhone(), "暂无"))
                                 .enterpriseId(enterpriseId)
                                 .role(Const.Role.ROLE_EMPLOYEE)
                                 .build());
                         employeeService.createEmployee(Employee.builder()
                                 .employeeId(userId)
                                 .employeeNumber(employeeVo.getEmployeeNumber())
-                                .department(employeeVo.getDepartment())
-                                .post(employeeVo.getPost())
                                 .sex(employeeVo.getSex())
                                 .enterpriseId(enterpriseId)
                                 .build());
@@ -137,10 +135,8 @@ public class UserController extends BaseController {
                 .employeeId(userId)
                 .username(user.getUserName())
                 .phone(user.getPhone())
-                .department(emp.getDepartment())
                 .employeeNumber(emp.getEmployeeNumber())
                 .enterpriseId(user.getEnterpriseId())
-                .post(emp.getPost())
                 .sex(emp.getSex())
                 .build();
         return ServerResponse.createBySuccess(employee);
@@ -173,8 +169,6 @@ public class UserController extends BaseController {
                         .build());
                 employeeService.createEmployee(Employee.builder()
                         .sex(employeeVo.getSex())
-                        .post(employeeVo.getPost())
-                        .department(employeeVo.getDepartment())
                         .employeeNumber(employeeVo.getEmployeeNumber())
                         .employeeId(employeeVo.getEmployeeId())
                         .enterpriseId(enterpriseId)

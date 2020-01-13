@@ -53,17 +53,13 @@ public class GroupController extends BaseController {
         } else {
             String enterpriseId = tokenUtil.getClaim(token, "enterpriseId").asString();
             String groupId = UUIDUtil.getId();
-            Boolean hadName = groupService.checkGroupName(enterpriseId, groupVo.getGroupName());
             Boolean hadNumber = groupService.checkGroupNumber(enterpriseId, groupVo.getGroupNumber());
-            if (hadName) {
-                return ServerResponse.createByErrorMessage("改组名已存在，请更改");
-            } else if (hadNumber) {
+            if (hadNumber) {
                 return ServerResponse.createByErrorMessage("这样的分配已存在，请更改");
             } else {
                 try {
                     return groupService.createGroup(Group.builder()
                             .groupId(groupId)
-                            .groupName(groupVo.getGroupName())
                             .groupNumber(groupVo.getGroupNumber())
                             .enterpriseId(enterpriseId)
                             .build());
