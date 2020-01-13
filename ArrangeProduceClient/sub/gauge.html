@@ -32,49 +32,34 @@
 
     $("#add-gauge").click(function () {
         let gauge = $("#new-gauge").val();
-        $.ajax({
-            url: serverUrl + "/gauge",
-            contentType: "application/json; charset=utf-8",
-            type: "POST",
-            beforeSend: function (XMLHttpRequest) {
-                XMLHttpRequest.setRequestHeader("token", token);
-            },
-            data: gauge,
-            success: function (result) {
-                if (result.status === 0) {
-                    let arrangeCurrentPage = localStorage.getItem("arrangeCurrentPage");
-                    Notiflix.Notify.Success("添加成功");
-                    getAllGauge();
-                    if (arrangeCurrentPage === "arrange") {
-                        getAllGaugeSelected("arrange");
-                    } else if (arrangeCurrentPage === "aw") {
-                        getAllGaugeSelected("aw");
+        if (gauge === "") {
+            Notiflix.Notify.Warning("请输入如规格在点击添加");
+            return false;
+        } else {
+            $.ajax({
+                url: serverUrl + "/gauge",
+                contentType: "application/json; charset=utf-8",
+                type: "POST",
+                beforeSend: function (XMLHttpRequest) {
+                    XMLHttpRequest.setRequestHeader("token", token);
+                },
+                data: gauge,
+                success: function (result) {
+                    if (result.status === 0) {
+                        let arrangeCurrentPage = localStorage.getItem("arrangeCurrentPage");
+                        Notiflix.Notify.Success("添加成功");
+                        getAllGauge();
+                        if (arrangeCurrentPage === "arrange") {
+                            getAllGaugeSelected("arrange");
+                        } else if (arrangeCurrentPage === "aw") {
+                            getAllGaugeSelected("aw");
+                        }
+                    } else {
+                        Notiflix.Notify.Failure(result.msg);
                     }
-                } else {
-                    Notiflix.Notify.Failure(result.msg);
                 }
-            }
-        });
+            });
+        }
     });
 
-    $(document).on("click", ".delete-gauge", function () {
-        const gaugeId = $(this).attr("gauge-id");
-        $.ajax({
-            url: serverUrl + "/gauge/" + gaugeId,
-            contentType: "application/json; charset=utf-8",
-            type: "DELETE",
-            beforeSend: function (XMLHttpRequest) {
-                XMLHttpRequest.setRequestHeader("token", token);
-            },
-            success: function (result) {
-                if (result.status === 0) {
-                    Notiflix.Notify.Success("删除成功");
-                    getAllGauge();
-                    getAllGaugeSelected();
-                } else {
-                    Notiflix.Notify.Failure(result.msg);
-                }
-            }
-        });
-    });
 </script>

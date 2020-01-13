@@ -30,9 +30,9 @@ function getData(dom) {
 
     let machine = tr.find("td:eq(1)").text();
     let gauge = tr.find("td:eq(2)").text();
-    let inletDiameter = tr.find("td:eq(3)").text();
-    let positiveTolerance = tr.find("td:eq(4)").text();
-    let negativeTolerance = tr.find("td:eq(5)").text();
+    let positiveTolerance = tr.find("td:eq(3)").text();
+    let negativeTolerance = tr.find("td:eq(4)").text();
+    let inletDiameter = tr.find("td:eq(5)").text();
     let weight = tr.find("td:eq(6)").text();
     let arrangeTime = tr.find("td:eq(7)").text();
     let shift = tr.find("td:eq(9)").text();

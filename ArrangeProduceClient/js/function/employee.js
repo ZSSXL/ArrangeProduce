@@ -10,8 +10,6 @@ $("#add-employee-btn").click(function () {
     let password = $("#password").val();
     let phone = $("#phone").val();
     let employeeNumber = $("#number").val();
-    let department = $("#department").val();
-    let post = $("#post").val();
     let sex = $("input[name='sex']:checked").val();
 
     if (username === "") {
@@ -22,12 +20,8 @@ $("#add-employee-btn").click(function () {
         return true;
     } else if (employeeNumber === "") {
         return true;
-    } else if (department === "") {
-        return true;
-    } else if (post === "") {
-        return true;
     } else {
-        let data = {username, phone, password, employeeNumber, department, post, sex};
+        let data = {username, phone, password, employeeNumber, sex};
         $.ajax({
             url: serverUrl + "/user",
             contentType: "application/json; charset=utf-8",
@@ -145,8 +139,6 @@ function showEmployeeDetail(data) {
     $("#detail-employee-name").val(data.username);
     $("#detail-employee-number").val(data.employeeNumber);
     $("#detail-phone").val(data.phone);
-    $("#detail-department").val(data.department);
-    $("#detail-post").val(data.post);
     if (data.sex === "1") {
         $("#detail-sex").val("男").attr("sex-tag", "1");
     } else {

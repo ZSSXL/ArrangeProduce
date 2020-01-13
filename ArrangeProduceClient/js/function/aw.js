@@ -32,6 +32,9 @@ $("#machine-setting-aw").click(function () {
     $("#load-modal-aw").modal("show");
 });
 
+/**
+ * 删除设备
+ */
 $(document).on("click", ".delete-machine", function () {
     const machineId = $(this).attr("machine-id");
     Notiflix.Confirm.Show("警告", "是否确认删除", "确定", "取消", function () {
@@ -48,6 +51,11 @@ $(document).on("click", ".delete-machine", function () {
                         getAllDraw();
                     } else {
                         getAllMachine(machineSort);
+                        if (machineSort === "annealing") {
+                            getAllMachineAnnealing();
+                        } else if (machineSort === "winding") {
+                            getAllMachineWinding();
+                        }
                     }
                     Notiflix.Notify.Success(result.msg);
                 } else {
@@ -55,6 +63,32 @@ $(document).on("click", ".delete-machine", function () {
                 }
             }
         });
+    });
+});
+
+/**
+ * 删除规格
+ */
+$(document).on("click", ".delete-gauge", function () {
+    const gaugeId = $(this).attr("gauge-id");
+    Notiflix.Confirm.Show("警告", "是否确认删除", "确定", "取消", function () {
+        $.ajax({
+            url: serverUrl + "/gauge/" + gaugeId,
+            contentType: "application/json; charset=utf-8",
+            type: "DELETE",
+            beforeSend: function (XMLHttpRequest) {
+                XMLHttpRequest.setRequestHeader("token", token);
+            },
+            success: function (result) {
+                if (result.status === 0) {
+                    Notiflix.Notify.Success("删除成功");
+                    getAllGauge();
+                    getAllGaugeSelected();
+                } else {
+                    Notiflix.Notify.Failure(result.msg);
+                }
+            }
+        })
     });
 });
 
@@ -96,35 +130,21 @@ $("#reset-btn-aw").click(function () {
 function getDate() {
     let gauge = $("#gauge-aw option:selected").val();
     let machine = $("#machine-aw option:selected").val();
-    let weight = $('#weight-aw').val();
     let arrangeDate = new Date($('#arrange-date-aw').val()).getTime();
     let shift = $("input[name='shift-aw']:checked").val();
 
     let negativeTolerance = $("#negative-tolerance").val();
     let positiveTolerance = $("#positive-tolerance").val();
-    let rawMaterials = $("#raw-materials").val();
-    let inletDiameter = $('#inlet-diameter').val();
     let group = $("#group option:selected").val();
-
-    if (rawMaterials === "") {
-        Notiflix.Notify.Warning("请输入原材料");
-        return false;
-    } else if (weight === "") {
-        Notiflix.Notify.Warning("请输入重量");
-        return false;
-    }
 
     return {
         gauge,
         machine,
-        weight,
         arrangeDate,
         shift,
         "sort": machineSort,
         negativeTolerance,
         positiveTolerance,
-        rawMaterials,
-        inletDiameter,
         group
     };
 }
@@ -236,14 +256,11 @@ function getAwArrangeDetail(dom) {
     let creator = $(dom).attr("creator");
     let createTime = $(dom).attr("create-time");
     let arrangeId = $(dom).attr("arrange-id");
-    let weight = $(dom).attr("weight");
-    let rawMaterials = $(dom).attr("raw-materials");
-    let groupNumber = $(dom).attr("group-number");
 
     const tr = $(dom).parents("tr");
 
-    let gauge = tr.find("td:eq(3)").text();
-    let inletDiameter = tr.find("td:eq(4)").text();
+    let groupNumber = tr.find("td:eq(3)").text();
+    let gauge = tr.find("td:eq(4)").text();
     let positiveTolerance = tr.find("td:eq(5)").text();
     let negativeTolerance = tr.find("td:eq(6)").text();
     let arrangeDate = tr.find("td:eq(7)").text();
@@ -256,11 +273,9 @@ function getAwArrangeDetail(dom) {
         creator,
         createTime,
         gauge,
-        inletDiameter,
         positiveTolerance,
         negativeTolerance,
         shift,
-        weight,
         machine,
         arrangeDate,
         push,
@@ -268,13 +283,10 @@ function getAwArrangeDetail(dom) {
     };
 
     $("#detail-gauge-aw").val(gauge);
-    $("#detail-inlet-diameter-aw").val(inletDiameter);
     $("#detail-positive-tolerance-aw").val(positiveTolerance);
     $("#detail-negative-tolerance-aw").val(negativeTolerance);
     $("#detail-arrange-time-aw").val(arrangeDate);
     $("#detail-shift-aw").val(shift);
-    $("#detail-weight-aw").val(weight);
-    $("#detail-raw-materials-aw").val(rawMaterials);
     $("#detail-creator-aw").val(creator);
     $("#detail-create-time-aw").val(printTimeFormatComplete(parseInt(createTime)));
     $("#detail-push-aw").val(push);
@@ -296,15 +308,12 @@ function getAwArrangeDetail(dom) {
 $("#print-history").click(function () {
     let awArrangeId = $(this).attr("arrange-id");
     let gauge = $("#detail-gauge-aw").val();
-    let inletDiameter = $("#detail-inlet-diameter-aw").val();
     let positiveTolerance = $("#detail-positive-tolerance-aw").val();
     let negativeTolerance = $("#detail-negative-tolerance-aw").val();
     let shift = $("#detail-shift-aw").val();
-    let weight = $("#detail-weight-aw").val();
     let machine = $("#detail-machine-aw").val();
     let arrangeDate = $("#detail-arrange-time-aw").val();
     let creator = $("#detail-creator-aw").val();
-    let rawMaterial = $("#detail-raw-materials-aw").val();
     let groupNumber = $("#detail-group-number-aw").val();
 
     let data = {
@@ -312,12 +321,9 @@ $("#print-history").click(function () {
         positiveTolerance,
         negativeTolerance,
         creator,
-        rawMaterial,
         shift,
-        weight,
         machine,
         arrangeDate,
-        inletDiameter,
         groupNumber
     };
 
@@ -347,8 +353,8 @@ $(document).on("click", ".print-arrange-aw-btn", function () {
     let awArrangeId = $(this).attr("arrange-id");
 
     const tr = $(this).parents("tr");
-    let gauge = tr.find("td:eq(3)").text();
-    let inletDiameter = tr.find("td:eq(4)").text();
+    let groupNumber = tr.find("td:eq(3)").text();
+    let gauge = tr.find("td:eq(4)").text();
     let positiveTolerance = tr.find("td:eq(5)").text();
     let negativeTolerance = tr.find("td:eq(6)").text();
     let arrangeDate = tr.find("td:eq(7)").text();
@@ -356,11 +362,9 @@ $(document).on("click", ".print-arrange-aw-btn", function () {
     let machine = tr.find("td:eq(2)").attr("machine-name");
     let rawMaterial = tr.find("td:eq(10)").find("button:eq(1)").attr("raw-materials");
     let creator = tr.find("td:eq(10)").find("button:eq(1)").attr("creator");
-    let groupNumber = tr.find("td:eq(10)").find("button:eq(1)").attr("group-number");
 
     let data = {
         gauge,
-        inletDiameter,
         positiveTolerance,
         negativeTolerance,
         shift,
@@ -398,12 +402,10 @@ function generateQrCodeByHistory(data, qrCode) {
     $("#qr-code").attr("src", qrCode);
     $("#machine-name").text(data.machine);
     $("#gauge-value").text(data.gauge);
-    $("#inlet-diameters-value").text(data.inletDiameter);
     $("#positive-tolerance-value").text(data.positiveTolerance);
     $("#negative-tolerance-value").text(data.negativeTolerance);
     $("#arrange-time").text(data.arrangeDate);
     $("#shift-value").text(data.shift);
-    $("#raw-materials-value").text(data.rawMaterial);
     $("#creator-value").text(data.creator);
     $("#group-number-value").text(data.groupNumber);
 }

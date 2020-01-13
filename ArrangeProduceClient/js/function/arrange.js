@@ -48,6 +48,8 @@ function getDate() {
     let rawMaterials = $("#raw-materials").val();
     let inletDiameter = $('#inlet-diameter').val();
 
+    sessionStorage.setItem("raw-materials", rawMaterials);
+
     return {
         gauge,
         machine,
@@ -167,6 +169,9 @@ $(document).on("click", ".delete-arrange", function () {
     });
 });
 
+/**
+ * 删除设备
+ */
 $(document).on("click", ".delete-machine", function () {
     const machineId = $(this).attr("machine-id");
     Notiflix.Confirm.Show("警告", "是否确认删除", "确定", "取消", function () {
@@ -192,6 +197,33 @@ $(document).on("click", ".delete-machine", function () {
         });
     });
 });
+
+/**
+ * 删除规格
+ */
+$(document).on("click", ".delete-gauge", function () {
+    const gaugeId = $(this).attr("gauge-id");
+    Notiflix.Confirm.Show("警告", "是否确认删除", "确定", "取消", function () {
+        $.ajax({
+            url: serverUrl + "/gauge/" + gaugeId,
+            contentType: "application/json; charset=utf-8",
+            type: "DELETE",
+            beforeSend: function (XMLHttpRequest) {
+                XMLHttpRequest.setRequestHeader("token", token);
+            },
+            success: function (result) {
+                if (result.status === 0) {
+                    Notiflix.Notify.Success("删除成功");
+                    getAllGauge();
+                    getAllGaugeSelected();
+                } else {
+                    Notiflix.Notify.Failure(result.msg);
+                }
+            }
+        })
+    });
+});
+
 
 /**
  * 推送
@@ -243,8 +275,8 @@ function getArrangeDetail(dom) {
 
     const tr = $(dom).parents("tr");
 
-    let gauge = tr.find("td:eq(3)").text();
-    let inletDiameter = tr.find("td:eq(4)").text();
+    let inletDiameter = tr.find("td:eq(3)").text();
+    let gauge = tr.find("td:eq(4)").text();
     let positiveTolerance = tr.find("td:eq(5)").text();
     let negativeTolerance = tr.find("td:eq(6)").text();
     let arrangeDate = tr.find("td:eq(7)").text();
@@ -369,8 +401,8 @@ $(document).on("click", ".print-arrange-btn", function () {
     const tr = $(this).parents("tr");
 
     let arrangeId = $(this).attr("arrange-id");
-    let gauge = tr.find("td:eq(3)").text();
-    let inletDiameter = tr.find("td:eq(4)").text();
+    let inletDiameter = tr.find("td:eq(3)").text();
+    let gauge = tr.find("td:eq(4)").text();
     let positiveTolerance = tr.find("td:eq(5)").text();
     let negativeTolerance = tr.find("td:eq(6)").text();
     let arrangeDate = tr.find("td:eq(7)").text();

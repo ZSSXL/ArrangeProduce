@@ -76,6 +76,11 @@
                         getAllDraw();
                     } else {
                         getAllMachine(machineSort);
+                        if(machineSort === "annealing"){
+                            getAllMachineAnnealing();
+                        } else if(machineSort === "winding"){
+                            getAllMachineWinding();
+                        }
                     }
                     Notiflix.Notify.Success("添加成功");
                 } else {

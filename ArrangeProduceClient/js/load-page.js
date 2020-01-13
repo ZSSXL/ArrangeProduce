@@ -124,7 +124,7 @@ function getAllMachineDraw() {
 function showGaugeToArrange(data) {
     $("#gauge").empty();
     $.each(data, function (index, item) {
-        const option = $("<option></option>").append(item.gauge.toFixed(3));
+        const option = $("<option class='select-item'></option>").append(item.gauge.toFixed(3));
         option.attr("value", item.gauge.toFixed(3));
         $("#gauge").append(option);
     })
@@ -133,7 +133,7 @@ function showGaugeToArrange(data) {
 function showGaugeToAw(data) {
     $("#gauge-aw").empty();
     $.each(data, function (index, item) {
-        const option = $("<option></option>").append(item.gauge.toFixed(3));
+        const option = $("<option class='select-item'></option>").append(item.gauge.toFixed(3));
         option.attr("value", item.gauge.toFixed(3));
         $("#gauge-aw").append(option);
     })
@@ -142,7 +142,7 @@ function showGaugeToAw(data) {
 function showDraw(data) {
     $("#machine").empty();
     $.each(data, function (index, item) {
-        const option = $("<option></option>").append(item.machineName).attr("value", item.machineNumber);
+        const option = $("<option class='select-item'></option>").append(item.machineName).attr("value", item.machineNumber);
         $("#machine").append(option);
     })
 }
@@ -215,8 +215,8 @@ function analyticalArrange(result) {
             $("<tr></tr>").append(checkboxId)
                 .append(numTd)
                 .append(machineTd)
-                .append(gaugeTd)
                 .append(inletDiameter)
+                .append(gaugeTd)
                 .append(positiveToleranceTd)
                 .append(negativeToleranceTd)
                 .append(arrangeDateTd)
@@ -351,7 +351,7 @@ function getAllMachineAnnealing() {
 function showMachineToAw(data) {
     $("#machine-aw").empty();
     $.each(data, function (index, item) {
-        const option = $("<option></option>").append(item.machineName).attr("value", item.machineNumber);
+        const option = $("<option class='select-item'></option>").append(item.machineName).attr("value", item.machineNumber);
         $("#machine-aw").append(option);
     })
 }
@@ -359,7 +359,7 @@ function showMachineToAw(data) {
 // ========================== 获取所有退火/绕线机数据 ============================ //
 
 /**
- * 获取所有的小拉机排产数据
+ * 获取所有的退火机排产数据
  */
 function getAllAwArrange(page, size) {
     $.ajax({
@@ -396,7 +396,7 @@ function analyticalAwArrange(result) {
             let numTd = $("<td scope='row'></td>").append(index + 1);
             let machineTd = $("<td></td>").append(item.machine).attr("machine-name", item.machineName);
             let gaugeTd = $("<td></td>").append(parseFloat(item.gauge).toFixed(3));
-            let inletDiameter = $("<td></td>").append(parseFloat(item.inletDiameter).toFixed(3));
+            let groupNumberTd = $("<td></td>").append(item.groupNumber);
             let positiveToleranceTd = $("<td></td>").append(parseFloat(item.positiveTolerance).toFixed(3));
             let negativeToleranceTd = $("<td></td>").append(parseFloat(item.negativeTolerance).toFixed(3));
             let arrangeDateTd = $("<td></td>").append(printTimeFormat(item.arrangeDate));
@@ -416,10 +416,7 @@ function analyticalAwArrange(result) {
                 "print-status": item.status,
                 "creator": item.creator,
                 "create-time": item.createTime,
-                "arrange-id": item.awArrangeId,
-                "weight": item.weight,
-                "raw-materials": item.rawMaterials,
-                "group-number": item.groupNumber
+                "arrange-id": item.awArrangeId
             });
             let printBtn = $("<button class='btn btn-outline-light print-arrange-aw-btn'>打印</button>").attr("arrange-id", item.awArrangeId);
             let deleteBtn = $("<button class='btn btn-outline-danger delete-arrange-aw'>删除</button>").attr("aw-arrange-id", item.awArrangeId);
@@ -427,8 +424,8 @@ function analyticalAwArrange(result) {
             $("<tr></tr>").append(checkboxId)
                 .append(numTd)
                 .append(machineTd)
+                .append(groupNumberTd)
                 .append(gaugeTd)
-                .append(inletDiameter)
                 .append(positiveToleranceTd)
                 .append(negativeToleranceTd)
                 .append(arrangeDateTd)
@@ -550,7 +547,6 @@ function getAllEmployee(page, size) {
         type: "GET",
         success: function (result) {
             if (result.status === 0) {
-                console.log(result.data);
                 analyticalUser(result);
                 build_page_info_user(result);
                 build_page_li_user(result);
@@ -710,10 +706,7 @@ function getAllGroup() {
 function showAllGroup(data) {
     $("#group").empty();
     $.each(data, function (index, item) {
-        if (index === 0) {
-            $("#group-detail").text(item.groupNumber);
-        }
-        const option = $("<option></option>").append(item.groupName + " [ " + item.groupNumber + " ]").attr("value", item.groupNumber);
+        const option = $("<option class='select-item'></option>").append(item.groupNumber).attr("value", item.groupNumber);
         $("#group").append(option);
     })
 }

@@ -66,9 +66,9 @@ function analyticalArrange(result) {
             let numTd = $("<td scope='row'></td>").append(index + 1);
             let machineTd = $("<td></td>").append(item.machineName).attr("machine-number", item.machine);
             let gaugeTd = $("<td></td>").append(item.gauge);
-            let inletDiameter = $("<td></td>").append(item.inletDiameter);
-            let positiveTolerance = $("<td></td>").append(item.positiveTolerance);
-            let negativeTolerance = $("<td></td>").append(item.negativeTolerance);
+            let positiveTolerance = $("<td></td>").append(parseFloat(item.positiveTolerance).toFixed(3));
+            let negativeTolerance = $("<td></td>").append(parseFloat(item.negativeTolerance).toFixed(3));
+            let inletDiameter = $("<td></td>").append(parseFloat(item.inletDiameter).toFixed(3));
             let weightTd = $("<td></td>").append(item.weight);
             let arrangeDateTd = $("<td></td>").append(printTimeFormat(item.arrangeDate));
             let shiftTd = $("<td></td>");
@@ -94,9 +94,9 @@ function analyticalArrange(result) {
             $("<tr></tr>").append(numTd)
                 .append(machineTd)
                 .append(gaugeTd)
-                .append(inletDiameter)
                 .append(positiveTolerance)
                 .append(negativeTolerance)
+                .append(inletDiameter)
                 .append(weightTd)
                 .append(arrangeDateTd)
                 .append(printStatusTd)
@@ -244,8 +244,8 @@ function analyticalAwArrange(result) {
         $.each(data, function (index, item) {
             let numTd = $("<td scope='row'></td>").append(index + 1);
             let machineTd = $("<td></td>").append(item.machineName).attr("machine-number", item.machine);
+            let groupNumber = $("<td></td>").append(item.groupNumber);
             let gaugeTd = $("<td></td>").append(item.gauge);
-            let inletDiameter = $("<td></td>").append(item.inletDiameter);
             let positiveTolerance = $("<td></td>").append(item.positiveTolerance);
             let negativeTolerance = $("<td></td>").append(item.positiveTolerance);
             let weightTd = $("<td></td>").append(item.weight);
@@ -259,8 +259,6 @@ function analyticalAwArrange(result) {
             let printBtn = $("<button>打印</button>").attr({
                 "aw-arrange-id": item.awArrangeId,
                 "creator": item.creator,
-                "group-number": item.groupNumber,
-                "raw-materials": item.rawMaterials
             });
             let printStatusTd = $("<td></td>");
             if (item.status === 1) {
@@ -273,11 +271,10 @@ function analyticalAwArrange(result) {
             let btnTd = $("<td></td>").append(printBtn);
             $("<tr></tr>").append(numTd)
                 .append(machineTd)
+                .append(groupNumber)
                 .append(gaugeTd)
-                .append(inletDiameter)
                 .append(positiveTolerance)
                 .append(negativeTolerance)
-                .append(weightTd)
                 .append(arrangeDateTd)
                 .append(printStatusTd)
                 .append(shiftTd)

@@ -31,17 +31,14 @@
                             <img id="qr-code" src="/img/photos/default.png">
                         </div>
                         <div class="col-lg-6 col-sm-6">
-                            <h3>机器&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id="machine-name"></span></h3>
-                            <h3>线规&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id="gauge-value"></span></h3>
-                            <h3>进口线径&nbsp;: <span id="inlet-diameters-value"></span></h3>
-                            <h3>公差&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: +<span id="positive-tolerance-value"></span>
-                                &nbsp;|&nbsp;-<span
-                                        id="negative-tolerance-value"></span></h3>
-                            <h3>生产时间&nbsp;: <span id="arrange-time"></span></h3>
-                            <h3>班次&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id="shift-value"></span></h3>
-                            <h3>原材料&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id="raw-materials-value"></span></h3>
+                            <h3>设备编码&nbsp;&nbsp;&nbsp;: <span id="machine-name"></span></h3>
+                            <h3>收放线编码&nbsp;: <span id="group-number-value"></span></h3>
+                            <h3>规格&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id="gauge-value"></span><strong> (mm)</strong></h3>
+                            <h3>负公差&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: +<span id="positive-tolerance-value"></span></h3>
+                            <h3>负公差&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: -<span id="negative-tolerance-value"></span></h3>
                             <h3>排单人&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id="creator-value"></span></h3>
-                            <h5>收线头 : <span id="group-number-value" style="word-wrap:break-word;"></span></h5>
+                            <h3>班次&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id="shift-value"></span></h3>
+                            <h3>生产时间&nbsp;: <span id="arrange-time"></span></h3>
                         </div>
                         <!--endprint-->
                     </div>
@@ -132,18 +129,6 @@
                         </div>
                         <div class="form-group row">
                             <div class="col-lg-2 col-sm-3">
-                                <h4>进口线径</h4>
-                            </div>
-                            <div class="col-lg-10 col-sm-9">
-                                <div class="input-group">
-                                    <input type="text" placeholder="group number" class="form-control"
-                                           id="detail-inlet-diameter-aw">
-                                    <div class="input-group-append"><span class="input-group-text">mm</span></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-lg-2 col-sm-3">
                                 <h4>分组信息</h4>
                             </div>
                             <div class="col-lg-10 col-sm-9">
@@ -169,26 +154,6 @@
                                     <div class="col-sm-9">
                                         <input type="text" placeholder="shift"
                                                class="form-control form-control-success" id="detail-shift-aw">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-lg-6 col-sm-6">
-                                <div class="row">
-                                    <h4 class="col-sm-4">重量(kg)</h4>
-                                    <div class="col-sm-8">
-                                        <input type="text" placeholder="weight"
-                                               class="form-control form-control-success" id="detail-weight-aw">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 col-sm-6">
-                                <div class="row">
-                                    <h4 class="col-sm-3">原料</h4>
-                                    <div class="col-sm-9">
-                                        <input type="text" placeholder="draw machine"
-                                               class="form-control form-control-success" id="detail-raw-materials-aw">
                                     </div>
                                 </div>
                             </div>
@@ -244,6 +209,7 @@
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
+    <!-- 排产打印 -->
     <div class="container-fluid block">
         <div class="row">
             <!-- Form Elements -->
@@ -257,20 +223,20 @@
                             <div class="i-checks">
                                 <input id="sort-annealing" type="radio" checked="" value="annealing" name="sort"
                                        class="radio-template">
-                                <label for="radioCustom2">退火机</label>
+                                <label for="sort-annealing">退火机</label>
                             </div>
                         </div>
                         <div class="col-lg-2 col-sm-3">
                             <div class="i-checks">
                                 <input id="sort-winding" type="radio" value="winding" name="sort"
                                        class="radio-template">
-                                <label for="radioCustom1">收线端</label>
+                                <label for="sort-winding">收线端</label>
                             </div>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-lg-2 col-sm-2 form-control-label">
-                            <h4 class="text-white">机器</h4>
+                            <h4 class="text-white">设备</h4>
                         </label>
                         <div class="col-lg-7 col-sm-7">
                             <select id="machine-aw" name="machine" class="form-control mb-3 mb-3">
@@ -283,7 +249,20 @@
                     <div class="line"></div>
                     <div class="form-group row">
                         <label class="col-lg-2 col-sm-3 form-control-label">
-                            <h4 class="text-white">线规(mm)</h4>
+                            <h4 class="text-white">分组选择</h4>
+                        </label>
+                        <div class="col-lg-7 col-sm-7">
+                            <select id="group" name="gauge" class="form-control">
+                            </select>
+                        </div>
+                        <div class="col-lg-2 col-sm-2">
+                            <button class="btn btn-outline-warning" id="group-setting">设置</button>
+                        </div>
+                    </div>
+                    <div class="line"></div>
+                    <div class="form-group row">
+                        <label class="col-lg-2 col-sm-3 form-control-label">
+                            <h4 class="text-white">规格(mm)</h4>
                         </label>
                         <div class="col-lg-7 col-sm-7">
                             <select id="gauge-aw" name="gauge" class="form-control mb-3 mb-3">
@@ -295,53 +274,23 @@
                     </div>
                     <div class="line"></div>
                     <div class="form-group row">
-                        <label class="col-lg-2 col-sm-3 form-control-label">
-                            <h4 class="text-white">分组选择</h4>
-                        </label>
-                        <div class="col-lg-7 col-sm-7">
-                            <select id="group" name="gauge" class="form-control">
-                            </select>
-                            <small id="group-detail" class="help-block-none text-primary"></small>
-                        </div>
-                        <div class="col-lg-2 col-sm-2">
-                            <button class="btn btn-outline-warning" id="group-setting">设置</button>
-                        </div>
-                    </div>
-                    <div class="line"></div>
-                    <div class="form-group row">
                         <label class="col-sm-2 form-control-label">
-                            <h4 class="text-white">原材料</h4>
+                            <h4 class="text-white">正公差(mm)</h4>
                         </label>
-                        <div class="col-sm-10">
-                            <input id="raw-materials" type="text" class="form-control" value="" placeholder="选择原材料">
-                        </div>
-                    </div>
-                    <div class="line"></div>
-                    <div class="form-group row">
-                        <label class="col-sm-2 form-control-label">
-                            <h4 class="text-white">进口线径</h4>
-                        </label>
-                        <div class="col-sm-10">
-                            <input id="inlet-diameter" type="text" class="form-control" placeholder="请输入进口线径" value="">
-                        </div>
-                    </div>
-                    <div class="line"></div>
-                    <div class="form-group row">
-                        <label class="col-sm-2 form-control-label">
-                            <h4 class="text-white">公差(mm)</h4>
-                        </label>
-                        <div class="col-sm-5">
+                        <div class="col-sm-8">
                             <div class="input-group">
-                                <div class="input-group-prepend"><span class="input-group-text text-white">+</span>
-                                </div>
                                 <input id="positive-tolerance" type="text" placeholder="请输入正公差"
                                        class="form-control">
                             </div>
                         </div>
-                        <div class="col-sm-5">
+                    </div>
+                    <div class="line"></div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 form-control-label">
+                            <h4 class="text-white">负公差(mm)</h4>
+                        </label>
+                        <div class="col-sm-8">
                             <div class="input-group">
-                                <div class="input-group-prepend"><span class="input-group-text text-white">-</span>
-                                </div>
                                 <input id="negative-tolerance" type="text" placeholder="请输入负公差" class="form-control">
                             </div>
                         </div>
@@ -349,18 +298,9 @@
                     <div class="line"></div>
                     <div class="form-group row">
                         <label class="col-sm-2 form-control-label">
-                            <h4 class="text-white">重量(kg)</h4>
-                        </label>
-                        <div class="col-sm-10">
-                            <input id="weight-aw" type="text" class="form-control" value="">
-                        </div>
-                    </div>
-                    <div class="line"></div>
-                    <div class="form-group row">
-                        <label class="col-sm-2 form-control-label">
                             <h4 class="text-white">生产时间</h4>
                         </label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-4">
                             <input id="arrange-date-aw" type="date" class="form-control">
                         </div>
                     </div>
@@ -389,7 +329,6 @@
                         <div class="col-lg-10 col-sm-10 ml-auto">
                             <button id="save-btn-aw" type="submit" class="btn btn-outline-info">保存</button>
                             <button id="reset-btn-aw" class="btn btn-outline-secondary">重置</button>
-                            <button id="print-btn-aw" type="submit" class="btn btn-outline-warning">打印预览</button>
                         </div>
                     </div>
                 </div>
@@ -428,8 +367,8 @@
                             <th class="sorter-false">全选<input type="checkbox" id="ck-aw"></th>
                             <th class="sorter-false">#</th>
                             <th class="sorter-false">设备</th>
+                            <th>收放线编号(mm)</th>
                             <th>线规(mm)</th>
-                            <th>进口线径(mm)</th>
                             <th>正公差(mm)</th>
                             <th>负公差(mm)</th>
                             <th>生产时间</th>
@@ -569,9 +508,9 @@
         $("#group-area").empty();
         $.each(data, function (index, item) {
             let groupDiv = $("<div class='delete-group' style='cursor: pointer;' data-placement='top'></div>")
-                .append(item.groupName).attr({
+                .append(item.groupNumber).attr({
                     "group-id": item.groupId,
-                    "title": item.groupNumber + " [点击删除]"
+                    "title": "[点击删除]"
                 });
             $("<div class='col-lg-2 col-sm-4 text-center'></div>").append(groupDiv).appendTo("#group-area");
         });
@@ -601,8 +540,4 @@
             .filter(":contains('" + (val) + "')").show();//filter和contains共同来实现了这个功能。
     }
 
-    $("#group").change(function () {
-        let groupNumber = $("#group  option:selected").val();
-        $("#group-detail").text(groupNumber);
-    });
 </script>
