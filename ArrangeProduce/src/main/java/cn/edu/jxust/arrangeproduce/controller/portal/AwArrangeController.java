@@ -81,15 +81,12 @@ public class AwArrangeController extends BaseController {
                             .machine(awArrangeVo.getMachine())
                             .machineName(machineName)
                             .shift(awArrangeVo.getShift())
-                            .weight(awArrangeVo.getWeight())
                             .status(0)
                             .sort(awArrangeVo.getSort())
                             .push(Const.DEFAULT_NO_PUSH)
                             .creator(username)
-                            .negativeTolerance(awArrangeVo.getNegativeTolerance())
-                            .positiveTolerance(awArrangeVo.getPositiveTolerance())
-                            .inletDiameter(awArrangeVo.getInletDiameter())
-                            .rawMaterials(awArrangeVo.getRawMaterials())
+                            .negativeTolerance(ParameterUtil.isEmpty(awArrangeVo.getNegativeTolerance(), "0"))
+                            .positiveTolerance(ParameterUtil.isEmpty(awArrangeVo.getPositiveTolerance(), "0"))
                             .groupNumber(awArrangeVo.getGroup())
                             .build());
                 } catch (Exception e) {
@@ -259,13 +256,10 @@ public class AwArrangeController extends BaseController {
                     awArrange.setGauge(updateVo.getGauge());
                     awArrange.setMachine(machineNumber);
                     awArrange.setMachineName(updateVo.getMachineName());
-                    awArrange.setPositiveTolerance(updateVo.getPositiveTolerance());
-                    awArrange.setNegativeTolerance(updateVo.getNegativeTolerance());
-                    awArrange.setInletDiameter(updateVo.getInletDiameter());
+                    awArrange.setPositiveTolerance(ParameterUtil.isEmpty(updateVo.getPositiveTolerance(), "0"));
+                    awArrange.setNegativeTolerance(ParameterUtil.isEmpty(updateVo.getNegativeTolerance(), "0"));
                     awArrange.setArrangeDate(updateVo.getArrangeDate());
                     awArrange.setShift(updateVo.getShift());
-                    awArrange.setWeight(updateVo.getWeight());
-                    awArrange.setRawMaterials(updateVo.getRawMaterials());
                     awArrange.setGroupNumber(updateVo.getGroupNumber());
                     try {
                         log.info("update aw arrange : [{}] success", updateVo.getArrangeId());

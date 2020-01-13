@@ -45,12 +45,4 @@ public interface GroupService {
      */
     Boolean checkGroupNumber(String enterpriseId, String groupNumber);
 
-    /**
-     * 查看是否已存在该组名
-     *
-     * @param enterpriseId 企业Id
-     * @param groupName    组名
-     * @return Boolean
-     */
-    Boolean checkGroupName(String enterpriseId, String groupName);
 }

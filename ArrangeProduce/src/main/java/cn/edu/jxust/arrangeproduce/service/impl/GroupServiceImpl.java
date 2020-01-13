@@ -34,7 +34,7 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public ServerResponse<List<Group>> getAllGroupByEnterpriseId(String enterpriseId) {
-        List<Group> groupList = groupRepository.findAllByEnterpriseIdOrderByGroupNameDesc(enterpriseId);
+        List<Group> groupList = groupRepository.findAllByEnterpriseIdOrderByGroupNumberAsc(enterpriseId);
         if (groupList == null) {
             return ServerResponse.createByErrorMessage("查询失败");
         } else {
@@ -54,8 +54,4 @@ public class GroupServiceImpl implements GroupService {
         return groupRepository.findByGroupNumberAndEnterpriseId(groupNumber, enterpriseId).isPresent();
     }
 
-    @Override
-    public Boolean checkGroupName(String enterpriseId, String groupName) {
-        return groupRepository.findByGroupNameAndEnterpriseId(groupName, enterpriseId).isPresent();
-    }
 }

@@ -40,7 +40,6 @@ public class ArrangeVo {
     /**
      * 安排重量
      */
-    @NotEmpty
     private String weight;
 
     /**
@@ -64,13 +63,11 @@ public class ArrangeVo {
     /**
      * 进口线径
      */
-    @NotEmpty
     private String inletDiameter;
 
     /**
      * 原材料
      */
-    @NotEmpty
     private String rawMaterials;
 
 }
