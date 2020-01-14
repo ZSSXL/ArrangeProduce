@@ -68,7 +68,7 @@ public interface ArrangeRepository extends JpaRepository<Arrange, String> {
      * @param pageable     分页信息
      * @return Page<Arrange>
      */
-    Page<Arrange> findAllByEnterpriseIdAndPushOrderByArrangeDateDesc(String enterpriseId, String push, Pageable pageable);
+    Page<Arrange> findAllByEnterpriseIdAndPushOrderByUpdateTimeDesc(String enterpriseId, String push, Pageable pageable);
 
     /**
      * 更新打印状态
@@ -86,12 +86,13 @@ public interface ArrangeRepository extends JpaRepository<Arrange, String> {
      * 更新推送状态
      *
      * @param push         推送
+     * @param updateTime   修改时间
      * @param arrangeId    id
      * @param enterpriseId 企业Id
      * @return Integer
      */
     @Modifying
     @Transactional(rollbackFor = Exception.class)
-    @Query(value = "update ap_arrange aa set aa.push = ?1 where aa.arrange_id = ?2 and aa.enterprise_id = ?3 ", nativeQuery = true)
-    Integer update(String push, String arrangeId, String enterpriseId);
+    @Query(value = "update ap_arrange aa set aa.push = ?1, aa.update_time = ?2 where aa.arrange_id = ?3 and aa.enterprise_id = ?4 ", nativeQuery = true)
+    Integer update(String push, Long updateTime, String arrangeId, String enterpriseId);
 }

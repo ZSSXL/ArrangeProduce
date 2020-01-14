@@ -48,7 +48,7 @@ public interface AwArrangeRepository extends JpaRepository<AwArrange, String> {
      * @param pageable     分页信息
      * @return Page<AwArrange>
      */
-    Page<AwArrange> findAllByEnterpriseIdAndPushOrderByArrangeDateDesc(String enterpriseId, String push, Pageable pageable);
+    Page<AwArrange> findAllByEnterpriseIdAndPushOrderByUpdateTimeDesc(String enterpriseId, String push, Pageable pageable);
 
     /**
      * 删除一条排产信息
@@ -76,12 +76,13 @@ public interface AwArrangeRepository extends JpaRepository<AwArrange, String> {
      * 更新推送状态
      *
      * @param push         推送
+     * @param updateTime   更新时间
      * @param awArrangeId  id
      * @param enterpriseId 企业Id
      * @return Integer
      */
     @Modifying
     @Transactional(rollbackFor = Exception.class)
-    @Query(value = "update ap_awarrange aa set aa.push = ?1 where aa.aw_arrange_id = ?2 and aa.enterprise_id = ?3 ", nativeQuery = true)
-    Integer update(String push, String awArrangeId, String enterpriseId);
+    @Query(value = "update ap_awarrange aa set aa.push = ?1, aa.update_time = ?2 where aa.aw_arrange_id = ?3 and aa.enterprise_id = ?4 ", nativeQuery = true)
+    Integer update(String push, Long updateTime, String awArrangeId, String enterpriseId);
 }

@@ -57,7 +57,7 @@ public class AwArrangeServiceImpl implements AwArrangeService {
 
     @Override
     public ServerResponse<Page<AwArrange>> getAllAwArrangeByEnterpriseIdAndPush(String enterpriseId, String push, Pageable pageable) {
-        Page<AwArrange> awArrangePage = awArrangeRepository.findAllByEnterpriseIdAndPushOrderByArrangeDateDesc(enterpriseId, push, pageable);
+        Page<AwArrange> awArrangePage = awArrangeRepository.findAllByEnterpriseIdAndPushOrderByUpdateTimeDesc(enterpriseId, push, pageable);
         if (awArrangePage == null) {
             return ServerResponse.createByErrorMessage("查询失败");
         } else {
@@ -80,7 +80,7 @@ public class AwArrangeServiceImpl implements AwArrangeService {
     @Override
     public ServerResponse updatePush(String enterpriseId, List<String> awArrangeList) {
         for (String awArrangeId : awArrangeList) {
-            Integer integer = awArrangeRepository.update(Const.PUSH, awArrangeId, enterpriseId);
+            Integer integer = awArrangeRepository.update(Const.PUSH, System.currentTimeMillis(), awArrangeId, enterpriseId);
             log.info("update awArrange : {} result : {}", awArrangeId, integer);
         }
         return ServerResponse.createBySuccessMessage("更新成功");

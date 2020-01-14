@@ -76,7 +76,7 @@ public class ArrangeServiceImpl implements ArrangeService {
 
     @Override
     public ServerResponse<Page<Arrange>> getAllArrangeByEnterpriseIdAndPush(String enterpriseId, String push, Pageable pageable) {
-        Page<Arrange> arrangeList = arrangeRepository.findAllByEnterpriseIdAndPushOrderByArrangeDateDesc(enterpriseId, push, pageable);
+        Page<Arrange> arrangeList = arrangeRepository.findAllByEnterpriseIdAndPushOrderByUpdateTimeDesc(enterpriseId, push, pageable);
         if (arrangeList == null) {
             return ServerResponse.createByErrorMessage("查询信息失败");
         } else {
@@ -87,7 +87,7 @@ public class ArrangeServiceImpl implements ArrangeService {
     @Override
     public ServerResponse updatePush(String enterpriseId, List<String> arrangeIdList) {
         for (String arrangeId : arrangeIdList) {
-            Integer integer = arrangeRepository.update(Const.PUSH, arrangeId, enterpriseId);
+            Integer integer = arrangeRepository.update(Const.PUSH, System.currentTimeMillis(), arrangeId, enterpriseId);
             log.info("update arrange : {} result : {}", arrangeId, integer);
         }
         return ServerResponse.createBySuccessMessage("更新成功");

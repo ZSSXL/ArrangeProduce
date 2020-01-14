@@ -216,11 +216,16 @@ public class AwArrangeController extends BaseController {
                     } else {
                         // 更新排产打印状态
                         String enterpriseId = tokenUtil.getClaim(token, "enterpriseId").asString();
-                        Boolean update = awArrangeService.updateStatus(awArrangeId, enterpriseId);
-                        if (update) {
+                        String role = tokenUtil.getClaim(token, "role").asString();
+                        if (StringUtils.equals(role, Const.Role.ROLE_MANAGER)) {
                             return ServerResponse.createBySuccess(qrCode);
                         } else {
-                            return ServerResponse.createBySuccess("打印成功，但是更新排产信息打印状态失败", qrCode);
+                            Boolean update = awArrangeService.updateStatus(awArrangeId, enterpriseId);
+                            if (update) {
+                                return ServerResponse.createBySuccess(qrCode);
+                            } else {
+                                return ServerResponse.createBySuccess("打印成功，但是更新排产信息打印状态失败", qrCode);
+                            }
                         }
                     }
                 }
@@ -229,7 +234,7 @@ public class AwArrangeController extends BaseController {
     }
 
     /**
-     * 修改排场信息
+     * 修改排产信息
      *
      * @param token    用户token
      * @param updateVo 更新实体Vo
@@ -265,7 +270,7 @@ public class AwArrangeController extends BaseController {
                         log.info("update aw arrange : [{}] success", updateVo.getArrangeId());
                         return awArrangeService.createAwArrange(awArrange);
                     } catch (Exception e) {
-                        log.error("update aw arrange : [{}] has error : {}", updateVo.getArrangeId(), e.getMessage());
+                        log.error("update aw arrange : [{}] has error : [{}]", updateVo.getArrangeId(), e.getMessage());
                         return ServerResponse.createByErrorMessage("修改排产信息异常");
                     }
                 }

@@ -206,6 +206,7 @@ public class ArrangeController extends BaseController {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.PARAMETER_ERROR.getCode(), ResponseCode.PARAMETER_ERROR.getDesc());
         } else {
             String enterpriseId = tokenUtil.getClaim(token, "enterpriseId").asString();
+            String role = tokenUtil.getClaim(token, "role").asString();
             String conflict = arrangeService.isConflict(arrangeVo.getArrangeDate(), arrangeVo.getShift(), arrangeVo.getMachine(), enterpriseId);
             String qrCode = generateQrCode(arrangeVo);
             if (!StringUtils.isEmpty(conflict)) {
@@ -213,12 +214,18 @@ public class ArrangeController extends BaseController {
                 if (qrCode == null) {
                     return ServerResponse.createByErrorMessage("生成二维码失败");
                 } else {
-                    Boolean update = arrangeService.updateStatus(conflict, enterpriseId);
-                    if (update) {
+                    // 管理员打印不改变打印状态
+                    if (StringUtils.equals(role, Const.Role.ROLE_MANAGER)) {
                         return ServerResponse.createBySuccess(qrCode);
                     } else {
-                        return ServerResponse.createBySuccess("打印成功，但是更新排产信息打印状态失败", qrCode);
+                        Boolean update = arrangeService.updateStatus(conflict, enterpriseId);
+                        if (update) {
+                            return ServerResponse.createBySuccess(qrCode);
+                        } else {
+                            return ServerResponse.createBySuccess("打印成功，但是更新排产信息打印状态失败", qrCode);
+                        }
                     }
+
                 }
             } else {
                 // 如果不存在，先保存，后打印
@@ -246,7 +253,7 @@ public class ArrangeController extends BaseController {
                                 .machineName(machineName)
                                 .push(Const.DEFAULT_NO_PUSH)
                                 // 更新打印状态为已打印(1)
-                                .status(1)
+                                .status(StringUtils.equals(role, Const.Role.ROLE_MANAGER) ? 0 : 1)
                                 .creator(username)
                                 .inletDiameter(ParameterUtil.isEmpty(arrangeVo.getInletDiameter(), "null"))
                                 .rawMaterials(ParameterUtil.isEmpty(arrangeVo.getRawMaterials(), "null"))
@@ -254,7 +261,7 @@ public class ArrangeController extends BaseController {
                                 .negativeTolerance(arrangeVo.getNegativeTolerance())
                                 .build());
                     } catch (Exception e) {
-                        log.error("create arrange error {}", e.getClass());
+                        log.error("create arrange error [{}]", e.getClass());
                         return ServerResponse.createByErrorMessage("新建排产任务异常");
                     }
                     return ServerResponse.createBySuccess(qrCode);
@@ -279,6 +286,7 @@ public class ArrangeController extends BaseController {
                 return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
             } else {
                 Arrange arrange = arrangeService.getArrangeById(arrangeId);
+                String role = tokenUtil.getClaim(token, "role").asString();
                 if (arrange == null) {
                     return ServerResponse.createByErrorMessage("打印失败，没有该排产信息");
                 } else {
@@ -294,14 +302,17 @@ public class ArrangeController extends BaseController {
                         return ServerResponse.createByErrorMessage("生成二维码失败");
                     } else {
                         // 更新排产打印状态
-                        String enterpriseId = tokenUtil.getClaim(token, "enterpriseId").asString();
-                        Boolean update = arrangeService.updateStatus(arrangeId, enterpriseId);
-                        if (update) {
+                        if (StringUtils.equals(role, Const.Role.ROLE_MANAGER)) {
                             return ServerResponse.createBySuccess(qrCode);
                         } else {
-                            return ServerResponse.createBySuccess("打印成功，但是更新排产信息打印状态失败", qrCode);
+                            String enterpriseId = tokenUtil.getClaim(token, "enterpriseId").asString();
+                            Boolean update = arrangeService.updateStatus(arrangeId, enterpriseId);
+                            if (update) {
+                                return ServerResponse.createBySuccess(qrCode);
+                            } else {
+                                return ServerResponse.createBySuccess("打印成功，但是更新排产信息打印状态失败", qrCode);
+                            }
                         }
-
                     }
                 }
             }
@@ -309,7 +320,7 @@ public class ArrangeController extends BaseController {
     }
 
     /**
-     * 修改排场信息
+     * 修改排产信息
      *
      * @param token    用户token
      * @param updateVo 更新实体Vo
@@ -342,10 +353,10 @@ public class ArrangeController extends BaseController {
                     arrange.setWeight(ParameterUtil.isEmpty(updateVo.getWeight(), "0"));
                     arrange.setRawMaterials(updateVo.getRawMaterials());
                     try {
-                        log.info("update arrange : {} success", updateVo.getArrangeId());
+                        log.info("update arrange : [{}] success", updateVo.getArrangeId());
                         return arrangeService.createArrange(arrange);
                     } catch (Exception e) {
-                        log.error("modify arrange : {} has error : {}", updateVo.getArrangeId(), e.getMessage());
+                        log.error("modify arrange : [{}] has error : [{}]", updateVo.getArrangeId(), e.getMessage());
                         return ServerResponse.createByErrorMessage("修改排产信息异常");
                     }
                 }
