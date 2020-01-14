@@ -91,25 +91,3 @@ ul.checkbox-tags li input[type="checkbox"] {
 ul.checkbox-tags li input[type="checkbox"]:focus + label {
 	border: 2px solid #e9a1ff;
 }
-
-/* ========================= select css ============================= */
-
-.select-item {
-	border: 1px solid #FFFFFF;
-
-	background-color: #FFFFFF;
-	color: #000000;
-}
-
-.select-item:hover {
-	color: #0CBF73;
-}
-
-/* ============================== 箭头 ============================== */
-
-.arrow {
-	font-size: 100px;
-	margin: -60px 0;
-	padding: -60px 0;
-}
-
