@@ -22,7 +22,8 @@
                             <img id="qr-code" src="/img/photos/default.png">
                         </div>
                         <div class="col-lg-6 col-sm-6">
-                            <h3>设备型号&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id="machine-name"></span></h3>
+                            <h3>设备型号&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id="machine-name"></span>
+                            </h3>
                             <h3>规格&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id="gauge-value"></span>
                                 <strong>(mm)</strong></h3>
                             <h3>进口线径&nbsp;: <span id="inlet-diameters-value"></span> <strong>(mm)</strong></h3>
@@ -68,20 +69,20 @@
                 </div>
                 <hr/>
                 <div class="row">
-                    <table class="table table-striped table-sm">
+                    <table id="sampleTable-arrange" class="table table-striped table-sm tablesorter-default">
                         <thead class="text-center text-white">
                         <tr>
-                            <th>#</th>
-                            <th>设备</th>
-                            <th>线规(mm)</th>
-                            <th>正公差(mm)</th>
-                            <th>负公差(mm)</th>
-                            <th>进口线径(mm)</th>
-                            <th>重量(kg)</th>
+                            <th class="sorter-false">#</th>
+                            <th class="sorter-false">设备</th>
+                            <th class="sorter-false">线规(mm)</th>
+                            <th class="sorter-false">正公差(mm)</th>
+                            <th class="sorter-false">负公差(mm)</th>
+                            <th class="sorter-false">进口线径(mm)</th>
+                            <th class="sorter-false">重量(kg)</th>
                             <th>安排时间</th>
-                            <th>打印状态</th>
-                            <th>班次</th>
-                            <th>操作</th>
+                            <th class="sorter-false">打印状态</th>
+                            <th class="sorter-false">班次</th>
+                            <th class="sorter-false">操作</th>
                         </tr>
                         </thead>
                         <tbody id="arrange-history-area" class="text-center">
@@ -115,6 +116,7 @@
 
 <!-- javascript -->
 <script src="js/function/arrange.js"></script>
+<script src="js/jquery.tablesorter.min.js"></script>
 <script type="text/javascript">
     $("#start-print").click(function () {
         preview();
@@ -130,6 +132,10 @@
     }
 
     $(function () {
+        $("#sampleTable-arrange").tablesorter({
+            sortReset: true
+        });
+
         $("#input-filter").keyup(function () {
             filterTable($(this).val());
         }).keyup();
