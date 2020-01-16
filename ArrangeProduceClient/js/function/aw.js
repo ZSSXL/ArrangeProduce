@@ -266,6 +266,7 @@ function getAwArrangeDetail(dom) {
     let arrangeDate = tr.find("td:eq(7)").text();
     let shift = tr.find("td:eq(8)").text();
     let machine = tr.find("td:eq(2)").attr("machine-name");
+    let machineNumber = tr.find("td:eq(2)").text();
     let push = tr.find("td:eq(9)").text();
 
     let data = {
@@ -279,7 +280,8 @@ function getAwArrangeDetail(dom) {
         machine,
         arrangeDate,
         push,
-        groupNumber
+        groupNumber,
+        machineNumber
     };
 
     $("#detail-gauge-aw").val(gauge);
@@ -291,6 +293,7 @@ function getAwArrangeDetail(dom) {
     $("#detail-create-time-aw").val(printTimeFormatComplete(parseInt(createTime)));
     $("#detail-push-aw").val(push);
     $("#detail-machine-aw").val(machine);
+    $("#detail-machine-aw").attr("machine-number", machineNumber);
     $("#detail-group-number-aw").val(groupNumber);
     if (printStatus === "0") {
         $("#detail-print-aw").val("未打印");
@@ -312,6 +315,7 @@ $("#print-history").click(function () {
     let negativeTolerance = $("#detail-negative-tolerance-aw").val();
     let shift = $("#detail-shift-aw").val();
     let machine = $("#detail-machine-aw").val();
+    let machineNumber = $("#detail-machine-aw").attr("machine-number");
     let arrangeDate = $("#detail-arrange-time-aw").val();
     let creator = $("#detail-creator-aw").val();
     let groupNumber = $("#detail-group-number-aw").val();
@@ -324,7 +328,8 @@ $("#print-history").click(function () {
         shift,
         machine,
         arrangeDate,
-        groupNumber
+        groupNumber,
+        machineNumber
     };
 
     $.ajax({
@@ -353,13 +358,14 @@ $(document).on("click", ".print-arrange-aw-btn", function () {
     let awArrangeId = $(this).attr("arrange-id");
 
     const tr = $(this).parents("tr");
+    let machine = tr.find("td:eq(2)").attr("machine-name");
+    let machineNumber = tr.find("td:eq(2)").text();
     let groupNumber = tr.find("td:eq(3)").text();
     let gauge = tr.find("td:eq(4)").text();
     let positiveTolerance = tr.find("td:eq(5)").text();
     let negativeTolerance = tr.find("td:eq(6)").text();
     let arrangeDate = tr.find("td:eq(7)").text();
     let shift = tr.find("td:eq(8)").text();
-    let machine = tr.find("td:eq(2)").attr("machine-name");
     let rawMaterial = tr.find("td:eq(10)").find("button:eq(1)").attr("raw-materials");
     let creator = tr.find("td:eq(10)").find("button:eq(1)").attr("creator");
 
@@ -369,6 +375,7 @@ $(document).on("click", ".print-arrange-aw-btn", function () {
         negativeTolerance,
         shift,
         machine,
+        machineNumber,
         arrangeDate,
         rawMaterial,
         creator,
@@ -399,17 +406,78 @@ $(document).on("click", ".print-arrange-aw-btn", function () {
  * @param qrCode
  */
 function generateQrCodeByHistory(data, qrCode) {
-    $("#qr-code").attr("src", qrCode);
-    $("#machine-name").text(data.machine);
-    $("#gauge-value").text(data.gauge);
-    $("#positive-tolerance-value").text(data.positiveTolerance);
-    $("#negative-tolerance-value").text(data.negativeTolerance);
-    $("#arrange-time").text(data.arrangeDate);
-    $("#shift-value").text(data.shift);
-    $("#creator-value").text(data.creator);
-    $("#group-number-value").text(data.groupNumber);
-}
+    $("#print-btn-aw").empty();
 
+    let ra = new RegExp("A", "g");
+    let rb = new RegExp("B", "g");
+
+    // 获取设备编码第一个字符
+    let str = data.machineNumber.slice(0, 1);
+    let groupSide = data.groupNumber.slice(0, 1);
+    if (str === "t") {
+        let groupNow = data.groupNumber.replace(ra, "").replace(rb, "").split("-");
+        let groupNumbers = [];
+        for (i = parseInt(groupNow[0]); i <= parseInt(groupNow[1]); i++) {
+            let test = i < 10 ? "0" + i : i;
+            groupNumbers.push(groupSide + test);
+        }
+        $.each(groupNumbers, function (index, item) {
+            let rowDiv = $("<div class='row' style='page-break-after:always;'></div>");
+            let qrCodeDiv = $("<div class='col-lg-6 col-sm-6'></div>").append($("<img>").attr("src", qrCode[index]));
+            let dataDiv = $("<div class='col-lg-6 col-ms-6'></div>");
+
+            let machineH = $("<h3>设备型号&nbsp;: </h3>").append($("<span>  </span>").append(data.machine));
+            let groupH = $("<h3></h3>").append("放线编码 : " + item);
+            let gaugeH = $("<h3>规格&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </h3>").append($("<span></span>").append(data.gauge));
+            let positiveToleranceH = $("<h3>正公差&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </h3>").append($("<span></span>").append(data.positiveTolerance));
+            let negativeToleranceH = $("<h3>负公差&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </h3>").append($("<span></span>").append(data.negativeTolerance));
+            let creatorH = $("<h3>排单人&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </h3>").append($("<span></span>").append(data.creator));
+            let shiftH = $("<h3>班次&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </h3>").append($("<span></span>").append(data.shift));
+            let arrangeDataH = $("<h3>生产时间&nbsp;: </h3>").append($("<span></span>").append(data.arrangeDate));
+
+            dataDiv.append(machineH)
+                .append(groupH)
+                .append(gaugeH)
+                .append(positiveToleranceH)
+                .append(negativeToleranceH)
+                .append(creatorH)
+                .append(shiftH)
+                .append(arrangeDataH);
+            rowDiv.append(qrCodeDiv).append(dataDiv).appendTo("#print-btn-aw");
+        });
+    } else if (str === "s") {
+        let groupNow = data.groupNumber.replace(ra, "").replace(rb, "").split("-");
+        let groupNumbers = [];
+        for (i = parseInt(groupNow[0]); i <= parseInt(groupNow[1]); i++) {
+            let test = i < 10 ? "0" + i : i;
+            groupNumbers.push(groupSide + test);
+        }
+        $.each(groupNumbers, function (index, item) {
+            let rowDiv = $("<div class='row' style='page-break-after:always;'></div>");
+            let qrCodeDiv = $("<div class='col-lg-6 col-sm-6'></div>").append($("<img>").attr("src", qrCode[index]));
+            let dataDiv = $("<div class='col-lg-6 col-ms-6'></div>");
+
+            let machineH = $("<h3>设备型号&nbsp;: </h3>").append($("<span>  </span>").append(data.machine));
+            let groupH = $("<h3></h3>").append("收线编码 : " + item);
+            let gaugeH = $("<h3>规格&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </h3>").append($("<span></span>").append(data.gauge));
+            let positiveToleranceH = $("<h3>正公差&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </h3>").append($("<span></span>").append(data.positiveTolerance));
+            let negativeToleranceH = $("<h3>负公差&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </h3>").append($("<span></span>").append(data.negativeTolerance));
+            let creatorH = $("<h3>排单人&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </h3>").append($("<span></span>").append(data.creator));
+            let shiftH = $("<h3>班次&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </h3>").append($("<span></span>").append(data.shift));
+            let arrangeDataH = $("<h3>生产时间&nbsp;: </h3>").append($("<span></span>").append(data.arrangeDate));
+
+            dataDiv.append(machineH)
+                .append(groupH)
+                .append(gaugeH)
+                .append(positiveToleranceH)
+                .append(negativeToleranceH)
+                .append(creatorH)
+                .append(shiftH)
+                .append(arrangeDataH);
+            rowDiv.append(qrCodeDiv).append(dataDiv).appendTo("#print-btn-aw");
+        });
+    }
+}
 
 // ======================== 修改排产 ======================= //
 
