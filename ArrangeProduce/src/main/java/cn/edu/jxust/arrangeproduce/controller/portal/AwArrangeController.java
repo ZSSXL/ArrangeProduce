@@ -20,6 +20,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -199,7 +200,7 @@ public class AwArrangeController extends BaseController {
      * @return ServerResponse<String>
      */
     @GetMapping("/{awArrangeId}")
-    public ServerResponse<String> printByAwArrangeId(@PathVariable("awArrangeId") String awArrangeId, @RequestHeader("token") String token) {
+    public ServerResponse<List<String>> printByAwArrangeId(@PathVariable("awArrangeId") String awArrangeId, @RequestHeader("token") String token) {
         if (StringUtils.isEmpty(awArrangeId)) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.PARAMETER_ERROR.getCode(), ResponseCode.PARAMETER_ERROR.getDesc());
         } else {
@@ -210,22 +211,18 @@ public class AwArrangeController extends BaseController {
                 if (awArrange == null) {
                     return ServerResponse.createByErrorMessage("打印失败，没有该排产信息");
                 } else {
-                    String qrCode = generateQrCode(awArrange);
-                    if (StringUtils.isEmpty(qrCode)) {
-                        return ServerResponse.createByErrorMessage("生成二维码失败");
+                    List<String> qrCodeList = generateQrCode(awArrange);
+                    // 更新排产打印状态
+                    String enterpriseId = tokenUtil.getClaim(token, "enterpriseId").asString();
+                    String role = tokenUtil.getClaim(token, "role").asString();
+                    if (StringUtils.equals(role, Const.Role.ROLE_MANAGER)) {
+                        return ServerResponse.createBySuccess(qrCodeList);
                     } else {
-                        // 更新排产打印状态
-                        String enterpriseId = tokenUtil.getClaim(token, "enterpriseId").asString();
-                        String role = tokenUtil.getClaim(token, "role").asString();
-                        if (StringUtils.equals(role, Const.Role.ROLE_MANAGER)) {
-                            return ServerResponse.createBySuccess(qrCode);
+                        Boolean update = awArrangeService.updateStatus(awArrangeId, enterpriseId);
+                        if (update) {
+                            return ServerResponse.createBySuccess(qrCodeList);
                         } else {
-                            Boolean update = awArrangeService.updateStatus(awArrangeId, enterpriseId);
-                            if (update) {
-                                return ServerResponse.createBySuccess(qrCode);
-                            } else {
-                                return ServerResponse.createBySuccess("打印成功，但是更新排产信息打印状态失败", qrCode);
-                            }
+                            return ServerResponse.createBySuccess("打印成功，但是更新排产信息打印状态失败", qrCodeList);
                         }
                     }
                 }
@@ -284,31 +281,43 @@ public class AwArrangeController extends BaseController {
      * @param awArrange 实体
      * @return String
      */
-    private String generateQrCode(AwArrange awArrange) {
-        StringBuilder qrMessage = new StringBuilder();
-        // 打码时间
-        qrMessage.append("8").append(DateUtil.getDateSimple()).append("*");
-        // 小拉机编号
-        qrMessage.append(awArrange.getMachine()).append("*");
-        // 线规
-        qrMessage.append(DigitUtil.formatDigit(awArrange.getGauge(), 3)).append("*");
-        // 正公差
-        qrMessage.append("+").append(DigitUtil.formatDigit(awArrange.getPositiveTolerance(), 3)).append("*");
-        //负公差
-        qrMessage.append("-").append(DigitUtil.formatDigit(awArrange.getNegativeTolerance(), 3)).append("*");
-        // 任务生产时间
-        qrMessage.append(DateUtil.timestampToDate(awArrange.getArrangeDate())).append("*");
-        // 早晚班： 1是早班， 0是晚班
-        qrMessage.append(awArrange.getShift()).append("*");
-        // 流水号 随机四位数
-        qrMessage.append((int) (Math.random() * 9000 + 1000));
-        log.info("generate aw QrCode message : [{}] and the length is : [{}]", qrMessage, qrMessage.length());
-        String qrCode = QrCodeUtil.createQrCode(qrMessage.toString());
-        if (qrCode != null) {
-            return qrCode.replaceAll("\\n", "").replaceAll("\\r", "").replaceAll("\\r\\n", "");
-        } else {
-            return null;
+    private List<String> generateQrCode(AwArrange awArrange) {
+        List<String> qrCodeList = new ArrayList<>();
+
+        String groupNumber = awArrange.getGroupNumber();
+        String groupSide = groupNumber.substring(0, 1);
+        String[] split = groupNumber.replaceAll("A", "").replaceAll("B", "").split("-");
+        for (int i = Integer.parseInt(split[0]); i <= Integer.parseInt(split[1]); i++) {
+            String test = i < 10 ? "0" + i : String.valueOf(i);
+
+            StringBuilder qrMessage = new StringBuilder();
+            // 打码时间
+            qrMessage.append("8").append(DateUtil.getDateSimple()).append("*");
+            // 小拉机编号
+            qrMessage.append(awArrange.getMachine()).append("*");
+            // 线规
+            qrMessage.append(DigitUtil.formatDigit(awArrange.getGauge(), 3)).append("*");
+            // 正公差
+            qrMessage.append("+").append(DigitUtil.formatDigit(awArrange.getPositiveTolerance(), 3)).append("*");
+            //负公差
+            qrMessage.append("-").append(DigitUtil.formatDigit(awArrange.getNegativeTolerance(), 3)).append("*");
+            // 任务生产时间
+            qrMessage.append(DateUtil.timestampToDate(awArrange.getArrangeDate())).append("*");
+            // 早晚班： 1是早班， 0是晚班
+            qrMessage.append(awArrange.getShift()).append("*");
+            // 收放线编号
+            qrMessage.append(groupSide).append(test).append("*");
+            // 流水号 随机四位数
+            qrMessage.append((int) (Math.random() * 9000 + 1000));
+            // 打印日志
+            log.info("generate aw QrCode message : [{}] and the length is : [{}]", qrMessage, qrMessage.length());
+            // 生成二维码
+            String qrCode = QrCodeUtil.createQrCode(qrMessage.toString());
+            if (qrCode != null) {
+                qrCodeList.add(qrCode.replaceAll("\\n", "").replaceAll("\\r", "").replaceAll("\\r\\n", ""));
+            }
         }
+        return qrCodeList;
     }
 
 }
