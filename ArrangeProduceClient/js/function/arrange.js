@@ -1,7 +1,7 @@
 /**
  * 保存按钮点击事件
  */
-$("#save-btn").click(function () {
+$(document).on("click", "#save-btn", function () {
     let data = getDate();
     if (data !== false) {
         saveArrange(data);
@@ -11,7 +11,7 @@ $("#save-btn").click(function () {
 /**
  * 打印按钮点击事件
  */
-$("#print-btn").click(function () {
+$(document).on("click", "#print-btn", function () {
     let data = getDate();
     if (data !== false) {
         $("#modal-area").load("/sub/print.html");
@@ -20,11 +20,15 @@ $("#print-btn").click(function () {
     }
 });
 
-$("#reset-btn").click(function () {
-    $('#arrange-date').val("");
-    $("#tolerance").val("");
+/**
+ * 清空
+ */
+$(document).on("click", "#reset-btn", function () {
+    $("#arrange-date").val(printTimeFormat(new Date()));
     $('#weight').val("");
-    $('#arrange-date').val("");
+    $("#inlet-diameter").val("");
+    $("#positive-tolerance").val("");
+    $("#negative-tolerance").val("");
 });
 
 /**
@@ -228,7 +232,7 @@ $(document).on("click", ".delete-gauge", function () {
 /**
  * 推送
  */
-$("#push").click(function () {
+$(document).on("click", "#push", function () {
     const arrangeIdList = [];
     $("input[name='good']:checked").each(function (index, item) {
         arrangeIdList.push($(this).val());
@@ -348,50 +352,6 @@ $(document).on("click", ".delete-arrange", function () {
     });
 });
 
-/**
- * 从详情中打印
- */
-$("#print-history").click(function () {
-    let arrangeId = $(this).attr("arrange-id");
-    let gauge = $("#detail-gauge").val();
-    let shift = $("#detail-shift").val();
-    let machine = $("#detail-machine").val();
-    let arrangeDate = $("#detail-arrange-time").val();
-    let positiveTolerance = $("#detail-positive-tolerance").val();
-    let negativeTolerance = $("#detail-negative-tolerance").val();
-    let inletDiameter = $("#detail-inlet-diameter").val();
-    let rawMaterials = $("#detail-raw-materials").val();
-    let creator = $("#detail-creator").val();
-
-    let data = {
-        gauge,
-        positiveTolerance,
-        negativeTolerance,
-        inletDiameter,
-        shift,
-        machine,
-        arrangeDate,
-        rawMaterials,
-        creator
-    };
-    $.ajax({
-        url: serverUrl + "/arrange/" + arrangeId,
-        contentType: "application/json; charset=utf-8",
-        type: "GET",
-        beforeSend: function (XMLHttpRequest) {
-            XMLHttpRequest.setRequestHeader("token", token);
-        },
-        success: function (result) {
-            if (result.status === 0) {
-                $("#arrange-detail-modal").modal("hide");
-                generateQrCodeByHistory(data, result.data);
-                $("#detail-print-modal").modal("show");
-            } else {
-                Notiflix.Notify.Failure(result.msg);
-            }
-        }
-    });
-});
 
 /**
  * 从列表中打印
@@ -459,7 +419,7 @@ function generateQrCodeByHistory(data, qrCode) {
 }
 
 // ======================== 修改排产 ======================= //
-$("#modify-arrange").click(function () {
+$(document).on("click", "#modify-arrange", function () {
     let arrangeId = $(this).attr("arrange-id");
     let gauge = $("#detail-gauge").val();
     let machineName = $("#detail-machine").val();
@@ -502,6 +462,52 @@ $("#modify-arrange").click(function () {
                 Notiflix.Notify.Success("修改成功");
                 getAllArrange(0, 20);
                 $("#arrange-detail-modal").modal("hide");
+            } else {
+                Notiflix.Notify.Failure(result.msg);
+            }
+        }
+    });
+});
+
+/**
+ * 从详情中打印
+ */
+$(document).on("click", "#print-history", function () {
+    let arrangeId = $(this).attr("arrange-id");
+    let gauge = $("#detail-gauge").val();
+    let shift = $("#detail-shift").val();
+    let machine = $("#detail-machine").val();
+    let arrangeDate = $("#detail-arrange-time").val();
+    let positiveTolerance = $("#detail-positive-tolerance").val();
+    let negativeTolerance = $("#detail-negative-tolerance").val();
+    let inletDiameter = $("#detail-inlet-diameter").val();
+    let rawMaterials = $("#detail-raw-materials").val();
+    let creator = $("#detail-creator").val();
+
+    let data = {
+        gauge,
+        positiveTolerance,
+        negativeTolerance,
+        inletDiameter,
+        shift,
+        machine,
+        arrangeDate,
+        rawMaterials,
+        creator
+    };
+
+    $.ajax({
+        url: serverUrl + "/arrange/" + arrangeId,
+        contentType: "application/json; charset=utf-8",
+        type: "GET",
+        beforeSend: function (XMLHttpRequest) {
+            XMLHttpRequest.setRequestHeader("token", token);
+        },
+        success: function (result) {
+            if (result.status === 0) {
+                $("#arrange-detail-modal").modal("hide");
+                generateQrCodeByHistory(data, result.data);
+                $("#detail-print-modal").modal("show");
             } else {
                 Notiflix.Notify.Failure(result.msg);
             }

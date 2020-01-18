@@ -26,7 +26,7 @@ function showMachineWinding(data) {
 
 // 退火/绕线机设置
 
-$("#machine-setting-aw").click(function () {
+$(document).on("click", "#machine-setting-aw", function () {
     $("#modal-area-aw").load("/sub/machine.html");
     getAllMachine(machineSort);
     $("#load-modal-aw").modal("show");
@@ -97,19 +97,18 @@ $(document).on("click", ".delete-gauge", function () {
 /**
  * 保存按钮点击事件
  */
-$("#save-btn-aw").click(function () {
-    let data = getDate();
+$(document).on("click", "#save-btn-aw", function () {
+    let data = getDataAw();
     if (data !== false) {
         saveAwArrange(data);
-        // Notiflix.Notify.Success("保存成功");
     }
 });
 
 /**
  * 打印按钮点击事件
  */
-$("#print-btn-aw").click(function () {
-    let data = getDate();
+$(document).on("click", "#print-btn-aw", function () {
+    let data = getDataAw();
     if (data !== false) {
         $("#modal-area").load("/sub/print.html");
         // saveAndPrint(data);
@@ -120,14 +119,13 @@ $("#print-btn-aw").click(function () {
 /**
  * 重置按钮
  */
-$("#reset-btn-aw").click(function () {
-    $('#arrange-date-aw').val("");
-    $("#tolerance-aw").val("");
-    $('#weight-aw').val("");
-    $('#arrange-date-aw').val("");
+$(document).on("click", "#reset-btn-aw", function () {
+    $("#arrange-date-aw").val(printTimeFormat(new Date()));
+    $("#positive-tolerance-aw").val("");
+    $("#negative-tolerance-aw").val("");
 });
 
-function getDate() {
+function getDataAw() {
     let gauge = $("#gauge-aw option:selected").val();
     let machine = $("#machine-aw option:selected").val();
     let arrangeDate = new Date($('#arrange-date-aw').val()).getTime();
@@ -213,7 +211,7 @@ $(document).on("click", "#ck-aw", function () {
 /**
  * 推送
  */
-$("#push-aw").click(function () {
+$(document).on("click", "#push-aw", function () {
     const awArrangeIdList = [];
     $("input[name='good-aw']:checked").each(function (index, item) {
         awArrangeIdList.push($(this).val());
@@ -241,7 +239,6 @@ $("#push-aw").click(function () {
         });
     }
 });
-
 
 /**
  * 查看线规详情
@@ -301,55 +298,9 @@ function getAwArrangeDetail(dom) {
         $("#detail-print-aw").val("已打印");
     }
 
-    $("#print-history").attr("arrange-id", arrangeId);
+    $("#print-history-aw").attr("arrange-id", arrangeId);
     $("#modify-aw").attr("arrange-id", arrangeId);
 }
-
-/**
- * 从详情中打印
- */
-$("#print-history").click(function () {
-    let awArrangeId = $(this).attr("arrange-id");
-    let gauge = $("#detail-gauge-aw").val();
-    let positiveTolerance = $("#detail-positive-tolerance-aw").val();
-    let negativeTolerance = $("#detail-negative-tolerance-aw").val();
-    let shift = $("#detail-shift-aw").val();
-    let machine = $("#detail-machine-aw").val();
-    let machineNumber = $("#detail-machine-aw").attr("machine-number");
-    let arrangeDate = $("#detail-arrange-time-aw").val();
-    let creator = $("#detail-creator-aw").val();
-    let groupNumber = $("#detail-group-number-aw").val();
-
-    let data = {
-        gauge,
-        positiveTolerance,
-        negativeTolerance,
-        creator,
-        shift,
-        machine,
-        arrangeDate,
-        groupNumber,
-        machineNumber
-    };
-
-    $.ajax({
-        url: serverUrl + "/aw/" + awArrangeId,
-        contentType: "application/json; charset=utf-8",
-        type: "GET",
-        beforeSend: function (XMLHttpRequest) {
-            XMLHttpRequest.setRequestHeader("token", token);
-        },
-        success: function (result) {
-            if (result.status === 0) {
-                $("#aw-arrange-detail-modal").modal("hide");
-                generateQrCodeByHistory(data, result.data);
-                $("#detail-print-modal").modal("show");
-            } else {
-                Notiflix.Notify.Failure(result.msg);
-            }
-        }
-    });
-});
 
 /**
  * 在列表中打印
@@ -391,7 +342,7 @@ $(document).on("click", ".print-arrange-aw-btn", function () {
         },
         success: function (result) {
             if (result.status === 0) {
-                generateQrCodeByHistory(data, result.data);
+                generateQrCodeByHistoryAw(data, result.data);
                 $("#detail-print-modal").modal("show");
             } else {
                 Notiflix.Notify.Failure(result.msg);
@@ -405,7 +356,7 @@ $(document).on("click", ".print-arrange-aw-btn", function () {
  * @param data 数据
  * @param qrCode
  */
-function generateQrCodeByHistory(data, qrCode) {
+function generateQrCodeByHistoryAw(data, qrCode) {
     $("#print-btn-aw").empty();
 
     let ra = new RegExp("A", "g");
@@ -414,7 +365,7 @@ function generateQrCodeByHistory(data, qrCode) {
     // 获取设备编码第一个字符
     let str = data.machineNumber.slice(0, 1);
     let groupSide = data.groupNumber.slice(0, 1);
-    if (str === "t") {
+    if (str === "t" || str === "f") {
         let groupNow = data.groupNumber.replace(ra, "").replace(rb, "").split("-");
         let groupNumbers = [];
         for (i = parseInt(groupNow[0]); i <= parseInt(groupNow[1]); i++) {
@@ -481,16 +432,14 @@ function generateQrCodeByHistory(data, qrCode) {
 
 // ======================== 修改排产 ======================= //
 
-$("#modify-aw").click(function () {
+$(document).on("click", "#modify-aw", function () {
     let arrangeId = $(this).attr("arrange-id");
     let gauge = $("#detail-gauge-aw").val();
     let machineName = $("#detail-machine-aw").val();
     let positiveTolerance = $("#detail-positive-tolerance-aw").val();
     let negativeTolerance = $("#detail-negative-tolerance-aw").val();
-    let inletDiameter = $("#detail-inlet-diameter-aw").val();
     let groupNumber = $("#detail-group-number-aw").val();
     let arrangeDate = new Date($("#detail-arrange-time-aw").val()).getTime();
-    let weight = $("#detail-weight-aw").val();
     let detailShift = $("#detail-shift-aw").val();
     let shift = "";
     if (detailShift === "A班") {
@@ -498,19 +447,15 @@ $("#modify-aw").click(function () {
     } else {
         shift = "0";
     }
-    let rawMaterials = $("#detail-raw-materials-aw").val();
     let data = {
         arrangeId,
         gauge,
         positiveTolerance,
         negativeTolerance,
-        weight,
         arrangeDate,
         shift,
-        machineName,
-        rawMaterials,
-        inletDiameter,
-        groupNumber
+        groupNumber,
+        machineName
     };
 
     $.ajax({
@@ -525,7 +470,54 @@ $("#modify-aw").click(function () {
             if (result.status === 0) {
                 Notiflix.Notify.Success("修改成功");
                 getAllAwArrange(0, 20);
-                $("#arrange-detail-modal").modal("hide");
+                $("#aw-arrange-detail-modal").modal("hide");
+            } else {
+                Notiflix.Notify.Failure(result.msg);
+            }
+        }
+    });
+});
+
+
+/**
+ * 从详情中打印
+ */
+$(document).on("click", "#print-history-aw", function () {
+    let awArrangeId = $(this).attr("arrange-id");
+    let gauge = $("#detail-gauge-aw").val();
+    let positiveTolerance = $("#detail-positive-tolerance-aw").val();
+    let negativeTolerance = $("#detail-negative-tolerance-aw").val();
+    let shift = $("#detail-shift-aw").val();
+    let machine = $("#detail-machine-aw").val();
+    let machineNumber = $("#detail-machine-aw").attr("machine-number");
+    let arrangeDate = $("#detail-arrange-time-aw").val();
+    let creator = $("#detail-creator-aw").val();
+    let groupNumber = $("#detail-group-number-aw").val();
+
+    let data = {
+        gauge,
+        positiveTolerance,
+        negativeTolerance,
+        creator,
+        shift,
+        machine,
+        arrangeDate,
+        groupNumber,
+        machineNumber
+    };
+
+    $.ajax({
+        url: serverUrl + "/aw/" + awArrangeId,
+        contentType: "application/json; charset=utf-8",
+        type: "GET",
+        beforeSend: function (XMLHttpRequest) {
+            XMLHttpRequest.setRequestHeader("token", token);
+        },
+        success: function (result) {
+            if (result.status === 0) {
+                $("#aw-arrange-detail-modal").modal("hide");
+                generateQrCodeByHistoryAw(data, result.data);
+                $("#detail-print-modal").modal("show");
             } else {
                 Notiflix.Notify.Failure(result.msg);
             }

@@ -25,24 +25,6 @@
                     </button>
                 </div>
                 <div class="modal-body" id="print-btn-aw">
-                    <!--<div class="row">
-                            <div class="col-lg-6 col-sm-6">
-                                <img id="qr-code" src="/img/photos/default.png">
-                            </div>
-                            <div class="col-lg-6 col-sm-6">
-                                <h3>设备型号&nbsp;: <span id="machine-name"></span></h3>
-                                <h3 id="group-number-value">&nbsp;</h3>
-                                <h3>规格&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id="gauge-value"></span>
-                                    <strong>(mm)</strong></h3>
-                                <h3>正公差&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: +<span id="positive-tolerance-value"></span>
-                                </h3>
-                                <h3>负公差&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: -<span id="negative-tolerance-value"></span>
-                                </h3>
-                                <h3>排单人&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id="creator-value"></span></h3>
-                                <h3>班次&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span id="shift-value"></span></h3>
-                                <h3>生产时间&nbsp;: <span id="arrange-time"></span></h3>
-                            </div>
-                        </div>-->
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-light" data-dismiss="modal">取消</button>
@@ -98,7 +80,7 @@
                             </label>
                             <div class="col-sm-4">
                                 <div class="input-group">
-                                    <div class="input-group-prepend display-none"><span
+                                    <div class="input-group-prepend"><span
                                             class="input-group-text text-white">+</span>
                                     </div>
                                     <input id="detail-positive-tolerance-aw" type="text" placeholder="正公差"
@@ -190,7 +172,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-info" id="modify-aw">修改</button>
-                    <button type="button" class="btn btn-outline-warning" id="print-history">打印</button>
+                    <button type="button" class="btn btn-outline-warning" id="print-history-aw">打印</button>
                     <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
                 </div>
             </div><!-- /.modal-content -->
@@ -267,7 +249,7 @@
                         </label>
                         <div class="col-sm-8">
                             <div class="input-group">
-                                <input id="positive-tolerance" type="text" placeholder="请输入正公差"
+                                <input id="positive-tolerance-aw" type="text" placeholder="请输入正公差"
                                        class="form-control">
                             </div>
                         </div>
@@ -279,7 +261,7 @@
                         </label>
                         <div class="col-sm-8">
                             <div class="input-group">
-                                <input id="negative-tolerance" type="text" placeholder="请输入负公差" class="form-control">
+                                <input id="negative-tolerance-aw" type="text" placeholder="请输入负公差" class="form-control">
                             </div>
                         </div>
                     </div>
@@ -392,12 +374,14 @@
         </div>
     </div>
 </section>
+
 <!-- javascript -->
-<script src="js/function/aw.js"></script>
+
 <script src="js/jquery.tablesorter.min.js"></script>
 <script type="text/javascript">
 
     $("#sort-annealing").change(function () {
+        console.log("I'm here");
         machineSort = $(this).val();
         getAllMachineAnnealing();
     });
@@ -513,9 +497,7 @@
             filterTable($(this).val());
         }).keyup();
 
-
         $("#arrange-date-aw").val(printTimeFormat(new Date()));
-        // $("#group-detail").text($("#group option:selected").val());
     });
 
     $(".quick-click").click(function () {

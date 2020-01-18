@@ -13,9 +13,7 @@ function getAwArrangeQrCode(awArrangeId, dom) {
         type: "GET",
         success: function (result) {
             if (result.status === 0) {
-                /*$("#qr-code-aw").attr("src", result.data);*/
-                qrCode = result.data;
-                getData(dom, result.data);
+                getDataAw(dom, result.data);
                 getAllAwArrange(0, 20);
             } else {
                 Notiflix.Notify.Failure(result.msg);
@@ -24,8 +22,8 @@ function getAwArrangeQrCode(awArrangeId, dom) {
     });
 }
 
-function getData(dom, qrCode) {
-    $("#print-btn-arrange").empty();
+function getDataAw(dom, qrCode) {
+    $("#print-btn-arrange-aw").empty();
 
     const tr = $(dom).parents("tr");
     let creator = $(dom).attr("creator");
@@ -45,7 +43,7 @@ function getData(dom, qrCode) {
 
     let str = machineNumber.slice(0, 1);
     let groupSide = groupNumber.slice(0, 1);
-    if (str === "t") {
+    if (str === "t" || str === "f") {
         let groupNow = groupNumber.replace(ra, "").replace(rb, "").split("-");
         let groupNumbers = [];
         for (i = parseInt(groupNow[0]); i <= parseInt(groupNow[1]); i++) {
@@ -74,7 +72,7 @@ function getData(dom, qrCode) {
                 .append(creatorH)
                 .append(shiftH)
                 .append(arrangeDataH);
-            rowDiv.append(qrCodeDiv).append(dataDiv).appendTo("#print-btn-arrange");
+            rowDiv.append(qrCodeDiv).append(dataDiv).appendTo("#print-btn-arrange-aw");
         });
     } else if (str === "s") {
         let groupNow = groupNumber.replace(ra, "").replace(rb, "").split("-");
@@ -105,7 +103,7 @@ function getData(dom, qrCode) {
                 .append(creatorH)
                 .append(shiftH)
                 .append(arrangeDataH);
-            rowDiv.append(qrCodeDiv).append(dataDiv).appendTo("#print-btn-arrange");
+            rowDiv.append(qrCodeDiv).append(dataDiv).appendTo("#print-btn-arrange-aw");
         });
     }
 }
