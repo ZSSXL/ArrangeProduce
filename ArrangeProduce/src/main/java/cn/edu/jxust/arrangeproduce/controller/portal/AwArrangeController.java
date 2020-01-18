@@ -91,7 +91,7 @@ public class AwArrangeController extends BaseController {
                             .groupNumber(awArrangeVo.getGroup())
                             .build());
                 } catch (Exception e) {
-                    log.error("create awArrange error {}", e.getMessage());
+                    log.error("create awArrange error [{}]", e.getMessage());
                     return ServerResponse.createByErrorMessage("新建退火/绕线机排产任务异常");
                 }
             }
@@ -159,7 +159,7 @@ public class AwArrangeController extends BaseController {
             try {
                 return awArrangeService.updatePush(enterpriseId, list);
             } catch (Exception e) {
-                log.error("An exception occurred during the update : {} ", e.getMessage());
+                log.error("An exception occurred during the update : [{}] ", e.getMessage());
                 return ServerResponse.createByErrorMessage("更新的时候发生了未知异常，请查看日志");
             }
         }
@@ -186,7 +186,7 @@ public class AwArrangeController extends BaseController {
                     return ServerResponse.createByErrorMessage("删除失败, 请重试");
                 }
             } catch (Exception e) {
-                log.error("delete awArrange error : {}", e.getMessage());
+                log.error("delete awArrange error : [{}]", e.getMessage());
                 return ServerResponse.createByErrorMessage("删除一条排产发生未知异常");
             }
         }
@@ -305,12 +305,19 @@ public class AwArrangeController extends BaseController {
             qrMessage.append(DateUtil.timestampToDate(awArrange.getArrangeDate())).append("*");
             // 早晚班： 1是早班， 0是晚班
             qrMessage.append(awArrange.getShift()).append("*");
-            // 收放线编号
-            qrMessage.append(groupSide).append(test).append("*");
-            // 流水号 随机四位数
-            qrMessage.append((int) (Math.random() * 9000 + 1000));
-            // 打印日志
-            log.info("generate aw QrCode message : [{}] and the length is : [{}]", qrMessage, qrMessage.length());
+            if (i == Integer.parseInt(split[0])) {
+                // 收放线编号
+                qrMessage.append(awArrange.getGroupNumber()).append("*");
+                // 流水号 随机四位数
+                qrMessage.append((int) (Math.random() * 9000 + 1000));
+                // 打印日志
+                log.info("generate aw QrCode message : [{}] and the length is : [{}]", qrMessage, qrMessage.length());
+            } else {
+                // 收放线编号
+                qrMessage.append(groupSide).append(test).append("*");
+                // 流水号 随机四位数
+                qrMessage.append((int) (Math.random() * 9000 + 1000));
+            }
             // 生成二维码
             String qrCode = QrCodeUtil.createQrCode(qrMessage.toString());
             if (qrCode != null) {
