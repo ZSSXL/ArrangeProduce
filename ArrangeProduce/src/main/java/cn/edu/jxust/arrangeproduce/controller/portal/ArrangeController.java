@@ -90,7 +90,7 @@ public class ArrangeController extends BaseController {
                             .rawMaterials(ParameterUtil.isEmpty(arrangeVo.getRawMaterials(), "null"))
                             .build());
                 } catch (Exception e) {
-                    log.error("create arrange error {}", e.getMessage());
+                    log.error("create arrange error [{}]", e.getMessage());
                     return ServerResponse.createByErrorMessage("新建排产任务异常");
                 }
             }
@@ -160,7 +160,7 @@ public class ArrangeController extends BaseController {
                     return ServerResponse.createByErrorMessage("删除失败, 请重试");
                 }
             } catch (Exception e) {
-                log.error("delete arrange error : {}", e.getMessage());
+                log.error("delete arrange error : [{}]", e.getMessage());
                 return ServerResponse.createByErrorMessage("删除一条排产发生未知异常");
             }
         }
@@ -185,7 +185,7 @@ public class ArrangeController extends BaseController {
             try {
                 return arrangeService.updatePush(enterpriseId, list);
             } catch (Exception e) {
-                log.error("An exception occurred during the update arrange push : {} ", e.getMessage());
+                log.error("An exception occurred during the update arrange push : [{}] ", e.getMessage());
                 return ServerResponse.createByErrorMessage("更新的时候发生了未知异常，请查看日志");
             }
         }
@@ -285,6 +285,7 @@ public class ArrangeController extends BaseController {
             if (StringUtils.isEmpty(token)) {
                 return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
             } else {
+                System.out.println("Some body call me?");
                 Arrange arrange = arrangeService.getArrangeById(arrangeId);
                 String role = tokenUtil.getClaim(token, "role").asString();
                 if (arrange == null) {
