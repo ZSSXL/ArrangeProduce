@@ -31,10 +31,9 @@ public class UpdateVo {
     @NotEmpty
     private String positiveTolerance;
 
-    // @NotEmpty
+    @NotEmpty
     private String negativeTolerance;
 
-    @NotEmpty
     private String inletDiameter;
 
     @NotNull
@@ -43,10 +42,8 @@ public class UpdateVo {
     @NotEmpty
     private String shift;
 
-    @NotEmpty
     private String weight;
 
-    @NotEmpty
     private String rawMaterials;
 
     private String groupNumber;

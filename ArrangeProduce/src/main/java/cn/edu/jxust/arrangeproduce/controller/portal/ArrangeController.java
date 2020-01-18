@@ -285,6 +285,7 @@ public class ArrangeController extends BaseController {
             if (StringUtils.isEmpty(token)) {
                 return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
             } else {
+                System.out.println("Some body call me?");
                 Arrange arrange = arrangeService.getArrangeById(arrangeId);
                 String role = tokenUtil.getClaim(token, "role").asString();
                 if (arrange == null) {

@@ -306,12 +306,14 @@ public class AwArrangeController extends BaseController {
             // 早晚班： 1是早班， 0是晚班
             qrMessage.append(awArrange.getShift()).append("*");
             if (i == Integer.parseInt(split[0])) {
-                // 收放线编号
-                qrMessage.append(awArrange.getGroupNumber()).append("*");
-                // 流水号 随机四位数
-                qrMessage.append((int) (Math.random() * 9000 + 1000));
+
+                Integer serialNumber = (int) (Math.random() * 9000 + 1000);
                 // 打印日志
-                log.info("generate aw QrCode message : [{}] and the length is : [{}]", qrMessage, qrMessage.length());
+                log.info("generate aw QrCode message : [{}] and the length is : [{}]", qrMessage + awArrange.getGroupNumber() + "*" + serialNumber, qrMessage.length());
+                // 收放线编号
+                qrMessage.append(groupSide).append(test).append("*");
+                // 流水号 随机四位数
+                qrMessage.append(serialNumber);
             } else {
                 // 收放线编号
                 qrMessage.append(groupSide).append(test).append("*");
