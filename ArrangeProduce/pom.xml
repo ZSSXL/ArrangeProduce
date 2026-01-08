@@ -19,7 +19,7 @@
         <java.version>1.8</java.version>
         <mysql-connector.version>8.0.15</mysql-connector.version>
         <zxing.version>3.3.3</zxing.version>
-        <commons-lang3.version>3.8.1</commons-lang3.version>
+        <commons-lang3.version>3.18.0</commons-lang3.version>
         <joda.version>2.9.9</joda.version>
         <jedis-client.version>3.1.0</jedis-client.version>
         <java-jwt.version>3.8.0</java-jwt.version>
